@@ -1,0 +1,133 @@
+.signup-page {
+    background: url('https://www.eliotthotel.com/wp-content/uploads/sites/7/2017/11/shutterstock_178624334.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: 'Poppins', Arial, sans-serif;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: -1;
+}
+
+.signup-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #23231A;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 500px;
+    text-align: center;
+    position: relative;
+}
+
+h2 {
+    color: #23231A;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.form-label {
+    text-align: left;
+    display: block;
+    margin-bottom: 8px;
+    color: #23231A;
+    font-weight: 500;
+}
+
+.form-control {
+    background-color: #E1E6E1;
+    border: 1px solid #CED4DA;
+    color: #23231A;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #E85D04;
+    box-shadow: 0 0 4px rgba(232, 93, 4, 0.5);
+    outline: none;
+}
+
+.btn-primary {
+    background-color: #E85D04;
+    border: none;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+}
+
+.btn-primary:hover {
+    background-color: darkorange;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.password-container .form-control {
+    flex-grow: 1;
+    width: calc(100% - 85px);
+}
+
+.toggle-link {
+    background-color: #E1E6E1;
+    color: #23231A;
+    border: 2px solid #23231A;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    text-align: center;
+    user-select: none;
+    width: 70px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.toggle-link:hover {
+    background-color: #E85D04;
+    color: white;
+    border-color: #E85D04;
+}
+
+.toggle-link-signup {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+
+select.form-control {
+    background-color: #E1E6E1;
+    border: 1px solid #CED4DA;
+    color: #23231A;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+}
