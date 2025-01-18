@@ -30,7 +30,7 @@ const Login = () => {
 
         try {
             const response = await axios.post(
-                "https://localhost:7031/api/Auth/login", formData,
+                "https://localhost:7031/api/Users/login", formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
