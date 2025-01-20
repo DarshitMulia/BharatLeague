@@ -33,7 +33,6 @@ const Signup = () => {
                 formData
             );
             console.log(response.data);
-            alert(response.data.message || "Signup successful!");
             navigate("/login");
         } catch (error) {
             console.error("Error details:", error);
