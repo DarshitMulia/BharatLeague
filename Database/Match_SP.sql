@@ -10,13 +10,6 @@ CREATE PROCEDURE PR_AddMatch
     @venue NVARCHAR(100)
 AS
 BEGIN
-    -- Ensure team1_id and team2_id are not the same
-    IF (@team1_id = @team2_id)
-    BEGIN
-        THROW 51000, 'Team1 and Team2 cannot be the same.', 1;
-    END;
-
-    -- Insert match details into the Match table
     INSERT INTO Match (league_id, team1_id, team2_id, match_date, start_time, venue, created_at, updated_at)
     VALUES (@league_id, @team1_id, @team2_id, @match_date, @start_time, @venue, GETDATE(), GETDATE());
 END;
@@ -41,12 +34,6 @@ CREATE PROCEDURE PR_UpdateMatch
     @venue NVARCHAR(100)
 AS
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Match WHERE match_id = @match_id)
-    BEGIN
-        RAISERROR ('Match with ID %d not found.', 16, 1, @match_id);
-        RETURN;
-    END
-
     UPDATE Match
     SET team1_id = @team1_id,
         team2_id = @team2_id,
@@ -58,24 +45,8 @@ BEGIN
 END;
 
 
--- Procedure to Delete a Match
-/* CREATE PROCEDURE PR_DeleteMatch
-    @MatchID INT
-AS
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM Match WHERE match_id = @MatchID)
-    BEGIN
-        RAISERROR ('Match not found.', 16, 1);
-        RETURN;
-    END
-
-    DELETE FROM Match
-    WHERE match_id = @MatchID;
-END; */
-
-
 -- Procedure to Retrieve Matches by League
-CREATE PROCEDURE PR_GetMatchesByLeague
+CREATE PROCEDURE PR_GetMatchesByLeagueID
     @league_id INT
 AS
 BEGIN

@@ -29,12 +29,6 @@ CREATE PROCEDURE PR_GetLeagueByID
     @LeagueID INT
 AS
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM League WHERE league_id = @LeagueID)
-    BEGIN
-        RAISERROR ('League not found.', 16, 1);
-        RETURN;
-    END
-
     SELECT league_id, user_id, leaguename, country, image_url, start_date, end_date, status, created_at, updated_at
     FROM League
     WHERE league_id = @LeagueID;
@@ -52,12 +46,6 @@ CREATE PROCEDURE PR_UpdateLeague
     @EndDate DATE
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM League WHERE leaguename = @LeagueName AND league_id <> @LeagueID)
-	BEGIN
-		RAISERROR ('League name already exists.', 16, 1);
-		RETURN;
-	END
-
     UPDATE League
     SET leaguename = @LeagueName,
         country = @Country,
@@ -67,6 +55,28 @@ BEGIN
         updated_at = GETDATE()
     WHERE league_id = @LeagueID;
 END; 
+
+
+CREATE PROCEDURE PR_GetLeaguesByUser
+    @UserID INT
+AS
+BEGIN
+    SELECT league_id, user_id, leaguename, country, image_url, start_date, end_date, status, created_at, updated_at
+    FROM League
+    WHERE user_id = @UserID
+    ORDER BY start_date DESC;
+END;
+
+
+-- Procedure to Get All Ongoing Leagues
+CREATE PROCEDURE PR_GetOngoingLeagues
+AS
+BEGIN
+    SELECT league_id, user_id, leaguename, country, image_url, start_date, end_date, status, created_at, updated_at
+    FROM League
+    WHERE status = 'Ongoing'
+	ORDER BY start_date DESC;
+END;
 
 
 -- Procedure to Delete League 
@@ -108,26 +118,6 @@ END; */
 
 
 -- Procedure to Get Leagues Created by a Specific User
-CREATE PROCEDURE PR_GetLeaguesByUser
-    @UserID INT
-AS
-BEGIN
-    SELECT league_id, user_id, leaguename, country, image_url, start_date, end_date, status, created_at, updated_at
-    FROM League
-    WHERE user_id = @UserID
-    ORDER BY start_date DESC;
-END;
-
-
--- Procedure to Get All Ongoing Leagues
-CREATE PROCEDURE PR_GetOngoingLeagues
-AS
-BEGIN
-    SELECT league_id, user_id, leaguename, country, image_url, start_date, end_date, status, created_at, updated_at
-    FROM League
-    WHERE status = 'Ongoing'
-	ORDER BY start_date DESC;
-END;
 
 
 ------------------------------------------ OPTIONAL -------------------------------
