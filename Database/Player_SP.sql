@@ -29,7 +29,7 @@ BEGIN
     END
 
     INSERT INTO Player (team_id, playername, image_url, age, jersey_number, position, created_at, updated_at)
-    VALUES (@TeamID, @PlayerName, @Age, @JerseyNumber, @Position, GETDATE(), GETDATE());
+    VALUES (@TeamID, @PlayerName, @ImageUrl, @Age, @JerseyNumber, @Position, GETDATE(), GETDATE());
 END;
 
 
@@ -77,9 +77,11 @@ END;
 
 
 -- Procedure to Update Player Details
-/* CREATE PROCEDURE PR_UpdatePlayer
+CREATE PROCEDURE PR_UpdatePlayer
     @PlayerID INT,
+	@TeamID INT,
     @PlayerName NVARCHAR(100),
+	@ImageUrl NVARCHAR(MAX),
     @Age INT,
     @JerseyNumber INT,
     @Position NVARCHAR(50)
@@ -105,12 +107,13 @@ BEGIN
 
     UPDATE Player
     SET playername = @PlayerName,
+		image_url = @ImageUrl,
         age = @Age,
         jersey_number = @JerseyNumber,
         position = @Position,
         updated_at = GETDATE()
     WHERE player_id = @PlayerID;
-END; */
+END;
 
 -- Procedure to Delete a Player
 /* CREATE PROCEDURE PR_DeletePlayer
@@ -139,59 +142,5 @@ BEGIN
        OR position LIKE '%' + @SearchTerm + '%';
 END;
 
------------------------------------------------ OPTIONAL -----------------------------
 
--- Procedure to Update Player's Team
-/* CREATE PROCEDURE PR_UpdatePlayerTeam
-    @PlayerID INT,
-    @NewTeamID INT
-AS
-BEGIN
-    -- Check if Player exists
-    IF NOT EXISTS (SELECT 1 FROM Player WHERE player_id = @PlayerID)
-    BEGIN
-        RAISERROR ('Player not found.', 16, 1);
-        RETURN;
-    END
-
-    -- Check if New Team exists
-    IF NOT EXISTS (SELECT 1 FROM Team WHERE team_id = @NewTeamID)
-    BEGIN
-        RAISERROR ('New team not found.', 16, 1);
-        RETURN;
-    END
-
-    -- Update the Player’s Team
-    UPDATE Player
-    SET team_id = @NewTeamID,
-        updated_at = GETDATE()
-    WHERE player_id = @PlayerID;
-END; */
-
--- Procedure to Delete a Player
-/* CREATE PROCEDURE PR_DeletePlayer
-    @PlayerID INT
-AS
-BEGIN
-    -- Ensure Player exists
-    IF NOT EXISTS (SELECT 1 FROM Player WHERE player_id = @PlayerID)
-    BEGIN
-        RAISERROR ('Player does not exist.', 16, 1);
-        RETURN;
-    END
-
-    -- Check if Player is part of any ongoing match (optional, based on match structure)
-    IF EXISTS (SELECT 1 FROM [Match] WHERE player_id = @PlayerID AND match_status = 'Ongoing')
-    BEGIN
-        RAISERROR ('Player is part of an ongoing match and cannot be deleted.', 16, 1);
-        RETURN;
-    END
-
-    -- Proceed to delete player
-    DELETE FROM Player
-    WHERE player_id = @PlayerID;
-END; */
-
-
-
----> Have to work on Delete and Update Procedure in here if needed.
+---> Have to work on Delete in here if needed.

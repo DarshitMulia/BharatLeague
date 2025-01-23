@@ -10,22 +10,6 @@ CREATE PROCEDURE PR_AddLeague
     @EndDate DATE
 AS
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM Users WHERE user_id = @UserID)
-	BEGIN
-		RAISERROR ('User ID does not exist.', 16, 1);
-		RETURN;
-	END
-	IF EXISTS (SELECT 1 FROM League WHERE leaguename = @LeagueName)
-    BEGIN
-        RAISERROR ('League name already exists.', 16, 1);
-        RETURN;
-    END
-	IF @StartDate >= @EndDate
-	BEGIN
-		RAISERROR ('Start date must be earlier than end date.', 16, 1);
-		RETURN;
-	END
-
     INSERT INTO League (user_id, leaguename, country, image_url, start_date, end_date, created_at, updated_at)
     VALUES (@UserID, @LeagueName, @Country, @ImageUrl, @StartDate, @EndDate, GETDATE(), GETDATE());
 END;
@@ -58,28 +42,31 @@ END;
 
 
 -- Procedure to Update League Details
-/* CREATE PROCEDURE PR_UpdateLeague
+CREATE PROCEDURE PR_UpdateLeague
+	@UserID INT,
     @LeagueID INT,
-    @Name NVARCHAR(100),
+    @LeagueName NVARCHAR(100),
     @Country NVARCHAR(50),
+	@ImageUrl NVARCHAR(MAX),
     @StartDate DATE,
-    @EndDate DATE = NULL
+    @EndDate DATE
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM League WHERE name = @Name AND league_id <> @LeagueID)
+    IF EXISTS (SELECT 1 FROM League WHERE leaguename = @LeagueName AND league_id <> @LeagueID)
 	BEGIN
 		RAISERROR ('League name already exists.', 16, 1);
 		RETURN;
 	END
 
     UPDATE League
-    SET name = @Name,
+    SET leaguename = @LeagueName,
         country = @Country,
+		image_url = @ImageUrl,
         start_date = @StartDate,
         end_date = @EndDate,
         updated_at = GETDATE()
     WHERE league_id = @LeagueID;
-END; */
+END; 
 
 
 -- Procedure to Delete League 
@@ -178,47 +165,3 @@ BEGIN
     FROM League
     WHERE league_id = @LeagueID;
 END; */
-
-
-
-
--- Testing 
--- Valid League Insertion
-EXEC PR_AddLeague @UserID = 2, @Name = 'Serie A', @Country = 'Italy', @StartDate = '2024-01-01', @EndDate = NULL;
--- Invalid League Insertion (Duplicate League Name)
-EXEC PR_AddLeague @UserID = 1, @Name = 'Premier League', @Country = 'England', @StartDate = '2024-07-01', @EndDate = '2024-12-01';
--- Invalid League Insertion (Non-Existent User ID)
-EXEC PR_AddLeague @UserID = 99, @Name = 'Serie A', @Country = 'Italy', @StartDate = '2024-02-01', @EndDate = '2024-07-01';
-
-
-EXEC PR_GetAllLeagues;
-
-
--- Fetch by Valid League ID
-EXEC PR_GetLeagueByID @LeagueID = 1;
--- Fetch by Invalid League ID
-EXEC PR_GetLeagueByID @LeagueID = 99;
-
-
--- Valid Update
-EXEC PR_UpdateLeague @LeagueID = 1, @Name = 'English Premier League', @Country = 'UK', @StartDate = '2024-01-01', @EndDate = '2024-06-30';
--- Invalid Update (Duplicate League Name)
-EXEC PR_UpdateLeague @LeagueID = 2, @Name = 'English Premier League', @Country = 'Spain', @StartDate = '2024-01-15', @EndDate = '2024-07-01';
--- Invalid Update (Non-Existent League ID)
-EXEC PR_UpdateLeague @LeagueID = 99, @Name = 'Bundesliga', @Country = 'Germany', @StartDate = '2024-03-01', @EndDate = '2024-08-01';
-
-
--- Valid Delete
-EXEC PR_DeleteLeague @LeagueID = 1;
--- Invalid Delete (Non-Existent League ID)
-EXEC PR_DeleteLeague @LeagueID = 99;
-
-
--- Fetch Leagues by Valid User ID
-EXEC PR_GetLeaguesByUser @UserID = 1;
--- Fetch Leagues by Invalid User ID
-EXEC PR_GetLeaguesByUser @UserID = 99;
-
-
--- Fetch Ongoing Leagues
-EXEC PR_GetOngoingLeagues;
