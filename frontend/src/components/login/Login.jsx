@@ -46,9 +46,11 @@ const Login = () => {
 
             const userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
             console.log("User Role:", userRole);
+            const userId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            console.log("UserId: ", userId);
 
-            // Store the role in localStorage
             localStorage.setItem("role", userRole);
+            localStorage.setItem("userId", userId);
 
             if (userRole === "Admin") {
                 navigate("/admindashboard");
