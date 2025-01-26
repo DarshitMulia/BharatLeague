@@ -1,113 +1,3 @@
-//using backend.Data;
-//using FluentValidation.AspNetCore;
-//using System.Reflection;
-//using backend.Models;
-
-//var builder = WebApplication.CreateBuilder(args);
-
-//// Add services to the container.
-
-//builder.Services.AddControllers().
-//    AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<UsersModel>());
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddScoped<UsersRepository>();
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowReactApp", policy =>
-//        policy.WithOrigins("http://localhost:5173") // React development server
-//              .AllowAnyHeader()
-//              .AllowAnyMethod());
-//});
-
-//var app = builder.Build();
-
-//app.UseCors("AllowReactApp");
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();
-
-
-
-
-
-
-
-
-//using backend.Data;
-//using FluentValidation.AspNetCore;
-//using System.Reflection;
-//using backend.Models;
-
-//var builder = WebApplication.CreateBuilder(args);
-
-//// Add services to the container.
-//builder.Services.AddControllers()
-//    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<UsersModel>());
-
-//// Register repositories and other dependencies
-//builder.Services.AddScoped<UsersRepository>();
-
-//// Add Swagger for API documentation
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//// Configure CORS to allow React frontend
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowReactApp", policy =>
-//        policy.WithOrigins("http://localhost:5173") // React development server
-//              .AllowAnyHeader()
-//              .AllowAnyMethod());
-//});
-
-//var app = builder.Build();
-
-//// Apply CORS policy
-//app.UseCors("AllowReactApp");
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//// Use HTTPS redirection only in non-development environments
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseHttpsRedirection();
-//}
-
-//// Authorization middleware (ready for future authentication implementation)
-//app.UseAuthorization();
-
-//// Map controllers to API endpoints
-//app.MapControllers();
-
-//app.Run();
-
-
-
-
-
-
-
-
 using backend.Data;
 using FluentValidation.AspNetCore;
 using System.Reflection;
@@ -115,19 +5,56 @@ using backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CloudinaryDotNet;
+using backend.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<AuthModel>());
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<UsersModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<LeagueModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<TeamModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchEventLogModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerActionModel>());
 
 // Register repositories and other dependencies
-builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<UsersRepository>();
+builder.Services.AddScoped<LeagueRepository>();
+builder.Services.AddScoped<TeamRepository>();
+builder.Services.AddScoped<PlayerRepository>();
+builder.Services.AddScoped<MatchRepository>();
+builder.Services.AddScoped<MatchEventLogRepository>();
+builder.Services.AddScoped<PlayerActionRepository>();
+
+// Register Cloudinary configuration and service
+builder.Services.AddSingleton<CloudinaryService>();
+var cloudinarySettings = builder.Configuration.GetSection("Cloudinary");
+var cloudinaryAccount = new Account(
+    cloudinarySettings["CloudName"],
+    cloudinarySettings["ApiKey"],
+    cloudinarySettings["ApiSecret"]
+);
+var cloudinary = new Cloudinary(cloudinaryAccount);
+builder.Services.AddSingleton(cloudinary);
 
 // Add Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bharat League API", Version = "v1" });
+    c.OperationFilter<SwaggerFileUploadOperationFilter>(); // Register the filter for file uploads
+});
+
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -164,13 +91,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bharat League API V1");
+    });
 }
 
 // Use HTTPS redirection only in non-development environments
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
+    app.UseDeveloperExceptionPage();
 }
 
 // Enable Authentication and Authorization
