@@ -61,7 +61,7 @@ END;
 
 
 
-CREATE PROCEDURE Update_PlayerActionsInAMatch
+/* CREATE PROCEDURE Update_PlayerActionsInAMatch
     @match_id INT,
     @team_id INT,
     @player_id INT,
@@ -90,7 +90,7 @@ BEGIN
         -- Throw an error if the action does not exist
         THROW 51000, 'Player action for the given match, team, and player does not exist.', 1;
     END
-END;
+END; */
 
 -- This procedure deletes a player action entry from the table (useful for undoing actions or corrections).
 /* CREATE PROCEDURE PR_DeletePlayerAction

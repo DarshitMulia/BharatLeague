@@ -108,7 +108,7 @@ CREATE TABLE PlayerActions (
     goals INT DEFAULT 0,
     assists INT DEFAULT 0,
     fouls INT DEFAULT 0,
-    yellow_cards INT DEFAULT 0,
+    yellow_cards INT DEFAULT 0,       
     red_cards INT DEFAULT 0,
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE(),
@@ -167,3 +167,4 @@ select * from PlayerActions
 select * from PlayerStatistics
 
 select * from LeagueStandings
+

@@ -36,7 +36,7 @@ END;
 
 
 -- This procedure retrieves the statistics of a player, such as goals, assists, fouls, etc.
-CREATE PROCEDURE SP_GetPlayerStatisticsByPlayer
+CREATE PROCEDURE PR_GetPlayerStatisticsByPlayer
     @player_id INT
 AS
 BEGIN
