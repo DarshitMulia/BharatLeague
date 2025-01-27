@@ -148,7 +148,7 @@ namespace backend.Controllers
             var leagues = await _leagueRepository.GetLeaguesByUserAsync(userId);
 
             if (!leagues.Any())
-                return NotFound("No leagues found for this user.");
+                return Ok(new List<LeagueModel>());
 
             return Ok(leagues);
         }
