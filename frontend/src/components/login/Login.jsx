@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import "./login.css"
+import "./login.css";
+import "../signup/signup.css";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -115,16 +116,30 @@ const Login = () => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="role" className="form-label">Role</label>
-                        <select
-                            name="role"
-                            value={formData.role}
-                            onChange={handleChange}
-                            className="form-control"
-                            id="role"
-                        >
-                            <option value="User">User</option>
-                            <option value="Admin">Admin</option>
-                        </select>
+                        <div className="role-options">
+                            <label className="role-option">
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="User"
+                                    checked={formData.role === "User"}
+                                    onChange={handleChange}
+                                    className="form-check-input"
+                                />
+                                User
+                            </label>
+                            <label className="role-option">
+                                <input
+                                    type="radio"
+                                    name="role"
+                                    value="Admin"
+                                    checked={formData.role === "Admin"}
+                                    onChange={handleChange}
+                                    className="form-check-input"
+                                />
+                                Admin
+                            </label>
+                        </div>
                     </div>
                     <button type="submit" className="btn btn-primary w-100">Login</button>
                     <p className="mt-3">
