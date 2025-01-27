@@ -85,7 +85,7 @@ const CreateLeague = () => {
     return (
         <div className="create-league-container">
             <Sidebar />
-            <div className="main-content">
+            <div className="create-league-main-content">
                 <div className="form-wrapper">
                     <h1 className="form-heading">Create New League</h1>
                     <form onSubmit={handleSubmit} encType="multipart/form-data" className="league-form">
