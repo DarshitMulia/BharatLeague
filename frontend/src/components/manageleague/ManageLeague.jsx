@@ -3,11 +3,14 @@ import axios from 'axios';
 import Sidebar from "../sidebar/Sidebar";
 import { FiEdit, FiArrowRight, FiPlus } from 'react-icons/fi';
 import './manageLeague.css';
+import { useNavigate } from 'react-router-dom';
 
 const ManageLeague = () => {
     const [leagues, setLeagues] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('userId');
@@ -34,6 +37,16 @@ const ManageLeague = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleEditLeague = async (leagueId) => {
+        const leagueToEdit = leagues.find((league) => league.leagueId === leagueId);
+        if (!leagueToEdit) {
+            console.error('League not found.');
+            return;
+        }
+
+        navigate(`/updateleague/${leagueId}`);
     };
 
     return (
@@ -84,15 +97,15 @@ const ManageLeague = () => {
                                     </div>
                                     <div className="league-dates">
                                         <b>
-                                        {new Date(league.startDate).toLocaleDateString('en-GB', {
-                                            day: 'numeric',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        })} - {new Date(league.endDate).toLocaleDateString('en-GB', {
-                                            day: 'numeric',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        })}
+                                            {new Date(league.startDate).toLocaleDateString('en-GB', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })} - {new Date(league.endDate).toLocaleDateString('en-GB', {
+                                                day: 'numeric',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })}
                                         </b>
                                     </div>
                                 </div>
@@ -104,13 +117,13 @@ const ManageLeague = () => {
                                         <FiArrowRight className="link-icon" />
                                         View Teams
                                     </a>
-                                    <a
-                                        href={`/updateleague/${league.leagueId}`}
+                                    <button
+                                        onClick={() => handleEditLeague(league.leagueId)}
                                         className="action-btn"
                                     >
                                         <FiEdit className="btn-icon" />
                                         Edit League
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         ))}
