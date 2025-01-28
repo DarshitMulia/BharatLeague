@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Sidebar from "../sidebar/Sidebar";
 import { FiPlus, FiUsers, FiEdit, FiArrowRight } from 'react-icons/fi';
 import './manageteam.css';
@@ -24,7 +24,6 @@ const ManageTeam = () => {
                 setIsLoading(false);
             }
         };
-
         fetchTeams();
     }, [leagueId]);
 
@@ -34,10 +33,10 @@ const ManageTeam = () => {
             <div className="manage-team-main-content">
                 <div className="content-header">
                     <h1>Manage Teams</h1>
-                    <a href={`/createteam/${leagueId}`} className="create-team-btn">
+                    <Link to={`/addteam/${leagueId}`} className="create-team-btn">
                         <FiPlus className="btn-icon" />
                         New Team
-                    </a>
+                    </Link>
                 </div>
                 {isLoading ? (
                     <div className="loading-state">
@@ -93,20 +92,18 @@ const ManageTeam = () => {
                                     </div>
                                 </div>
                                 <div className="team-actions-container">
-                                    <a
-                                        href={`/viewplayers/${team.teamId}`}
+                                    <Link to={`/viewplayers/${team.teamId}`}
                                         className="view-link"
                                     >
                                         <FiArrowRight className="link-icon" />
                                         View Players
-                                    </a>
-                                    <a
-                                        href={`/editteam/${team.teamId}`}
+                                    </Link>
+                                    <Link to={`/updateteam/${team.leagueId}/${team.teamId}`}
                                         className="action-btn"
                                     >
                                         <FiEdit className="btn-icon" />
                                         Edit Team
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
