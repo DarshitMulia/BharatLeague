@@ -5,7 +5,7 @@ import "font-awesome/css/font-awesome.min.css";
 
 const Sidebar = () => {
     const [role, setRole] = useState(null);
-    const [collapsed, setCollapsed] = useState(false); 
+    const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const Sidebar = () => {
     }, []);
 
     const toggleSidebar = () => {
-        setCollapsed(!collapsed); 
+        setCollapsed(!collapsed);
     };
 
     const logout = () => {
@@ -52,6 +52,11 @@ const Sidebar = () => {
                 <li className="nav-item">
                     <Link to="/manageleague" className="nav-link text-white">
                         <i className="fa fa-cogs"></i> {!collapsed && "Manage League"}
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link to="/leagues" className="nav-link text-white">
+                        <i className="fa fa-shield"></i> {!collapsed && "Leagues"}
                     </Link>
                 </li>
                 <li className="nav-item">
