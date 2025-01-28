@@ -95,6 +95,7 @@ const CreateLeague = () => {
                                 className="form-input"
                                 type="text"
                                 name="leagueName"
+                                placeholder='Enter League Name'
                                 value={formData.leagueName}
                                 onChange={(e) => {
                                     handleInputChange(e);

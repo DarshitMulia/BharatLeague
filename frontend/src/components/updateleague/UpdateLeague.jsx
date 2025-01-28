@@ -29,14 +29,13 @@ const UpdateLeague = () => {
                 );
                 const data = response.data;
 
-                // Reformat dates to "yyyy-MM-dd"
                 const formatDate = (dateString) => dateString.split("T")[0];
 
                 setLeagueDetails({
                     leagueName: data.leagueName,
                     country: data.country,
-                    startDate: formatDate(data.startDate), // Format the date
-                    endDate: formatDate(data.endDate),     // Format the date
+                    startDate: formatDate(data.startDate), 
+                    endDate: formatDate(data.endDate),     
                     imageFile: null,
                 });
 
@@ -126,6 +125,7 @@ const UpdateLeague = () => {
                                 className="form-input"
                                 type="text"
                                 name="leagueName"
+                                placeholder="Enter League Name"
                                 value={leagueDetails.leagueName}
                                 onChange={handleChange}
                                 required
