@@ -8,6 +8,11 @@ import CreateLeague from "./components/createleague/CreateLeague";
 import ManageLeague from "./components/manageleague/ManageLeague";
 import ManageTeam from "./components/manageteam/ManageTeam";
 import ManagePlayer from "./components/manageplayer/ManagePlayer";
+import UpdateLeague from "./components/updateleague/UpdateLeague";
+import AddTeam from "./components/addteam/AddTeam";
+import UpdateTeam from "./components/updateteam/UpdateTeam";
+import AddPlayer from "./components/addplayer/AddPlayer";
+import UpdatePlayer from "./components/updateplayer/UpdatePlayer";
 
 function App() {
   return (
@@ -29,6 +34,14 @@ function App() {
           element={<PrivateRoute element={CreateLeague} allowedRoles={["User", "Admin"]} />}
         />
         <Route
+          path="/addteam/:leagueId"
+          element={<PrivateRoute element={AddTeam} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/addplayer/:teamId"
+          element={<PrivateRoute element={AddPlayer} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
           path="/manageleague"
           element={<PrivateRoute element={ManageLeague} allowedRoles={["User", "Admin"]} />}
         />
@@ -39,6 +52,18 @@ function App() {
         <Route
           path="/viewplayers/:teamId"
           element={<PrivateRoute element={ManagePlayer} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/updateleague/:leagueId"
+          element={<PrivateRoute element={UpdateLeague} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/updateteam/:leagueId/:teamId"
+          element={<PrivateRoute element={UpdateTeam} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/updateplayer/:teamId/:playerId"
+          element={<PrivateRoute element={UpdatePlayer} allowedRoles={["User", "Admin"]} />}
         />
       </Routes>
     </BrowserRouter>
