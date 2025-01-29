@@ -79,6 +79,15 @@ BEGIN
 END;
 
 
+CREATE PROCEDURE PR_SearchLeagues
+    @SearchTerm NVARCHAR(100)
+AS
+BEGIN
+    SELECT * FROM League
+    WHERE leaguename LIKE '%' + @SearchTerm + '%'
+END;
+
+
 -- Procedure to Delete League 
 /* CREATE PROCEDURE PR_DeleteLeague
     @LeagueID INT
