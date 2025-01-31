@@ -31,52 +31,72 @@ const Sidebar = () => {
                 </button>
                 {!collapsed && <h3>Bharat League</h3>}
             </div>
-            <ul className="nav flex-column mt-4">
+            <ul className="nav flex-column">
                 {role === "Admin" && (
-                    <li className="nav-item">
-                        <Link to="/admindashboard" className="nav-link text-white">
-                            <i className="fa fa-tachometer"></i> {!collapsed && "Admin Dashboard"}
-                        </Link>
-                    </li>
+                    <>
+                        <li className="nav-item">
+                            <Link to="/admindashboard" className="nav-link">
+                                <i className="fa fa-tachometer"></i>
+                                {!collapsed && <span className="link-text">Admin Dashboard</span>}
+                            </Link>
+                        </li>
+                        <hr />
+                    </>
                 )}
+
                 <li className="nav-item">
-                    <Link to="/" className="nav-link text-white">
-                        <i className="fa fa-home"></i> {!collapsed && "Home"}
+                    <Link to="/" className="nav-link">
+                        <i className="fa fa-home"></i>
+                        {!collapsed && <span className="link-text">Home</span>}
                     </Link>
                 </li>
+                <hr />
                 <li className="nav-item">
-                    <Link to="/createleague" className="nav-link text-white">
-                        <i className="fa fa-plus-circle"></i> {!collapsed && "Create League"}
+                    <Link to="/createleague" className="nav-link">
+                        <i className="fa fa-plus-circle"></i>
+                        {!collapsed && <span className="link-text">Create League</span>}
                     </Link>
                 </li>
+                <hr />
                 <li className="nav-item">
-                    <Link to="/manageleague" className="nav-link text-white">
-                        <i className="fa fa-cogs"></i> {!collapsed && "Manage League"}
+                    <Link to="/manageleague" className="nav-link">
+                        <i className="fa fa-cogs"></i>
+                        {!collapsed && <span className="link-text">Manage League</span>}
                     </Link>
                 </li>
+                <hr />
                 <li className="nav-item">
-                    <Link to="/leagues" className="nav-link text-white">
-                        <i className="fa fa-shield"></i> {!collapsed && "Leagues"}
+                    <Link to="/leagues" className="nav-link">
+                        <i className="fa fa-shield"></i>
+                        {!collapsed && <span className="link-text">Leagues</span>}
                     </Link>
                 </li>
-                <li className="nav-item">
-                    <Link to="/teams" className="nav-link text-white">
-                        <i className="fa fa-users"></i> {!collapsed && "Teams"}
+                <hr />
+                {/* <li className="nav-item">
+                    <Link to="/teams" className="nav-link">
+                        <i className="fa fa-users"></i>
+                        {!collapsed && <span className="link-text">Teams</span>}
                     </Link>
                 </li>
+                <hr />
                 <li className="nav-item">
-                    <Link to="/players" className="nav-link text-white">
-                        <i className="fa fa-user"></i> {!collapsed && "Players"}
+                    <Link to="/players" className="nav-link">
+                        <i className="fa fa-user"></i>
+                        {!collapsed && <span className="link-text">Players</span>}
                     </Link>
                 </li>
+                <hr /> */}
                 <li className="nav-item">
-                    <Link to="/leaguestandings" className="nav-link text-white">
-                        <i className="fa fa-trophy"></i> {!collapsed && "League Standings"}
+                    <Link to="/leaguestandings" className="nav-link">
+                        <i className="fa fa-trophy"></i>
+                        {!collapsed && <span className="link-text">Standings</span>}
                     </Link>
                 </li>
-                <li className="mt-3">
-                    <button className="btn btn-danger w-100" onClick={logout}>
-                        <i className="fa fa-sign-out"></i> {!collapsed && "Logout"}
+                <hr />
+                <li className="nav-item logout-btn">
+                    <button className="nav-link" onClick={logout}>
+                        <i className="fa fa-sign-out"></i>
+                        {!collapsed && <span className="link-text">Logout</span>}
                     </button>
                 </li>
             </ul>
