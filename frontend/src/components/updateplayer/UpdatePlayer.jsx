@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Sidebar from "../sidebar/Sidebar";
 import "../addplayer/addplayer.css";
-import "./updateplayer.css";
 
 const UpdatePlayer = () => {
     const { teamId, playerId } = useParams();
