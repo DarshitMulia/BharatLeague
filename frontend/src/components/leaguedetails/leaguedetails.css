@@ -1,0 +1,222 @@
+.league-details-wrapper {
+    background: #E1E6E1;
+    min-height: 100vh;
+    display: flex;
+}
+
+.league-details-container {
+    margin-left: 250px;
+    padding: 2rem;
+    width: calc(100% - 250px);
+}
+
+.league-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2.5rem;
+}
+
+.search-bar .search-input {
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem 2rem 1rem 3rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-bar .search-input:focus {
+    box-shadow: 0 4px 25px rgba(232, 93, 4, 0.2);
+    background: white;
+}
+
+.search-bar::before {
+    content: '🔍';
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    z-index: 2;
+}
+
+.team-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.team-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    border: none;
+}
+
+.team-header {
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.team-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: rgba(232, 93, 4, 0.1);
+}
+
+.team-name {
+    color: #2d2d2d;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.team-city {
+    color: #E85D04;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.coach-info {
+    color: #5a5a5a;
+    font-size: 0.95rem;
+}
+
+.coach-label {
+    color: #E85D04;
+    font-weight: 600;
+}
+
+.founded-year {
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.toggle-icon {
+    color: #E85D04;
+    font-weight: 700;
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.team-header.active .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.player-section {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+}
+
+.player-card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(232, 93, 4, 0.1);
+}
+
+.player-card:hover {
+    transform: translateX(8px);
+    border-color: rgba(232, 93, 4, 0.3);
+    box-shadow: 3px 3px 15px rgba(232, 93, 4, 0.08);
+}
+
+.jersey-number {
+    color: #E85D04;
+    font-weight: 800;
+    font-size: 1.2rem;
+    min-width: 40px;
+    display: inline-block;
+}
+
+.player-name {
+    color: #363636;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.info-label {
+    color: #7a7a7a;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+}
+
+.info-value {
+    color: #4a4a4a;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-left: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.loading-spinner {
+    width: 3.5rem;
+    height: 3.5rem;
+    color: #E85D04;
+}
+
+.alert-info {
+    background: rgba(232, 93, 4, 0.06);
+    border: 1px solid rgba(232, 93, 4, 0.15);
+    color: #5a5a5a;
+    border-radius: 12px;
+}
+
+@media (max-width: 992px) {
+    .league-details-container {
+        margin-left: 0;
+        padding: 2rem;
+        width: 100%;
+    }
+    
+    .team-header {
+        padding: 1.25rem;
+    }
+    
+    .coach-info {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .league-title {
+        font-size: 1.8rem;
+        padding-left: 1rem;
+    }
+    
+    .league-title::before {
+        width: 4px;
+    }
+    
+    .search-bar .search-input {
+        padding-left: 2.5rem;
+    }
+    
+    .player-card {
+        padding: 1rem;
+    }
+}

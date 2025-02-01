@@ -25,7 +25,7 @@
     margin: 0;
 }
 
-.create-league-btn {
+.create-league-button {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -38,7 +38,7 @@
     transition: transform 0.2s, background 0.2s;
 }
 
-.create-league-btn:hover {
+.create-league-button:hover {
     background: #BF4D00;
     transform: translateY(-1px);
 }
