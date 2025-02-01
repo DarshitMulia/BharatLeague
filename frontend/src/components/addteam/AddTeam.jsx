@@ -74,8 +74,12 @@ const AddTeam = () => {
         data.append('ImageFile', formData.imageFile);
 
         try {
+            const token = localStorage.getItem('authToken');
             const response = await axios.post('https://localhost:7031/api/Team/addteam', data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` 
+                },
             });
             navigate(`/viewteams/${leagueId}`);
             console.log(response.data);

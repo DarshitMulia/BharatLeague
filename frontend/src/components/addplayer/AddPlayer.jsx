@@ -75,8 +75,12 @@ const AddPlayer = () => {
         data.append('Position', formData.position);
 
         try {
+            const token = localStorage.getItem('authToken');
             const response = await axios.post('https://localhost:7031/api/Player/addplayer', data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` 
+                },
             });
             navigate(`/viewplayers/${teamId}`);
             console.log(response.data);

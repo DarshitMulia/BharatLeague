@@ -69,8 +69,12 @@ const CreateLeague = () => {
         data.append('EndDate', formData.endDate);
 
         try {
+            const token = localStorage.getItem('authToken');
             const response = await axios.post('https://localhost:7031/api/League/addleague', data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` 
+                },
             });
             alert('League created successfully!');
             console.log(response.data);

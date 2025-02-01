@@ -93,8 +93,12 @@ const UpdateTeam = () => {
         }
 
         try {
+            const token = localStorage.getItem("authToken");
             const response = await axios.put(`https://localhost:7031/api/Team/updateteam/${teamId}`, data, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` 
+                },
             });
             navigate(`/viewteams/${leagueId}`);
             console.log(response.data);

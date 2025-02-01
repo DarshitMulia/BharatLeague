@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sidebar from "../sidebar/Sidebar";
 import { FiEdit, FiArrowRight, FiPlus } from 'react-icons/fi';
 import './manageLeague.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ManageLeague = () => {
     const [leagues, setLeagues] = useState([]);
@@ -30,7 +30,18 @@ const ManageLeague = () => {
     const fetchLeagues = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get(`https://localhost:7031/api/League/user/${userId}`);
+            // Retrieve the token from localStorage
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                throw new Error('No token found. User might not be authenticated.');
+            }
+
+            // Include the token in the Authorization header
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+
+            const response = await axios.get(`https://localhost:7031/api/League/user/${userId}`, config);
             setLeagues(response.data);
         } catch (err) {
             console.error('Unexpected error fetching leagues:', err);
@@ -45,7 +56,6 @@ const ManageLeague = () => {
             console.error('League not found.');
             return;
         }
-
         navigate(`/updateleague/${leagueId}`);
     };
 
@@ -55,7 +65,7 @@ const ManageLeague = () => {
             <div className="manage-league-main-content">
                 <div className="content-header">
                     <h1>Manage Leagues</h1>
-                    <a href="/createleague" className="create-league-btn">
+                    <a href="/createleague" className="create-league-button">
                         <FiPlus className="btn-icon" />
                         New League
                     </a>
@@ -110,13 +120,12 @@ const ManageLeague = () => {
                                     </div>
                                 </div>
                                 <div className="league-actions-container">
-                                    <a
-                                        href={`/viewteams/${league.leagueId}`}
+                                    <Link to={`/viewteams/${league.leagueId}`}
                                         className="teams-link"
                                     >
                                         <FiArrowRight className="link-icon" />
                                         View Teams
-                                    </a>
+                                    </Link>
                                     <button
                                         onClick={() => handleEditLeague(league.leagueId)}
                                         className="action-btn"

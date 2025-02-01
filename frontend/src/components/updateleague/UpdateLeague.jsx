@@ -5,7 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import "./updateleague.css";
 
 const UpdateLeague = () => {
-    const { leagueId } = useParams(); 
+    const { leagueId } = useParams();
     const navigate = useNavigate();
 
     const [leagueDetails, setLeagueDetails] = useState({
@@ -15,17 +15,20 @@ const UpdateLeague = () => {
         endDate: "",
         imageFile: null,
     });
-    const [currentImage, setCurrentImage] = useState(null); 
+    const [currentImage, setCurrentImage] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    const token = localStorage.getItem("authToken")
+
     useEffect(() => {
         const fetchLeagueDetails = async () => {
             try {
-                const response = await axios.get(
-                    `https://localhost:7031/api/League/${leagueId}`
+                const response = await axios.get(`https://localhost:7031/api/League/${leagueId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }
                 );
                 const data = response.data;
 
@@ -34,8 +37,8 @@ const UpdateLeague = () => {
                 setLeagueDetails({
                     leagueName: data.leagueName,
                     country: data.country,
-                    startDate: formatDate(data.startDate), 
-                    endDate: formatDate(data.endDate),     
+                    startDate: formatDate(data.startDate),
+                    endDate: formatDate(data.endDate),
                     imageFile: null,
                 });
 
@@ -91,7 +94,8 @@ const UpdateLeague = () => {
                 formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
                     },
                 }
             );

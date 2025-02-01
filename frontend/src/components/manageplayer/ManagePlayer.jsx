@@ -14,7 +14,10 @@ const ManagePlayer = () => {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const response = await axios.get(`https://localhost:7031/api/Player/team/${teamId}`);
+                const token = localStorage.getItem("authToken");
+                const response = await axios.get(`https://localhost:7031/api/Player/team/${teamId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 setPlayers(response.data);
                 setError('');
             } catch (err) {

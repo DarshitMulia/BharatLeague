@@ -25,27 +25,30 @@ const UpdatePlayer = () => {
     });
 
     const navigate = useNavigate();
+    const token = localStorage.getItem("authToken");
 
     useEffect(() => {
         if (playerId) {
-            axios
-                .get(`https://localhost:7031/api/Player/${playerId}`)
-                .then((response) => {
-                    const data = response.data;
-                    setFormData({
-                        teamId: data.teamId,
-                        playerName: data.playerName,
-                        position: data.position,
-                        jerseyNumber: data.jerseyNumber,
-                        nationality: data.nationality,
-                        age: data.age,
-                        imageFile: null,
-                    });
-                    setCurrentImage(data.imageUrl || null);
-                })
-                .catch((error) => {
-                    console.error('Error fetching player details:', error);
+            axios.get(`https://localhost:7031/api/Player/${playerId}`, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+            }).then((response) => {
+                const data = response.data;
+                setFormData({
+                    teamId: data.teamId,
+                    playerName: data.playerName,
+                    position: data.position,
+                    jerseyNumber: data.jerseyNumber,
+                    nationality: data.nationality,
+                    age: data.age,
+                    imageFile: null,
                 });
+                setCurrentImage(data.imageUrl || null);
+            }).catch((error) => {
+                console.error('Error fetching player details:', error);
+            });
         }
     }, [playerId]);
 
@@ -192,7 +195,7 @@ const UpdatePlayer = () => {
                                 required
                             />
                         </div>
-                        
+
                         <div className="form-group">
                             <label className="form-label">Player Image</label>
                             {currentImage && (
