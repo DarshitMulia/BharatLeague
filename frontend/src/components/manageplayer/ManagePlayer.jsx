@@ -81,7 +81,7 @@ const ManagePlayer = () => {
                                                 <span className="position-tag">
                                                     {player.position}
                                                 </span>
-                                                <span className="jersey-number">
+                                                <span className="jersey-no">
                                                     Jersey Number: <b>{player.jerseyNumber}</b>
                                                 </span>
                                                 <span className="age-info">
