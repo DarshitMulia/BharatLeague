@@ -18,6 +18,8 @@ const UpdateTeam = () => {
         imageFile: null,
     });
 
+    const token = localStorage.getItem("authToken");
+
     const [currentImage, setCurrentImage] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({
@@ -29,7 +31,12 @@ const UpdateTeam = () => {
     useEffect(() => {
         if (teamId) {
             axios
-                .get(`https://localhost:7031/api/Team/${teamId}`)
+                .get(`https://localhost:7031/api/Team/${teamId}`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
+                    },
+                })
                 .then((response) => {
                     const data = response.data;
                     setFormData({
@@ -38,9 +45,9 @@ const UpdateTeam = () => {
                         city: data.city,
                         coachName: data.coachName,
                         foundedYear: data.foundedYear,
-                        imageFile: null, 
+                        imageFile: null,
                     });
-                    setCurrentImage(data.imageUrl || null); 
+                    setCurrentImage(data.imageUrl || null);
                 })
                 .catch((error) => {
                     console.error('Error fetching team details:', error);
@@ -93,11 +100,10 @@ const UpdateTeam = () => {
         }
 
         try {
-            const token = localStorage.getItem("authToken");
             const response = await axios.put(`https://localhost:7031/api/Team/updateteam/${teamId}`, data, {
-                headers: { 
+                headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` 
+                    'Authorization': `Bearer ${token}`
                 },
             });
             navigate(`/viewteams/${leagueId}`);
