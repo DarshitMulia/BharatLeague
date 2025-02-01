@@ -84,7 +84,7 @@ const ManageTeam = () => {
                                                 <span className="coach-info">
                                                     Coach: <b>{team.coachName}</b>
                                                 </span>
-                                                <span className="founded-year">
+                                                <span className="found-year">
                                                     Founded Year: <b>{team.foundedYear}</b>
                                                 </span>
                                             </div>
