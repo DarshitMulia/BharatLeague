@@ -1,0 +1,250 @@
+.ongoing-matches-container {
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #E1E6E1;
+    padding: 3rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.matches-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.matches-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.status-group {
+    margin-bottom: 3rem;
+}
+
+.status-heading {
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.status-heading::before {
+    content: '';
+    width: 4px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: currentColor;
+}
+
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2.5rem;
+    padding: 1rem;
+}
+
+.match-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.match-card:hover {
+    transform: translateY(-5px);
+}
+
+.live-ribbon {
+    position: absolute;
+    top: 15px;
+    right: -30px;
+    background: #E85D04;
+    color: white;
+    padding: 6px 35px;
+    transform: rotate(45deg);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 15px rgba(232, 93, 4, 0.3);
+    z-index: 2;
+}
+
+.league-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #23231A;
+    color: #E1E6E1;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.teams-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0 1.5rem;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.team-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #E1E6E1, #ffffff);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.team-logo::after {
+    content: '?';
+    color: #23231A;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.vs-container {
+    position: relative;
+    margin: 0 1rem;
+}
+
+.vs-swords {
+    font-size: 2.5rem;
+    color: #E85D04;
+    transform: rotate(-15deg);
+}
+
+.match-info {
+    border-top: 2px solid rgba(232, 93, 4, 0.1);
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(232, 93, 4, 0.03);
+    border-radius: 8px;
+}
+
+.info-label {
+    color: #E85D04;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-value {
+    color: #23231A;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+}
+
+.details-button {
+    width: 100%;
+    padding: 0.8rem;
+    background: #E85D04;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 15px rgba(232, 93, 4, 0.3);
+}
+
+.details-button:hover {
+    background: #d15303;
+    transform: translateY(-2px);
+}
+
+.empty-state {
+    text-align: center;
+    color: #666;
+    font-size: 1.2rem;
+    padding: 4rem;
+    background: white;
+    border-radius: 20px;
+    margin: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .ongoing-matches-container {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .ongoing-matches-container {
+        padding: 1.5rem;
+    }
+
+    .matches-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .team-logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .league-badge {
+        left: 10px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.8rem;
+    }
+
+    .live-ribbon {
+        font-size: 0.8rem;
+        padding: 5px 30px;
+    }
+
+    .status-heading {
+        font-size: 1.2rem;
+        padding: 0.8rem 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .status-group {
+        margin-bottom: 2rem;
+    }
+}
