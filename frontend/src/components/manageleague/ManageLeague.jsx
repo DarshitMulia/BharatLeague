@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from "../sidebar/Sidebar";
-import { FiEdit, FiArrowRight, FiPlus } from 'react-icons/fi';
+import { FiEdit, FiArrowRight, FiPlus, FiUsers } from 'react-icons/fi';
 import './manageLeague.css';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -30,13 +30,11 @@ const ManageLeague = () => {
     const fetchLeagues = async () => {
         setIsLoading(true);
         try {
-            // Retrieve the token from localStorage
             const token = localStorage.getItem('authToken');
             if (!token) {
                 throw new Error('No token found. User might not be authenticated.');
             }
 
-            // Include the token in the Authorization header
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -50,12 +48,7 @@ const ManageLeague = () => {
         }
     };
 
-    const handleEditLeague = async (leagueId) => {
-        const leagueToEdit = leagues.find((league) => league.leagueId === leagueId);
-        if (!leagueToEdit) {
-            console.error('League not found.');
-            return;
-        }
+    const handleEditLeague = (leagueId) => {
         navigate(`/updateleague/${leagueId}`);
     };
 
@@ -65,10 +58,10 @@ const ManageLeague = () => {
             <div className="manage-league-main-content">
                 <div className="content-header">
                     <h1>Manage Leagues</h1>
-                    <a href="/createleague" className="create-league-button">
+                    <Link to="/createleague" className="create-league-button">
                         <FiPlus className="btn-icon" />
                         New League
-                    </a>
+                    </Link>
                 </div>
                 {isLoading ? (
                     <div className="loading-state">
@@ -119,20 +112,46 @@ const ManageLeague = () => {
                                         </b>
                                     </div>
                                 </div>
-                                <div className="league-actions-container">
-                                    <Link to={`/viewteams/${league.leagueId}`}
-                                        className="teams-link"
-                                    >
-                                        <FiArrowRight className="link-icon" />
-                                        View Teams
+
+                                <div className="action-section management-actions">
+                                    <Link to={`/viewteams/${league.leagueId}`} className="action-link">
+                                        <FiUsers className="link-icon" />
+                                        Teams
                                     </Link>
                                     <button
                                         onClick={() => handleEditLeague(league.leagueId)}
-                                        className="action-btn"
+                                        className="action-link"
                                     >
                                         <FiEdit className="btn-icon" />
                                         Edit League
                                     </button>
+                                </div>
+
+                                <div className="action-section matches-section">
+                                    <div className="matches-header">
+                                        <div className="matches-title">
+                                            <h4>Matches</h4>
+                                            <Link to={`/addmatch/${league.leagueId}`} className="action-link highlight">
+                                                <FiPlus className="btn-icon" />
+                                                Add Match
+                                            </Link>
+                                        </div>
+                                        <Link to={`/matches/${league.leagueId}`} className="view-all-link">
+                                            View All
+                                            <FiArrowRight className="link-icon" />
+                                        </Link>
+                                    </div>
+                                    <div className="status-filters">
+                                        <Link to={`/scheduledmatches/${league.leagueId}`} className="status-filter scheduled">
+                                            Scheduled
+                                        </Link>
+                                        <Link to={`/viewmatches/${league.leagueId}?status=ongoing`} className="status-filter ongoing">
+                                            Ongoing
+                                        </Link>
+                                        <Link to={`/completedmatches/${league.leagueId}`} className="status-filter completed">
+                                            Completed
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         ))}
