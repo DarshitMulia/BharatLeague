@@ -230,10 +230,96 @@
         }
       }
     },
+    "/api/League/searchleague": {
+      "get": {
+        "tags": [
+          "League"
+        ],
+        "parameters": [
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/LeagueStandings/{leagueId}": {
+      "get": {
+        "tags": [
+          "LeagueStandings"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Match/addmatch": {
       "post": {
         "tags": [
           "Match"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Match/updatematch/{matchId}": {
+      "put": {
+        "tags": [
+          "Match"
+        ],
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -284,7 +370,7 @@
         }
       }
     },
-    "/api/Match/updatematch/{matchId}": {
+    "/api/Match/markongoing/{matchId}": {
       "put": {
         "tags": [
           "Match"
@@ -300,25 +386,87 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MatchModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MatchModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/MatchModel"
-              }
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Match/ongoingmatches": {
+      "get": {
+        "tags": [
+          "Match"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Match/scheduledmatches/{leagueId}": {
+      "get": {
+        "tags": [
+          "Match"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Match/ongoingmatches/{leagueId}": {
+      "get": {
+        "tags": [
+          "Match"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Match/completedmatches/{leagueId}": {
+      "get": {
+        "tags": [
+          "Match"
+        ],
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -370,26 +518,26 @@
         }
       }
     },
-    "/api/MatchEventLog/addmatchevent": {
+    "/api/MatchEvents/addevent": {
       "post": {
         "tags": [
-          "MatchEventLog"
+          "MatchEvents"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MatchEventLogModel"
+                "$ref": "#/components/schemas/MatchEventsModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/MatchEventLogModel"
+                "$ref": "#/components/schemas/MatchEventsModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/MatchEventLogModel"
+                "$ref": "#/components/schemas/MatchEventsModel"
               }
             }
           }
@@ -401,14 +549,37 @@
         }
       }
     },
-    "/api/MatchEventLog/match/{matchId}": {
+    "/api/MatchEvents/{matchId}": {
       "get": {
         "tags": [
-          "MatchEventLog"
+          "MatchEvents"
         ],
         "parameters": [
           {
             "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MatchEvents/deleteevent/{eventId}": {
+      "delete": {
+        "tags": [
+          "MatchEvents"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
             "in": "path",
             "required": true,
             "schema": {
@@ -658,26 +829,26 @@
         }
       }
     },
-    "/api/PlayerAction/addOrUpdate": {
+    "/api/PlayerStatistics/update": {
       "post": {
         "tags": [
-          "PlayerAction"
+          "PlayerStatistics"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlayerActionModel"
+                "$ref": "#/components/schemas/UpdatePlayerStatisticsRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlayerActionModel"
+                "$ref": "#/components/schemas/UpdatePlayerStatisticsRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/PlayerActionModel"
+                "$ref": "#/components/schemas/UpdatePlayerStatisticsRequest"
               }
             }
           }
@@ -689,10 +860,10 @@
         }
       }
     },
-    "/api/PlayerAction/match/{matchId}": {
-      "get": {
+    "/api/PlayerStatistics/matchcomplete/{matchId}": {
+      "put": {
         "tags": [
-          "PlayerAction"
+          "PlayerStatistics"
         ],
         "parameters": [
           {
@@ -712,10 +883,42 @@
         }
       }
     },
-    "/api/PlayerAction/player/{playerId}": {
+    "/api/PlayerStatistics/match/{matchId}/player/{playerId}": {
       "get": {
         "tags": [
-          "PlayerAction"
+          "PlayerStatistics"
+        ],
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PlayerStatistics/{playerId}": {
+      "get": {
+        "tags": [
+          "PlayerStatistics"
         ],
         "parameters": [
           {
@@ -1072,45 +1275,6 @@
           }
         }
       }
-    },
-    "/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "GetWeatherForecast",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1137,7 +1301,7 @@
         },
         "additionalProperties": false
       },
-      "MatchEventLogModel": {
+      "MatchEventsModel": {
         "type": "object",
         "properties": {
           "eventId": {
@@ -1148,17 +1312,14 @@
             "type": "integer",
             "format": "int32"
           },
-          "team1Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "team2Id": {
+          "teamId": {
             "type": "integer",
             "format": "int32"
           },
           "playerId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "eventType": {
             "type": "string",
@@ -1168,13 +1329,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "team1Score": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "team2Score": {
-            "type": "integer",
-            "format": "int32"
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
           },
           "createdAt": {
             "type": "string",
@@ -1212,7 +1369,7 @@
           },
           "startTime": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-span"
           },
           "venue": {
             "type": "string",
@@ -1221,52 +1378,6 @@
           "status": {
             "type": "string",
             "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "PlayerActionModel": {
-        "type": "object",
-        "properties": {
-          "matchId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "teamId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "playerId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "goals": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "assists": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "fouls": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "yellowCards": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "redCards": {
-            "type": "integer",
-            "format": "int32"
           },
           "createdAt": {
             "type": "string",
@@ -1301,25 +1412,19 @@
         },
         "additionalProperties": false
       },
-      "WeatherForecast": {
+      "UpdatePlayerStatisticsRequest": {
         "type": "object",
         "properties": {
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "temperatureC": {
+          "playerId": {
             "type": "integer",
             "format": "int32"
           },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
+          "eventType": {
             "type": "string",
             "nullable": true
+          },
+          "incrementMatch": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
