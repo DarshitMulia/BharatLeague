@@ -23,9 +23,11 @@ builder.Services.AddControllers()
 builder.Services.AddControllers()
     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchModel>());
 builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchEventLogModel>());
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchEventsModel>());
 builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerActionModel>());
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerStatisticsModel>());
+builder.Services.AddControllers()
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<LeagueStandingsModel>());
 
 // Register repositories and other dependencies
 builder.Services.AddScoped<UsersRepository>();
@@ -33,8 +35,9 @@ builder.Services.AddScoped<LeagueRepository>();
 builder.Services.AddScoped<TeamRepository>();
 builder.Services.AddScoped<PlayerRepository>();
 builder.Services.AddScoped<MatchRepository>();
-builder.Services.AddScoped<MatchEventLogRepository>();
-builder.Services.AddScoped<PlayerActionRepository>();
+builder.Services.AddScoped<MatchEventsRepository>();
+builder.Services.AddScoped<PlayerStatisticsRepository>();
+builder.Services.AddScoped<LeagueStandingsRepository>();
 
 // Register Cloudinary configuration and service
 builder.Services.AddSingleton<CloudinaryService>();
@@ -106,7 +109,7 @@ if (!app.Environment.IsDevelopment())
 
 // Enable Authentication and Authorization
 app.UseAuthentication();  // Add this line to use JWT Authentication
-app.UseAuthorization();   // This line already exists
+app.UseAuthorization();   
 
 // Map controllers to API endpoints
 app.MapControllers();
