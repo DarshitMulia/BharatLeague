@@ -11,10 +11,6 @@
     flex-direction: column;
 }
 
-.sidebar.collapsed {
-    width: 80px;
-}
-
 .sidebar-header {
     padding: 24px;
     display: flex;
@@ -25,24 +21,10 @@
 
 .sidebar-header h3 {
     color: #E1E6E1;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
     margin: 0;
     white-space: nowrap;
-}
-
-.hamburger-btn {
-    background: none;
-    border: none;
-    color: #E1E6E1;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.hamburger-btn:hover {
-    color: #E85D04;
-    transform: scale(1.1);
 }
 
 .nav {
@@ -117,27 +99,6 @@ hr {
     margin: 0;
 }
 
-.sidebar.collapsed .link-text {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.sidebar.collapsed .nav-link {
-    justify-content: center;
-    padding: 14px;
-}
-
-.sidebar.collapsed .nav-link:hover .link-text {
-    opacity: 1;
-    position: absolute;
-    left: calc(100% + 15px);
-    background: #23231A;
-    padding: 8px 16px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-}
-
 .logout-btn {
     margin-top: auto;
     border-top: 1px solid rgba(232, 93, 4, 0.1);
@@ -152,10 +113,6 @@ hr {
 @media (max-width: 768px) {
     .sidebar {
         width: 240px;
-    }
-
-    .sidebar.collapsed {
-        width: 60px;
     }
 
     .sidebar-header {
