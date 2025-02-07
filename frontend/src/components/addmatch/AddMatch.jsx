@@ -1,44 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
-import './addmatch.css';
+import "./addmatch.css";
 
 const AddMatch = () => {
     const { leagueId } = useParams();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        team1Id: '',
-        team2Id: '',
-        matchDate: '',
-        startTime: '',
-        venue: '',
+        team1Id: "",
+        team2Id: "",
+        matchDate: "",
+        startTime: "",
+        venue: "",
     });
 
     const [teams, setTeams] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
 
-    // Fetch teams for the given league when leagueId is available
     useEffect(() => {
         if (!leagueId) {
-            console.error('League ID not found in the URL.');
+            console.error("League ID not found in the URL.");
             return;
         }
 
         const fetchTeams = async () => {
             try {
-                const token = localStorage.getItem('authToken');
-                const response = await axios.get(`https://localhost:7031/api/Team/league/${leagueId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
+                const token = localStorage.getItem("authToken");
+                const response = await axios.get(
+                    `https://localhost:7031/api/Team/league/${leagueId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
                 setTeams(response.data);
             } catch (err) {
-                console.error('Error fetching teams:', err);
-                // Optionally, set an error state here if you want to display a message
+                console.error("Error fetching teams:", err);
             }
         };
 
@@ -52,27 +53,22 @@ const AddMatch = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.team1Id) {
-            newErrors.team1Id = 'Please select Team 1.';
-        }
-        if (!formData.team2Id) {
-            newErrors.team2Id = 'Please select Team 2.';
-        }
+        if (!formData.team1Id) newErrors.team1Id = "Please select Team 1.";
+        if (!formData.team2Id) newErrors.team2Id = "Please select Team 2.";
         if (formData.team1Id && formData.team2Id && formData.team1Id === formData.team2Id) {
-            newErrors.team2Id = 'Team 1 and Team 2 cannot be the same.';
+            newErrors.team2Id = "Team 1 and Team 2 cannot be the same.";
         }
-        if (!formData.matchDate) {
-            newErrors.matchDate = 'Match Date is required.';
-        }
-        if (!formData.startTime) {
-            newErrors.startTime = 'Start Time is required.';
-        }
-        if (!formData.venue) {
-            newErrors.venue = 'Venue is required.';
-        }
+        if (!formData.matchDate) newErrors.matchDate = "Match Date is required.";
+        if (!formData.startTime) newErrors.startTime = "Start Time is required.";
+        if (!formData.venue) newErrors.venue = "Venue is required.";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const formatTimeForAPI = (timeString) => {
+        if (!timeString) return "";
+        return `${timeString}:00`;
     };
 
     const handleSubmit = async (e) => {
@@ -85,40 +81,37 @@ const AddMatch = () => {
         setIsSubmitting(true);
 
         try {
-            const token = localStorage.getItem('authToken');
+            const token = localStorage.getItem("authToken");
 
-            // Combine matchDate and startTime into ISO datetime strings.
-            const matchDateISO = new Date(formData.matchDate).toISOString();
-            const startDateTimeISO = new Date(`${formData.matchDate}T${formData.startTime}`).toISOString();
-
-            // Include a default Status (e.g., "Scheduled") since the API requires it.
             const matchData = {
                 leagueId: parseInt(leagueId, 10),
                 team1Id: parseInt(formData.team1Id, 10),
                 team2Id: parseInt(formData.team2Id, 10),
-                matchDate: matchDateISO,
-                startTime: startDateTimeISO,
+                matchDate: formData.matchDate,
+                startTime: formatTimeForAPI(formData.startTime),
                 venue: formData.venue,
-                status: "Scheduled"  // Default status value
+                status: "Scheduled",
             };
 
+            console.log("Sending Match Data:", matchData);
+
             const response = await axios.post(
-                'https://localhost:7031/api/Match/addmatch',
+                "https://localhost:7031/api/Match/addmatch",
                 matchData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
 
-            alert('Match added successfully!');
+            alert("Match added successfully!");
             console.log(response.data);
-            navigate('/'); // Change the navigation route as needed
+            navigate("/");
         } catch (err) {
-            console.error('Error:', err);
-            alert('An error occurred while adding the match.');
+            console.error("Error:", err);
+            alert("An error occurred while adding the match.");
         } finally {
             setIsSubmitting(false);
         }
@@ -210,7 +203,7 @@ const AddMatch = () => {
                         </div>
 
                         <button type="submit" className="submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Add Match'}
+                            {isSubmitting ? "Submitting..." : "Add Match"}
                         </button>
                     </form>
                 </div>
