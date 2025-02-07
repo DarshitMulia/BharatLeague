@@ -21,6 +21,7 @@ import OngoingMatches from "./components/ongoingmatches/OngoingMatches";
 import GetMatchesByLeague from "./components/getmatchesbyleague/GetMatchesByLeague";
 import ScheduledMatchesByLeague from "./components/schedulematchesbyleague/ScheduleMatchesByLeague";
 import CompletedMatchesByLeague from "./components/completedmatchesbyleague/CompletedMatchesByLeague";
+import LeagueStandings from "./components/leaguestandings/LeagueStandings";
 
 function App() {
   return (
@@ -104,6 +105,10 @@ function App() {
         <Route
           path="/leaguedetails/:leagueId"
           element={<PrivateRoute element={LeagueDetails} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/leaguestandings"
+          element={<PrivateRoute element={LeagueStandings} allowedRoles={["User", "Admin"]} />}
         />
       </Routes>
     </BrowserRouter>
