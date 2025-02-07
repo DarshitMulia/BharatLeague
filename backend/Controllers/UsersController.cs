@@ -11,11 +11,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly UsersRepository _usersRepository;
@@ -38,6 +40,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("signup")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpUsers signupUser)
         {
             var validationResult = await _signUpValidator.ValidateAsync(signupUser);
@@ -59,6 +62,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUsers loginUser)
         {
             var validationResult = await _loginValidator.ValidateAsync(loginUser);

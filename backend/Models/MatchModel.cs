@@ -9,7 +9,7 @@ namespace backend.Models
         public int Team1Id { get; set; }
         public int Team2Id { get; set; }
         public DateTime MatchDate { get; set; }
-        public DateTime StartTime { get; set; }
+        public TimeSpan StartTime { get; set; }
         public string Venue { get; set; }
         public string Status { get; set; } 
         public DateTime CreatedAt { get; set; }

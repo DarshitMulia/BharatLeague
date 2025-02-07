@@ -6,11 +6,13 @@ using FluentValidation;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MatchController : ControllerBase
     {
         private readonly MatchRepository _matchRepository;
@@ -42,18 +44,6 @@ namespace backend.Controllers
                 return Ok("Match added successfully.");
             else
                 return StatusCode(500, "An error occurred while adding the match.");
-        }
-
-        // Get all matches by league ID
-        [HttpGet("league/{leagueId}")]
-        public async Task<IActionResult> GetMatchesByLeagueId(int leagueId)
-        {
-            var matches = await _matchRepository.GetMatchesByLeagueIdAsync(leagueId);
-
-            if (!matches.Any())
-                return NotFound("No matches found for this league.");
-
-            return Ok(matches);
         }
 
         // Update a match
@@ -95,6 +85,76 @@ namespace backend.Controllers
                 // Log the exception
                 return StatusCode(500, $"An error occurred while updating the match: {ex.Message}");
             }
+        }
+
+        // Get all matches by league ID
+        [HttpGet("league/{leagueId}")]
+        public async Task<IActionResult> GetMatchesByLeagueId(int leagueId)
+        {
+            var matches = await _matchRepository.GetMatchesByLeagueIdAsync(leagueId);
+
+            if (!matches.Any())
+                return NotFound("No matches found for this league.");
+
+            return Ok(matches);
+        }
+
+        [HttpPut("markongoing/{matchId}")]
+        public async Task<IActionResult> MarkMatchOngoing(int matchId)
+        {
+            var result = await _matchRepository.MarkMatchOngoingAsync(matchId);
+
+            if (result)
+                return Ok("Match marked as ongoing successfully.");
+            else
+                return StatusCode(500, "An error occurred while marking the match as ongoing.");
+        }
+
+        [HttpGet("ongoingmatches")]
+        public async Task<IActionResult> GetOngoingMatches()
+        {
+            var matches = await _matchRepository.GetOngoingMatchesAsync();
+
+            if (!matches.Any())
+                return NotFound("No ongoing matches found.");
+
+            return Ok(matches);
+        }
+
+        // Get scheduled matches by league ID
+        [HttpGet("scheduledmatches/{leagueId}")]
+        public async Task<IActionResult> GetScheduledMatchesByLeague(int leagueId)
+        {
+            var matches = await _matchRepository.GetScheduledMatchesByLeagueAsync(leagueId);
+
+            if (!matches.Any())
+                return NotFound("No scheduled matches found for this league.");
+
+            return Ok(matches);
+        }
+
+        // Get ongoing matches by league ID
+        [HttpGet("ongoingmatches/{leagueId}")]
+        public async Task<IActionResult> GetOngoingMatchesByLeague(int leagueId)
+        {
+            var matches = await _matchRepository.GetOngoingMatchesByLeagueAsync(leagueId);
+
+            if (!matches.Any())
+                return NotFound("No ongoing matches found for this league.");
+
+            return Ok(matches);
+        }
+
+        // Get completed matches by league ID
+        [HttpGet("completedmatches/{leagueId}")]
+        public async Task<IActionResult> GetCompletedMatchesByLeague(int leagueId)
+        {
+            var matches = await _matchRepository.GetCompletedMatchesByLeagueAsync(leagueId);
+
+            if (!matches.Any())
+                return NotFound("No completed matches found for this league.");
+
+            return Ok(matches);
         }
 
         // Get match by ID

@@ -101,7 +101,7 @@ namespace backend.Data
                                 Team1Id = Convert.ToInt32(reader["team1_id"]),
                                 Team2Id = Convert.ToInt32(reader["team2_id"]),
                                 MatchDate = Convert.ToDateTime(reader["match_date"]),
-                                StartTime = Convert.ToDateTime(reader["start_time"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
                                 Venue = reader["venue"].ToString(),
                                 Status = reader["status"].ToString(),
                                 CreatedAt = Convert.ToDateTime(reader["created_at"]),
@@ -111,6 +111,177 @@ namespace backend.Data
                     }
                 }
             }
+            return matches;
+        }
+
+        public async Task<bool> MarkMatchOngoingAsync(int matchId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("PR_MarkMatchOngoing", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@match_id", matchId);
+
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error marking match as ongoing: {ex.Message}");
+                    return false;
+                }
+            }
+        }
+
+        public async Task<List<MatchModel>> GetOngoingMatchesAsync()
+        {
+            var matches = new List<MatchModel>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetOngoingMatches", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            matches.Add(new MatchModel
+                            {
+                                MatchId = Convert.ToInt32(reader["match_id"]),
+                                LeagueId = Convert.ToInt32(reader["league_id"]),
+                                Team1Id = Convert.ToInt32(reader["team1_id"]),
+                                Team2Id = Convert.ToInt32(reader["team2_id"]),
+                                MatchDate = Convert.ToDateTime(reader["match_date"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
+                                Venue = reader["venue"].ToString(),
+                                Status = reader["status"].ToString(),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return matches;
+        }
+
+        public async Task<List<MatchModel>> GetScheduledMatchesByLeagueAsync(int leagueId)
+        {
+            var matches = new List<MatchModel>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetScheduledMatchesByLeague", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@leagueId", leagueId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            matches.Add(new MatchModel
+                            {
+                                MatchId = Convert.ToInt32(reader["match_id"]),
+                                LeagueId = leagueId,
+                                Team1Id = Convert.ToInt32(reader["team1_id"]),
+                                Team2Id = Convert.ToInt32(reader["team2_id"]),
+                                MatchDate = Convert.ToDateTime(reader["match_date"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
+                                Venue = reader["venue"].ToString(),
+                                Status = reader["status"].ToString(),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return matches;
+        }
+
+        public async Task<List<MatchModel>> GetOngoingMatchesByLeagueAsync(int leagueId)
+        {
+            var matches = new List<MatchModel>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetOngoingMatchesByLeague", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@leagueId", leagueId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            matches.Add(new MatchModel
+                            {
+                                MatchId = Convert.ToInt32(reader["match_id"]),
+                                LeagueId = leagueId,
+                                Team1Id = Convert.ToInt32(reader["team1_id"]),
+                                Team2Id = Convert.ToInt32(reader["team2_id"]),
+                                MatchDate = Convert.ToDateTime(reader["match_date"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
+                                Venue = reader["venue"].ToString(),
+                                Status = reader["status"].ToString(),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return matches;
+        }
+
+        public async Task<List<MatchModel>> GetCompletedMatchesByLeagueAsync(int leagueId)
+        {
+            var matches = new List<MatchModel>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetCompletedMatchesByLeague", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@leagueId", leagueId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            matches.Add(new MatchModel
+                            {
+                                MatchId = Convert.ToInt32(reader["match_id"]),
+                                LeagueId = leagueId,
+                                Team1Id = Convert.ToInt32(reader["team1_id"]),
+                                Team2Id = Convert.ToInt32(reader["team2_id"]),
+                                MatchDate = Convert.ToDateTime(reader["match_date"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
+                                Venue = reader["venue"].ToString(),
+                                Status = reader["status"].ToString(),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+
             return matches;
         }
 
@@ -136,7 +307,7 @@ namespace backend.Data
                                 Team1Id = Convert.ToInt32(reader["team1_id"]),
                                 Team2Id = Convert.ToInt32(reader["team2_id"]),
                                 MatchDate = Convert.ToDateTime(reader["match_date"]),
-                                StartTime = Convert.ToDateTime(reader["start_time"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
                                 Venue = reader["venue"].ToString(),
                                 Status = reader["status"].ToString(),
                                 CreatedAt = Convert.ToDateTime(reader["created_at"]),
@@ -172,7 +343,7 @@ namespace backend.Data
                                 Team1Id = Convert.ToInt32(reader["team1_id"]),
                                 Team2Id = Convert.ToInt32(reader["team2_id"]),
                                 MatchDate = Convert.ToDateTime(reader["match_date"]),
-                                StartTime = Convert.ToDateTime(reader["start_time"]),
+                                StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
                                 Venue = reader["venue"].ToString(),
                                 Status = reader["status"].ToString(),
                                 CreatedAt = Convert.ToDateTime(reader["created_at"]),
@@ -182,7 +353,6 @@ namespace backend.Data
                     }
                 }
             }
-
             return matches;
         }
     }

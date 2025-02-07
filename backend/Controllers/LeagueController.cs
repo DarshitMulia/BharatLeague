@@ -6,11 +6,13 @@ using FluentValidation;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LeagueController : ControllerBase
     {
         private readonly LeagueRepository _leagueRepository;
@@ -126,7 +128,6 @@ namespace backend.Controllers
                 existingLeague.Country = leagueDto.Country ?? existingLeague.Country;
                 existingLeague.StartDate = (DateTime)leagueDto.StartDate;
                 existingLeague.EndDate = (DateTime)leagueDto.EndDate;
-                //existingLeague.Status = leagueDto.Status ?? existingLeague.Status;
                 existingLeague.UpdatedAt = DateTime.Now;
 
                 // Save changes to the database
@@ -165,5 +166,22 @@ namespace backend.Controllers
 
             return Ok(leagues);
         }
+
+
+
+        [HttpGet("searchleague")]
+        public async Task<IActionResult> SearchLeagues([FromQuery] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return BadRequest("Search term cannot be empty.");
+
+            var leagues = await _leagueRepository.SearchLeaguesAsync(searchTerm);
+
+            if (!leagues.Any())
+                return NotFound("No leagues matched the search criteria.");
+
+            return Ok(leagues);
+        }
+
     }
 }

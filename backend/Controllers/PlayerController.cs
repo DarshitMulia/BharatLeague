@@ -9,11 +9,13 @@ using backend.Services;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PlayerController : ControllerBase
     {
         private readonly PlayerRepository _playerRepository;

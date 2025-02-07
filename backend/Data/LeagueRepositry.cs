@@ -205,7 +205,7 @@ namespace backend.Data
             return leagues;
         }
 
-
+        
 
         public async Task<List<LeagueModel>> GetOngoingLeaguesAsync()
         {
@@ -232,6 +232,44 @@ namespace backend.Data
                                 StartDate = Convert.ToDateTime(reader["start_date"]),
                                 EndDate = Convert.ToDateTime(reader["end_date"]),
                                 Status = reader["status"].ToString(),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return leagues;
+        }
+
+
+
+        public async Task<List<LeagueModel>> SearchLeaguesAsync(string searchTerm)
+        {
+            var leagues = new List<LeagueModel>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_SearchLeagues", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@SearchTerm", searchTerm);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            leagues.Add(new LeagueModel
+                            {
+                                LeagueId = Convert.ToInt32(reader["league_id"]),
+                                UserId = Convert.ToInt32(reader["user_id"]),
+                                LeagueName = reader["leaguename"].ToString(),
+                                ImageUrl = reader["image_url"].ToString(),
+                                Country = reader["country"].ToString(),
+                                StartDate = Convert.ToDateTime(reader["start_date"]),
+                                EndDate = Convert.ToDateTime(reader["end_date"]),
                                 CreatedAt = Convert.ToDateTime(reader["created_at"]),
                                 UpdatedAt = Convert.ToDateTime(reader["updated_at"])
                             });

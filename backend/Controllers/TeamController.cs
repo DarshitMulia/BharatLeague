@@ -1,134 +1,4 @@
-﻿//using Microsoft.AspNetCore.Mvc;
-//using backend.Data;
-//using backend.Models;
-//using backend.Validator;
-//using FluentValidation;
-//using System.Threading.Tasks;
-//using System.Collections.Generic;
-//using System.Linq;
-
-//namespace backend.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class TeamController : ControllerBase
-//    {
-//        private readonly TeamRepository _teamRepository;
-//        private readonly TeamValidator _teamValidator;
-
-//        public TeamController(TeamRepository teamRepository, TeamValidator teamValidator)
-//        {
-//            _teamRepository = teamRepository;
-//            _teamValidator = teamValidator;
-//        }
-
-//        // Add a new team
-//        [HttpPost("addteam")]
-//        public async Task<IActionResult> AddTeam([FromBody] TeamModel teamModel)
-//        {
-//            if (teamModel == null)
-//                return BadRequest("Invalid data.");
-
-//            var validationResult = await _teamValidator.ValidateAsync(teamModel);
-
-//            if (!validationResult.IsValid)
-//            {
-//                return BadRequest(validationResult.Errors);
-//            }
-
-//            var result = await _teamRepository.AddTeamAsync(teamModel);
-
-//            if (result)
-//                return Ok("Team added successfully.");
-//            else
-//                return StatusCode(500, "An error occurred while adding the team.");
-//        }
-
-//        // Get all teams by league ID
-//        [HttpGet("league/{leagueId}")]
-//        public async Task<IActionResult> GetTeamsByLeagueId(int leagueId)
-//        {
-//            var teams = await _teamRepository.GetTeamsByLeagueIdAsync(leagueId);
-
-//            if (!teams.Any())
-//                return NotFound("No teams found for this league.");
-
-//            return Ok(teams);
-//        }
-
-//        [HttpPut("updateteam/{teamId}")]
-//        public async Task<IActionResult> UpdateTeam(int teamId, [FromBody] TeamModel teamModel)
-//        {
-//            if (teamModel == null)
-//                return BadRequest("Invalid data.");
-
-//            // Validate the LeagueModel
-//            var validationResult = await _teamValidator.ValidateAsync(teamModel);
-
-//            if (!validationResult.IsValid)
-//            {
-//                return BadRequest(validationResult.Errors);
-//            }
-
-//            // Ensure the LeagueId matches
-//            if (teamId != teamModel.TeamId)
-//            {
-//                return BadRequest("Team ID mismatch.");
-//            }
-
-//            try
-//            {
-//                var updatedTeam = await _teamRepository.UpdateTeamAsync(teamModel);
-
-//                if (updatedTeam != null)
-//                {
-//                    return Ok(new { message = "Team updated successfully.", data = updatedTeam });
-//                }
-//                else
-//                {
-//                    return NotFound("Team not found.");
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                // Log the exception
-//                return StatusCode(500, $"An error occurred while updating the league: {ex.Message}");
-//            }
-//        }
-
-//        // Get team by ID
-//        [HttpGet("{teamId}")]
-//        public async Task<IActionResult> GetTeamById(int teamId)
-//        {
-//            var team = await _teamRepository.GetTeamByIdAsync(teamId);
-
-//            if (team == null)
-//                return NotFound("Team not found.");
-
-//            return Ok(team);
-//        }
-
-//        // Search teams by name or city
-//        [HttpGet("searchteam")]
-//        public async Task<IActionResult> SearchTeams([FromQuery] string searchTerm)
-//        {
-//            if (string.IsNullOrWhiteSpace(searchTerm))
-//                return BadRequest("Search term cannot be empty.");
-
-//            var teams = await _teamRepository.SearchTeamsAsync(searchTerm);
-
-//            if (!teams.Any())
-//                return NotFound("No teams matched the search criteria.");
-
-//            return Ok(teams);
-//        }
-//    }
-//}
-
-
-
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using backend.Data;
 using backend.Models;
 using backend.Validator;
@@ -139,11 +9,13 @@ using backend.Services;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TeamController : ControllerBase
     {
         private readonly TeamRepository _teamRepository;
