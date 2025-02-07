@@ -90,7 +90,7 @@ const LeagueDetails = () => {
         <div className="league-details-wrapper">
             <Sidebar />
             <Container fluid className="league-details-container">
-                <h2 className="league-title">League Teams</h2>
+                <h2 className="league-title">League Details</h2>
 
                 <Form.Group className="search-bar mb-4">
                     <Form.Control
