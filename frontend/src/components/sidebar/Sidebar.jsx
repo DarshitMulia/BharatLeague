@@ -67,7 +67,7 @@ const Sidebar = () => {
                 <li className="nav-item">
                     <Link to="/leaguestandings" className="nav-link">
                         <i className="fa fa-trophy"></i>
-                        <span className="link-text">Standings</span>
+                        <span className="link-text">League Standings</span>
                     </Link>
                 </li>
                 <hr />
