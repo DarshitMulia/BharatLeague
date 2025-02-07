@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import Sidebar from "../sidebar/Sidebar";
-import { FiPlus, FiEdit, FiArrowRight } from 'react-icons/fi';
+import { FiPlus, FiEdit } from 'react-icons/fi';
+import { RiUserLine } from 'react-icons/ri';
 import './managePlayer.css';
 
 const ManagePlayer = () => {
@@ -58,12 +59,8 @@ const ManagePlayer = () => {
                     </div>
                 ) : players.length === 0 ? (
                     <div className="empty-state">
-                        <h3>No Players Found</h3>
-                        <p>Get started by creating a new player</p>
-                        <Link to={`/createplayer/${teamId}`} className="create-player-btn">
-                            <FiPlus className="btn-icon" />
-                            Create Player
-                        </Link>
+                        <h3>No Players Found Yet!</h3>
+                        <p>Get started by adding a new player</p>
                     </div>
                 ) : (
                     <div className="player-list">
@@ -97,16 +94,16 @@ const ManagePlayer = () => {
                                 <div className="player-actions-container">
                                     <Link
                                         to={`/viewprofile/${player.playerId}`}
-                                        className="view-link"
+                                        className="action-link"
                                     >
-                                        <FiArrowRight className="link-icon" />
+                                        <RiUserLine  className="link-icon" />
                                         View Profile
                                     </Link>
                                     <Link
                                         to={`/updateplayer/${player.teamId}/${player.playerId}`}
-                                        className="action-btn"
+                                        className="action-link"
                                     >
-                                        <FiEdit className="btn-icon" />
+                                        <FiEdit className="btn-link" />
                                         Edit Player
                                     </Link>
                                 </div>

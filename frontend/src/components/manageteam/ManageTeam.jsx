@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Sidebar from "../sidebar/Sidebar";
-import { FiPlus, FiUsers, FiEdit, FiArrowRight } from 'react-icons/fi';
+import { FiPlus, FiUsers, FiEdit, FiArrowRight, FiUser } from 'react-icons/fi';
 import './manageteam.css';
 
 const ManageTeam = () => {
@@ -58,12 +58,8 @@ const ManageTeam = () => {
                     </div>
                 ) : teams.length === 0 ? (
                     <div className="empty-state">
-                        <h3>No Teams Found</h3>
-                        <p>Get started by creating a new team</p>
-                        <a href={`/createteam/${leagueId}`} className="create-team-btn">
-                            <FiPlus className="btn-icon" />
-                            Create Team
-                        </a>
+                        <h3>No Teams Found Yet!</h3>
+                        <p>Get started by adding a new team</p>
                     </div>
                 ) : (
                     <div className="team-list">
@@ -84,8 +80,8 @@ const ManageTeam = () => {
                                                 <span className="city-tag">
                                                     {team.city}
                                                 </span>
-                                                <span className="coach-info">
-                                                    Coach: <b>{team.coachName}</b>
+                                                <span className="coach-information">
+                                                    Manager: <b>{team.coachName}</b>
                                                 </span>
                                                 <span className="found-year">
                                                     Founded Year: <b>{team.foundedYear}</b>
@@ -95,16 +91,14 @@ const ManageTeam = () => {
                                     </div>
                                 </div>
                                 <div className="team-actions-container">
-                                    <Link to={`/viewplayers/${team.teamId}`}
-                                        className="view-link"
-                                    >
-                                        <FiArrowRight className="link-icon" />
-                                        View Players
+                                    <Link to={`/viewplayers/${team.teamId}`} className="action-link">
+                                        <FiUser className="link-icon" />
+                                        Players
                                     </Link>
                                     <Link to={`/updateteam/${team.leagueId}/${team.teamId}`}
-                                        className="action-btn"
+                                        className="action-link"
                                     >
-                                        <FiEdit className="btn-icon" />
+                                        <FiEdit className="btn-link" />
                                         Edit Team
                                     </Link>
                                 </div>
