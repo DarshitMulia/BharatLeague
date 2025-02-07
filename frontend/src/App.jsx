@@ -17,6 +17,10 @@ import Leagues from "./components/leagues/Leagues";
 import LeagueDetails from "./components/leaguedetails/LeagueDetails";
 import AddMatch from "./components/addmatch/AddMatch";
 import UpdateMatch from "./components/updatematch/UpdateMatch";
+import OngoingMatches from "./components/ongoingmatches/OngoingMatches";
+import GetMatchesByLeague from "./components/getmatchesbyleague/GetMatchesByLeague";
+import ScheduledMatchesByLeague from "./components/schedulematchesbyleague/ScheduleMatchesByLeague";
+import CompletedMatchesByLeague from "./components/completedmatchesbyleague/CompletedMatchesByLeague";
 
 function App() {
   return (
@@ -32,6 +36,10 @@ function App() {
         <Route
           path="/"
           element={<PrivateRoute element={Home} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/ongoingmatches"
+          element={<PrivateRoute element={OngoingMatches} allowedRoles={["User", "Admin"]} />}
         />
         <Route
           path="/createleague"
@@ -52,6 +60,18 @@ function App() {
         <Route
           path="/manageleague"
           element={<PrivateRoute element={ManageLeague} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/matches/:leagueId"
+          element={<PrivateRoute element={GetMatchesByLeague} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/scheduledmatches/:leagueId"
+          element={<PrivateRoute element={ScheduledMatchesByLeague} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/completedmatches/:leagueId"
+          element={<PrivateRoute element={CompletedMatchesByLeague} allowedRoles={["User", "Admin"]} />}
         />
         <Route
           path="/viewteams/:leagueId"
