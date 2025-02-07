@@ -128,10 +128,11 @@ namespace backend.Controllers
             var teams = await _teamRepository.GetTeamsByLeagueIdAsync(leagueId);
 
             if (!teams.Any())
-                return NotFound("No teams found for this league.");
+                return Ok(new List<TeamModel>());
 
             return Ok(teams);
         }
+
         // Get team by ID
         [HttpGet("{teamId}")]
         public async Task<IActionResult> GetTeamById(int teamId)

@@ -94,7 +94,7 @@ namespace backend.Controllers
             var matches = await _matchRepository.GetMatchesByLeagueIdAsync(leagueId);
 
             if (!matches.Any())
-                return NotFound("No matches found for this league.");
+                return Ok(new List<MatchModel>());
 
             return Ok(matches);
         }
@@ -128,7 +128,7 @@ namespace backend.Controllers
             var matches = await _matchRepository.GetScheduledMatchesByLeagueAsync(leagueId);
 
             if (!matches.Any())
-                return NotFound("No scheduled matches found for this league.");
+                return Ok(new List<MatchModel>());
 
             return Ok(matches);
         }
@@ -140,7 +140,7 @@ namespace backend.Controllers
             var matches = await _matchRepository.GetOngoingMatchesByLeagueAsync(leagueId);
 
             if (!matches.Any())
-                return NotFound("No ongoing matches found for this league.");
+                return Ok(new List<MatchModel>());
 
             return Ok(matches);
         }
@@ -152,7 +152,7 @@ namespace backend.Controllers
             var matches = await _matchRepository.GetCompletedMatchesByLeagueAsync(leagueId);
 
             if (!matches.Any())
-                return NotFound("No completed matches found for this league.");
+                return Ok(new List<MatchModel>());
 
             return Ok(matches);
         }

@@ -158,7 +158,7 @@ namespace backend.Controllers
             var players = await _playerRepository.GetPlayersByTeamAsync(teamId);
 
             if (!players.Any())
-                return NotFound("No players found for this team.");
+                return Ok(new List<PlayerModel>());
 
             return Ok(players);
         }
