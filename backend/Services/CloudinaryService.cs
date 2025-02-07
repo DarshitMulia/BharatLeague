@@ -29,7 +29,7 @@ namespace backend.Services
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
-                Folder = "leagues" // Optional: Specify a folder for better organization
+                Folder = "leagues" 
             };
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
