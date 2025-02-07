@@ -4,13 +4,14 @@ CREATE DATABASE Bharat_League;
 -- Table: Users
 CREATE TABLE Users (
     user_id INT PRIMARY KEY IDENTITY(1,1),
-    username NVARCHAR(50) NOT NULL UNIQUE,
+    username NVARCHAR(50) NOT NULL,
     email NVARCHAR(100) NOT NULL UNIQUE,
     password NVARCHAR(200) NOT NULL,
     role NVARCHAR(20) CHECK (role IN ('Admin', 'User')), 
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE()
 );
+
 
 -- Table: League
 CREATE TABLE League (
@@ -69,50 +70,26 @@ CREATE TABLE Match (
     team1_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),
     team2_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),
     match_date DATE NOT NULL,
-    start_time DATETIME NOT NULL, 
+    start_time TIME NOT NULL,  
     venue NVARCHAR(100) NOT NULL,
-    status AS (
-        CASE 
-            WHEN start_time > GETDATE() THEN 'Scheduled' 
-            WHEN GETDATE() BETWEEN start_time AND DATEADD(HOUR, 2, start_time) THEN 'Ongoing' 
-            ELSE 'Completed' 
-        END
-    ),
+	status NVARCHAR(50) NOT NULL DEFAULT 'Scheduled' CHECK (status IN ('Scheduled', 'Ongoing', 'Completed')),
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE(),
     CHECK (team1_id <> team2_id)
 );
 
 
--- Table: MatchEventLogs
-CREATE TABLE MatchEventLogs (
+-- Table: MatchEvents
+CREATE TABLE MatchEvents (
     event_id INT PRIMARY KEY IDENTITY(1,1),
     match_id INT NOT NULL FOREIGN KEY REFERENCES Match(match_id),
-    team1_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),
-	team2_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),
-    player_id INT NOT NULL FOREIGN KEY REFERENCES Player(player_id),
+    team_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),          
+    player_id INT NULL FOREIGN KEY REFERENCES Player(player_id),            
     event_type NVARCHAR(50) CHECK (event_type IN ('Goal', 'Assist', 'Yellow Card', 'Red Card', 'Foul')),
-    event_time INT, 
-	team1_score INT DEFAULT 0,
-    team2_score INT DEFAULT 0,
+    event_time INT,                
+    additional_info NVARCHAR(500) NULL,  
     created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE()
-);
-
-
--- Table: PlayerActions
-CREATE TABLE PlayerActions (
-    match_id INT NOT NULL FOREIGN KEY REFERENCES Match(match_id),
-    team_id INT NOT NULL FOREIGN KEY REFERENCES Team(team_id),
-    player_id INT NOT NULL FOREIGN KEY REFERENCES Player(player_id),
-    goals INT DEFAULT 0,
-    assists INT DEFAULT 0,
-    fouls INT DEFAULT 0,
-    yellow_cards INT DEFAULT 0,       
-    red_cards INT DEFAULT 0,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    PRIMARY KEY (match_id, team_id, player_id)  
+    updated_at DATETIME DEFAULT GETDATE()  
 );
 
 
@@ -139,10 +116,12 @@ CREATE TABLE LeagueStandings (
     wins INT DEFAULT 0,
     losses INT DEFAULT 0,
     draws INT DEFAULT 0,
-    points INT DEFAULT 0,
     goals_scored INT DEFAULT 0,
     goals_conceded INT DEFAULT 0,
     goals_difference AS (goals_scored - goals_conceded),
+	points INT DEFAULT 0,
+	created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME DEFAULT GETDATE()
     UNIQUE (league_id, team_id)
 );
 
@@ -160,11 +139,8 @@ select * from Player
 
 select * from Match
 
-select * from MatchEventLogs
-
-select * from PlayerActions
+select * from MatchEvents
 
 select * from PlayerStatistics
 
 select * from LeagueStandings
-
