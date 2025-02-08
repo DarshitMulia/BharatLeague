@@ -13,9 +13,15 @@ const CompletedMatchesByLeague = () => {
     const [error, setError] = useState(null);
     const token = localStorage.getItem("authToken");
 
+    // Helper function to get team name by teamId
     const getTeamName = (teamId) => {
         const team = teams.find((t) => t.teamId === teamId);
         return team ? team.teamName : `ID: ${teamId}`;
+    };
+
+    const getTeamImage = (teamId) => {
+        const team = teams.find((t) => t.teamId === teamId);
+        return team && team.imageUrl ? team.imageUrl : "https://via.placeholder.com/50";
     };
 
     useEffect(() => {
@@ -65,7 +71,7 @@ const CompletedMatchesByLeague = () => {
         <div className="ongoing-matches-container">
             <Sidebar />
             <header className="matches-header">
-                <h1>{league ? league.leagueName : `Completed Matches`}</h1>
+                <h1>{league ? league.leagueName : `Completed Matches`} (Completed Matches)</h1>
             </header>
 
             <div className="content-wrapper">
@@ -77,7 +83,13 @@ const CompletedMatchesByLeague = () => {
                             <div key={match.matchId} className="match-card">
                                 <div className="teams-container">
                                     <div className="team">
-                                        <div className="team-logo"></div>
+                                        <div className="team-logo">
+                                            <img 
+                                                src={getTeamImage(match.team1Id)} 
+                                                alt={getTeamName(match.team1Id)} 
+                                                className="team-logo-img"
+                                            />
+                                        </div>
                                         <span className="team-name">{getTeamName(match.team1Id)}</span>
                                     </div>
 
@@ -86,7 +98,13 @@ const CompletedMatchesByLeague = () => {
                                     </div>
 
                                     <div className="team">
-                                        <div className="team-logo"></div>
+                                        <div className="team-logo">
+                                            <img 
+                                                src={getTeamImage(match.team2Id)} 
+                                                alt={getTeamName(match.team2Id)} 
+                                                className="team-logo-img"
+                                            />
+                                        </div>
                                         <span className="team-name">{getTeamName(match.team2Id)}</span>
                                     </div>
                                 </div>
@@ -111,12 +129,12 @@ const CompletedMatchesByLeague = () => {
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
 
-                                    <div className="info-row">
+                                    {/* <div className="info-row">
                                         <span className="info-label">🏆 Result</span>
                                         <span className="info-value">
                                             {match.result || "Result not yet available"}
                                         </span>
-                                    </div>
+                                    </div> */}
 
                                     <button className="details-button">
                                         View Match Details →

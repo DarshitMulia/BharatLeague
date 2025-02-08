@@ -18,21 +18,29 @@ const ScheduledMatchesByLeague = () => {
         return team ? team.teamName : `ID: ${teamId}`;
     };
 
+    const getTeamImage = (teamId) => {
+        const team = teams.find((t) => t.teamId === teamId);
+        return team && team.imageUrl ? team.imageUrl : "https://via.placeholder.com/50";
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Fetch the scheduled matches for the league
                 const matchesResponse = await axios.get(
                     `https://localhost:7031/api/match/scheduledmatches/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setMatches(matchesResponse.data);
 
+                // Fetch the teams in the league
                 const teamsResponse = await axios.get(
                     `https://localhost:7031/api/team/league/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setTeams(teamsResponse.data);
 
+                // Fetch the league details
                 const leagueResponse = await axios.get(
                     `https://localhost:7031/api/league/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
@@ -74,7 +82,13 @@ const ScheduledMatchesByLeague = () => {
                             <div key={match.matchId} className="match-card">
                                 <div className="teams-container">
                                     <div className="team">
-                                        <div className="team-logo"></div>
+                                        <div className="team-logo">
+                                            <img 
+                                                src={getTeamImage(match.team1Id)} 
+                                                alt={getTeamName(match.team1Id)} 
+                                                className="team-logo-img"
+                                            />
+                                        </div>
                                         <span className="team-name">{getTeamName(match.team1Id)}</span>
                                     </div>
 
@@ -83,7 +97,13 @@ const ScheduledMatchesByLeague = () => {
                                     </div>
 
                                     <div className="team">
-                                        <div className="team-logo"></div>
+                                        <div className="team-logo">
+                                            <img 
+                                                src={getTeamImage(match.team2Id)} 
+                                                alt={getTeamName(match.team2Id)} 
+                                                className="team-logo-img"
+                                            />
+                                        </div>
                                         <span className="team-name">{getTeamName(match.team2Id)}</span>
                                     </div>
                                 </div>
