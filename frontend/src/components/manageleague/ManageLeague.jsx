@@ -145,7 +145,7 @@ const ManageLeague = () => {
                                         <Link to={`/scheduledmatches/${league.leagueId}`} className="status-filter scheduled">
                                             Scheduled
                                         </Link>
-                                        <Link to={`/viewmatches/${league.leagueId}?status=ongoing`} className="status-filter ongoing">
+                                        <Link to={`/ongoingmatches/${league.leagueId}`} className="status-filter ongoing">
                                             Ongoing
                                         </Link>
                                         <Link to={`/completedmatches/${league.leagueId}`} className="status-filter completed">
