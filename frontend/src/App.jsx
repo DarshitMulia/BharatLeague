@@ -24,7 +24,7 @@ import CompletedMatchesByLeague from "./components/completedmatchesbyleague/Comp
 import LeagueStandings from "./components/leaguestandings/LeagueStandings";
 import OngoingMatchesByLeague from "./components/ongoingmatchesbyleague/OngoingMatchesByLeague";
 import ViewMatchDetails from "./components/viewmatchdetails/ViewMatchDetails";
-import ManageMatch from "./components/addmatchevents/ManageMatch";
+import ManageMatch from "./components/managematch/ManageMatch";
 
 function App() {
   return (
