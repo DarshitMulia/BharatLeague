@@ -1,0 +1,124 @@
+.player-profile-container {
+    background-color: #E1E6E1;
+    display: flex;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 2rem 3rem;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #23231A;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-details h1 {
+    color: #E85D04;
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+}
+
+.profile-details p {
+    color: #23231A;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+.team-league-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.player-team-info,
+.player-league-info {
+    flex: 1;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.player-team-info img,
+.player-league-info img {
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.team-info h2,
+.league-info h2 {
+    color: #23231A;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.statistics-section h2 {
+    color: #23231A;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat h3 {
+    color: #23231A;
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+}
+
+.stat p {
+    color: #E85D04;
+    font-weight: 600;
+    margin: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .team-league-info {
+        flex-direction: column;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
