@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { FiEdit } from 'react-icons/fi';
 import Sidebar from "../sidebar/Sidebar";
 import '../ongoingmatches/ongoingmatches.css';
 
@@ -11,6 +12,7 @@ const ScheduledMatchesByLeague = () => {
     const [league, setLeague] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     const token = localStorage.getItem("authToken");
 
     const getTeamName = (teamId) => {
@@ -67,10 +69,10 @@ const ScheduledMatchesByLeague = () => {
     }
 
     return (
-        <div className="ongoing-matches-container">
+        <div className="matches-container-for-all">
             <Sidebar />
             <header className="matches-header">
-                <h1>{league ? league.leagueName : `Scheduled Matches`}</h1>
+                <h1>{league ? league.leagueName : `Scheduled Matches`} (Scheduled Matches)</h1>
             </header>
 
             <div className="content-wrapper">
@@ -89,7 +91,7 @@ const ScheduledMatchesByLeague = () => {
                                                 className="team-logo-img"
                                             />
                                         </div>
-                                        <span className="team-name">{getTeamName(match.team1Id)}</span>
+                                        <span>{getTeamName(match.team1Id)}</span>
                                     </div>
 
                                     <div className="vs-container">
@@ -104,7 +106,7 @@ const ScheduledMatchesByLeague = () => {
                                                 className="team-logo-img"
                                             />
                                         </div>
-                                        <span className="team-name">{getTeamName(match.team2Id)}</span>
+                                        <span>{getTeamName(match.team2Id)}</span>
                                     </div>
                                 </div>
 
@@ -128,8 +130,9 @@ const ScheduledMatchesByLeague = () => {
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
 
-                                    <button className="details-button">
-                                        View Match Details →
+                                    <button onClick={() => navigate(`/updatematch/${leagueId}/${match.matchId}`)} className="details-button">
+                                        <FiEdit style={{margin:"5px"}}/> 
+                                        Edit Details
                                     </button>
                                 </div>
                             </div>
