@@ -108,7 +108,7 @@ const ManageMatch = () => {
         if (!formData.playerId) newErrors.playerId = "Please select a player";
         if (!formData.eventType) newErrors.eventType = "Please select an event type";
         if (!formData.eventTime) newErrors.eventTime = "Event time is required";
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -142,7 +142,7 @@ const ManageMatch = () => {
             );
 
             alert("Match event added successfully!");
-            navigate(-1); // Go back to previous page
+            navigate(-1); 
         } catch (err) {
             console.error("Error adding match event:", err);
             alert("An error occurred while adding the match event");
