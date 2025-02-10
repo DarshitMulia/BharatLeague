@@ -1,9 +1,14 @@
-.ongoing-matches-container {
+.matches-container-for-all {
     margin-left: 250px;
     min-height: 100vh;
     background: #E1E6E1;
     padding: 3rem;
-    font-family: 'Inter', sans-serif;
+}
+
+.ongoing-matches-container {
+    min-height: 100vh;
+    background: #E1E6E1;
+    padding: 3rem;
 }
 
 .matches-header {
