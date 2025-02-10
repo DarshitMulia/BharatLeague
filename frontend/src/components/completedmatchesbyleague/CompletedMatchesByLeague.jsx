@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
 import '../ongoingmatches/ongoingmatches.css';
 
 const CompletedMatchesByLeague = () => {
-    const { leagueId } = useParams(); 
+    const { leagueId } = useParams();
     const [matches, setMatches] = useState([]);
     const [teams, setTeams] = useState([]);
     const [league, setLeague] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     const token = localStorage.getItem("authToken");
 
     // Helper function to get team name by teamId
@@ -68,7 +69,7 @@ const CompletedMatchesByLeague = () => {
     }
 
     return (
-        <div className="ongoing-matches-container">
+        <div className="matches-container-for-all">
             <Sidebar />
             <header className="matches-header">
                 <h1>{league ? league.leagueName : `Completed Matches`} (Completed Matches)</h1>
@@ -84,13 +85,13 @@ const CompletedMatchesByLeague = () => {
                                 <div className="teams-container">
                                     <div className="team">
                                         <div className="team-logo">
-                                            <img 
-                                                src={getTeamImage(match.team1Id)} 
-                                                alt={getTeamName(match.team1Id)} 
+                                            <img
+                                                src={getTeamImage(match.team1Id)}
+                                                alt={getTeamName(match.team1Id)}
                                                 className="team-logo-img"
                                             />
                                         </div>
-                                        <span className="team-name">{getTeamName(match.team1Id)}</span>
+                                        <span>{getTeamName(match.team1Id)}</span>
                                     </div>
 
                                     <div className="vs-container">
@@ -99,13 +100,13 @@ const CompletedMatchesByLeague = () => {
 
                                     <div className="team">
                                         <div className="team-logo">
-                                            <img 
-                                                src={getTeamImage(match.team2Id)} 
-                                                alt={getTeamName(match.team2Id)} 
+                                            <img
+                                                src={getTeamImage(match.team2Id)}
+                                                alt={getTeamName(match.team2Id)}
                                                 className="team-logo-img"
                                             />
                                         </div>
-                                        <span className="team-name">{getTeamName(match.team2Id)}</span>
+                                        <span>{getTeamName(match.team2Id)}</span>
                                     </div>
                                 </div>
 
@@ -129,14 +130,7 @@ const CompletedMatchesByLeague = () => {
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
 
-                                    {/* <div className="info-row">
-                                        <span className="info-label">🏆 Result</span>
-                                        <span className="info-value">
-                                            {match.result || "Result not yet available"}
-                                        </span>
-                                    </div> */}
-
-                                    <button className="details-button">
+                                    <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
                                         View Match Details →
                                     </button>
                                 </div>
