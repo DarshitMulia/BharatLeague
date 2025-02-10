@@ -29,6 +29,32 @@ BEGIN
 END;
 
 
+-- Procedure to Retrieve Teams by Match ID
+CREATE PROCEDURE PR_GetTeamsByMatchID
+    @MatchID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        team_id,
+        league_id,
+        teamname,
+        image_url,
+        city,
+        coach_name,
+        founded_year,
+        created_at,
+        updated_at
+    FROM Team
+    WHERE team_id IN (
+         SELECT team1_id FROM Match WHERE match_id = @MatchID
+         UNION
+         SELECT team2_id FROM Match WHERE match_id = @MatchID
+    );
+END;
+
+
 -- Procedure to Retrieve a Team by Team ID
 CREATE PROCEDURE PR_GetTeamByID
     @TeamID INT

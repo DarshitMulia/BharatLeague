@@ -141,11 +141,34 @@ END;
 
 
 -- Retrieves overall statistics for a specific player.
-CREATE PROCEDURE PR_GetPlayerStatisticsByPlayerId
+ALTER PROCEDURE PR_GetPlayerStatisticsByPlayerId
     @player_id INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT * FROM PlayerStatistics WHERE player_id = @player_id;
-END;
+    SELECT 
+        p.playername,
+        p.image_url AS playerimage,
+        t.teamname,
+        t.image_url AS teamimage,
+        l.leaguename,
+        l.image_url AS leagueimage,
+        p.age,
+        p.jersey_number,
+        p.position,
+        ps.matches_played,
+        ps.goals,
+        ps.assists,
+        ps.yellow_cards,
+        ps.red_cards,
+        ps.fouls
+    FROM Player p
+    INNER JOIN Team t 
+        ON p.team_id = t.team_id
+    INNER JOIN League l 
+        ON t.league_id = l.league_id
+    LEFT JOIN PlayerStatistics ps 
+        ON p.player_id = ps.player_id
+    WHERE p.player_id = @player_id;
+END
