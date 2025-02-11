@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
 import '../ongoingmatches/ongoingmatches.css';
+import "font-awesome/css/font-awesome.min.css";
 
 const OngoingMatchesByLeague = () => {
     const { leagueId } = useParams();
@@ -127,8 +128,9 @@ const OngoingMatchesByLeague = () => {
                                         <span className="info-label">📍 Venue</span>
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
-                                    <button onClick={() => navigate('')} className="details-button" style={{ backgroundColor: "#1a1a1a" }}>
+                                    <button onClick={() => navigate(`addmatchevents/${match.matchId}`)} className="details-button" style={{ backgroundColor: "#1a1a1a" }}>
                                         Manage Match
+                                        <i className="fa fa-cogs" style={{color:"white", marginLeft:"10px"}}></i>
                                     </button>
                                     <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
                                         View Match Details →
