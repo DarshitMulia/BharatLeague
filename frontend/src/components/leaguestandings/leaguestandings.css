@@ -29,18 +29,11 @@
 
 .league-select {
     padding: 0.8rem 1.2rem;
-    border: 2px solid #23231A;
     border-radius: 8px;
     background-color: white;
     font-size: 1rem;
     transition: all 0.3s ease;
     width: 300px;
-}
-
-.league-select:focus {
-    outline: none;
-    border-color: #E85D04;
-    box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.2);
 }
 
 .table-container {
@@ -58,7 +51,7 @@
 
 .standings-table th {
     background-color: #23231A;
-    color: #E85D04;
+    color: white;
     padding: 1.2rem;
     text-align: center;
     text-transform: uppercase;

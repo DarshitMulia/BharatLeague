@@ -100,7 +100,7 @@ const LeagueStandings = () => {
                         onChange={handleLeagueChange}
                         className="league-select"
                     >
-                        <option value="">--Select a League--</option>
+                        <option value="">Select League</option>
                         {leagues.map((league) => (
                             <option key={league.leagueId} value={league.leagueId}>
                                 {league.leagueName}
