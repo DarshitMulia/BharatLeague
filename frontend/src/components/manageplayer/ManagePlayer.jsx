@@ -93,10 +93,10 @@ const ManagePlayer = () => {
                                 </div>
                                 <div className="player-actions-container">
                                     <Link
-                                        to={`/viewprofile/${player.playerId}`}
+                                        to={`viewplayerprofile/${player.playerId}`}
                                         className="action-link"
                                     >
-                                        <RiUserLine  className="link-icon" />
+                                        <RiUserLine className="link-icon" />
                                         View Profile
                                     </Link>
                                     <Link

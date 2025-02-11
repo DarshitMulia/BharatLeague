@@ -25,6 +25,7 @@ import LeagueStandings from "./components/leaguestandings/LeagueStandings";
 import OngoingMatchesByLeague from "./components/ongoingmatchesbyleague/OngoingMatchesByLeague";
 import ViewMatchDetails from "./components/viewmatchdetails/ViewMatchDetails";
 import ManageMatch from "./components/managematch/ManageMatch";
+import ViewPlayerProfile from "./components/viewplayerprofile/ViewPlayerProfile";
 
 function App() {
   return (
@@ -88,6 +89,18 @@ function App() {
         <Route
           path="/viewmatchdetails/:leagueId/:matchId"
           element={<PrivateRoute element={ViewMatchDetails} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/viewmatchdetails/:leagueId/:matchId/viewplayerprofile/:playerId"
+          element={<PrivateRoute element={ViewPlayerProfile} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/viewplayers/:teamId/viewplayerprofile/:playerId"
+          element={<PrivateRoute element={ViewPlayerProfile} allowedRoles={["User", "Admin"]} />}
+        />
+        <Route
+          path="/leaguedetails/:leagueId/viewplayerprofile/:playerId"
+          element={<PrivateRoute element={ViewPlayerProfile} allowedRoles={["User", "Admin"]} />}
         />
         <Route
           path="/viewteams/:leagueId"
