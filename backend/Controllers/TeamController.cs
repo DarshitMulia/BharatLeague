@@ -145,6 +145,18 @@ namespace backend.Controllers
             return Ok(team);
         }
 
+        // Get teams by match ID
+        [HttpGet("match/{matchId}")]
+        public async Task<IActionResult> GetTeamsByMatchId(int matchId)
+        {
+            var teams = await _teamRepository.GetTeamsByMatchIdAsync(matchId);
+
+            if (!teams.Any())
+                return Ok(new List<TeamModel>());
+
+            return Ok(teams);
+        }
+
         // Search teams by name or city
         [HttpGet("searchteam")]
         public async Task<IActionResult> SearchTeams([FromQuery] string searchTerm)
