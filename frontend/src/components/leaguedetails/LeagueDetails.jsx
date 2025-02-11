@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, ListGroup, Spinner, Form, Collapse } from 'react-bootstrap';
+import { FiArrowRight } from 'react-icons/fi';
 import axios from 'axios';
 import Sidebar from "../sidebar/Sidebar";
 import "./LeagueDetails.css";
@@ -100,6 +101,10 @@ const LeagueDetails = () => {
                         onChange={(e) => setTeamSearchTerm(e.target.value)}
                         className="search-input rounded-pill"
                     />
+                    <Link to={`/matches/${leagueId}`} className="create-league-button">
+                        View All Matches
+                        <FiArrowRight className="link-icon" />
+                    </Link>
                 </Form.Group>
 
                 {filteredTeams.length === 0 ? (
@@ -166,6 +171,12 @@ const LeagueDetails = () => {
                                                             <Col xs={6} md={3} className="player-info">
                                                                 <span className="info-label">Age:</span>
                                                                 <span className="info-value">{player.age}</span>
+                                                            </Col>
+                                                            <Col xs={6} md={3} className="player-info">
+                                                                <Link to={`viewplayerprofile/${player.playerId}`} className="view-profile-link">
+                                                                    View Profile
+                                                                    <FiArrowRight className="link-icon" />
+                                                                </Link>
                                                             </Col>
                                                         </Row>
                                                     </ListGroup.Item>
