@@ -137,15 +137,21 @@ namespace backend.Data
                             {
                                 stats = new PlayerStatisticsModel
                                 {
-                                    PlayerId = Convert.ToInt32(reader["player_id"]),
+                                    PlayerName = reader["playername"].ToString(),
+                                    PlayerImage = reader["playerimage"].ToString(),
+                                    TeamName = reader["teamname"].ToString(),
+                                    TeamImage = reader["teamimage"].ToString(),
+                                    LeagueName = reader["leaguename"].ToString(),
+                                    LeagueImage = reader["leagueimage"].ToString(),
+                                    Age = Convert.ToInt32(reader["age"]),
+                                    JerseyNumber = Convert.ToInt32(reader["jersey_number"]),
+                                    Position = reader["position"].ToString(),
                                     MatchesPlayed = Convert.ToInt32(reader["matches_played"]),
                                     Goals = Convert.ToInt32(reader["goals"]),
                                     Assists = Convert.ToInt32(reader["assists"]),
                                     YellowCards = Convert.ToInt32(reader["yellow_cards"]),
                                     RedCards = Convert.ToInt32(reader["red_cards"]),
-                                    Fouls = Convert.ToInt32(reader["fouls"]),
-                                    CreatedAt = Convert.ToDateTime(reader["created_at"]),
-                                    UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                                    Fouls = Convert.ToInt32(reader["fouls"])
                                 };
                             }
                         }
@@ -153,7 +159,7 @@ namespace backend.Data
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error retrieving overall statistics for player {playerId}: {ex.Message}");
+                    _logger.LogError($"Error retrieving statistics for player {playerId}: {ex.Message}");
                 }
             }
             return stats;
