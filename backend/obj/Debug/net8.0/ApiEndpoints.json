@@ -691,6 +691,22 @@
   },
   {
     "ContainingType": "backend.Controllers.TeamController",
+    "Method": "GetTeamsByMatchId",
+    "RelativePath": "api/Team/match/{matchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "matchId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.TeamController",
     "Method": "SearchTeams",
     "RelativePath": "api/Team/searchteam",
     "HttpMethod": "GET",
