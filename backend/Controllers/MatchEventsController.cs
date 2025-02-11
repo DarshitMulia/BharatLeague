@@ -33,7 +33,7 @@ namespace backend.Controllers
         {
             var events = await _matchEventsRepository.GetMatchEventsByMatchIdAsync(matchId);
             if (events == null || events.Count == 0)
-                return NotFound("No events found for the specified match.");
+                return Ok(new List<MatchEventsModel>());
             return Ok(events);
         }
 

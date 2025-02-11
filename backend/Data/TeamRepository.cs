@@ -111,6 +111,39 @@ namespace backend.Data
             return teams;
         }
 
+        public async Task<List<TeamModel>> GetTeamsByMatchIdAsync(int matchId)
+        {
+            var teams = new List<TeamModel>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetTeamsByMatchID", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@MatchID", matchId);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            teams.Add(new TeamModel
+                            {
+                                TeamId = Convert.ToInt32(reader["team_id"]),
+                                LeagueId = Convert.ToInt32(reader["league_id"]),
+                                TeamName = reader["teamname"].ToString(),
+                                ImageUrl = reader["image_url"].ToString(),
+                                City = reader["city"].ToString(),
+                                CoachName = reader["coach_name"].ToString(),
+                                FoundedYear = Convert.ToInt32(reader["founded_year"]),
+                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                            });
+                        }
+                    }
+                }
+            }
+            return teams;
+        }
+
         public async Task<TeamModel?> GetTeamByIdAsync(int teamId)
         {
             TeamModel? team = null;
