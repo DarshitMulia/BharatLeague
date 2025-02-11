@@ -185,15 +185,21 @@ const UpdatePlayer = () => {
 
                         <div className="form-group">
                             <label className="form-label">Position</label>
-                            <input
+                            <select
                                 className="form-input"
-                                type="text"
                                 name="position"
-                                placeholder='Enter Position'
                                 value={formData.position}
                                 onChange={handleInputChange}
                                 required
-                            />
+                            >
+                                <option value="">
+                                    Select Position
+                                </option>
+                                <option value="Forward">Forward</option>
+                                <option value="Midfielder">Midfielder</option>
+                                <option value="Defender">Defender</option>
+                                <option value="Goalkeeper">Goalkeeper</option>
+                            </select>
                         </div>
 
                         <div className="form-group">
