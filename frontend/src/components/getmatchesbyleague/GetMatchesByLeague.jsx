@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
 import '../ongoingmatches/ongoingmatches.css';
 
@@ -11,6 +11,7 @@ const GetMatchesByLeague = () => {
     const [league, setLeague] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     const token = localStorage.getItem("authToken");
 
     // Utility functions to get team name and image based on teamId.
@@ -122,7 +123,7 @@ const GetMatchesByLeague = () => {
                     <span className="info-value">{match.venue || "To be determined"}</span>
                 </div>
 
-                <button className="details-button">
+                <button onClick={() => navigate(`/viewmatchdetails/${match.leagueId}/${match.matchId}`)} className="details-button">
                     View Match Details →
                 </button>
             </div>

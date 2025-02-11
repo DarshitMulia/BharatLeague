@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../sidebar/Sidebar";
 import './ongoingmatches.css';
+import { useNavigate } from "react-router-dom";
 
 const OngoingMatches = () => {
   const [matches, setMatches] = useState([]);
@@ -9,11 +10,17 @@ const OngoingMatches = () => {
   const [league, setLeague] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
 
   const getTeamName = (teamId) => {
     const team = teams.find((t) => t.teamId === teamId);
     return team ? team.teamName : `ID: ${teamId}`;
+  };
+
+  const getTeamImage = (teamId) => {
+    const team = teams.find((t) => t.teamId === teamId);
+    return team && team.imageUrl ? team.imageUrl : "https://via.placeholder.com/50";
   };
 
   useEffect(() => {
@@ -75,16 +82,22 @@ const OngoingMatches = () => {
             {matches.map((match) => (
               <div key={match.matchId} className="match-card">
                 <div className="live-ribbon">LIVE</div>
-                {/* {league && (
+                {league && (
                   <div className="league-badge">
-                    {league.leagueName || league.leagueId}
+                    <b>League Name :</b> <b style={{ color: "#E85D04" }}>{league.leagueName || league.leagueId}</b>
                   </div>
-                )} */}
+                )}
 
                 <div className="teams-container">
                   <div className="team">
-                    <div className="team-logo"></div>
-                    <span className="team-name">{getTeamName(match.team1Id)}</span>
+                    <div className="team-logo">
+                      <img
+                        src={getTeamImage(match.team1Id)}
+                        alt={getTeamName(match.team1Id)}
+                        className="team-logo-img"
+                      />
+                    </div>
+                    <span>{getTeamName(match.team1Id)}</span>
                   </div>
 
                   <div className="vs-container">
@@ -92,10 +105,17 @@ const OngoingMatches = () => {
                   </div>
 
                   <div className="team">
-                    <div className="team-logo"></div>
-                    <span className="team-name">{getTeamName(match.team2Id)}</span>
+                    <div className="team-logo">
+                      <img
+                        src={getTeamImage(match.team2Id)}
+                        alt={getTeamName(match.team2Id)}
+                        className="team-logo-img"
+                      />
+                    </div>
+                    <span>{getTeamName(match.team2Id)}</span>
                   </div>
                 </div>
+
 
                 <div className="match-info">
                   <div className="info-row">
@@ -115,7 +135,7 @@ const OngoingMatches = () => {
                     <span className="info-value">{match.venue}</span>
                   </div>
 
-                  <button className="details-button">
+                  <button onClick={() => navigate(`/viewmatchdetails/${match.leagueId}/${match.matchId}`)} className="details-button">
                     View Match Details →
                   </button>
                 </div>
