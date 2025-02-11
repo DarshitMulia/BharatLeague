@@ -1,0 +1,242 @@
+.match-dashboard {
+    background: #E1E6E1;
+    min-height: 100vh;
+    padding: 2rem 4%;
+    margin-left: 250px;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #23231A;
+    box-sizing: border-box;
+}
+
+.score-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+}
+
+.team-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.team-info.left {
+    margin-right: 2rem;
+}
+
+.team-info.right {
+    margin-left: 2rem;
+}
+
+.team-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 0.5rem;
+}
+
+.team-name-heading {
+    color: #23231A;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0.5rem 0 0 0;
+}
+
+.scores-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #23231A;
+}
+
+.vs {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.team-score {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #23231A;
+}
+
+/* Timeline Section */
+.match-timeline {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.section-heading {
+    color: #23231A;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #E85D04;
+}
+
+.timeline-container {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-container:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: #E85D04;
+}
+
+.timeline-event {
+    position: relative;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    border-left: 4px solid #E85D04;
+    transition: transform 0.2s ease;
+}
+
+.timeline-event:hover {
+    transform: translateX(8px);
+}
+
+.event-time {
+    position: absolute;
+    left: -3.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #23231A;
+    color: #E1E6E1;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.event-content {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.event-type {
+    font-weight: 700;
+    color: #E85D04;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.scorer-name {
+    font-weight: 500;
+    color: #23231A;
+}
+
+.event-detail {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+/* Team Rosters */
+.team-rosters {
+    display: grid;
+    gap: 3rem;
+}
+
+.roster-container {
+    border-radius: 1.5rem;
+    padding: 2rem;
+}
+
+.roster-title {
+    color: #23231A;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #E85D04;
+}
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.player-card {
+    background: #fff;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+}
+
+.player-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.jersey-number {
+    color: #E85D04;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.player-position {
+    background: #23231A;
+    color: #E1E6E1;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.player-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #23231A;
+    margin: 0;
+}
+
+.view-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #E85D04;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
