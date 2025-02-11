@@ -136,10 +136,6 @@ const ManageLeague = () => {
                                                 Add Match
                                             </Link>
                                         </div>
-                                        <Link to={`/matches/${league.leagueId}`} className="view-all-link">
-                                            View All
-                                            <FiArrowRight className="link-icon" />
-                                        </Link>
                                     </div>
                                     <div className="status-filters">
                                         <Link to={`/scheduledmatches/${league.leagueId}`} className="status-filter scheduled">
