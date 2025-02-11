@@ -11,19 +11,11 @@ const Leagues = () => {
     const [selectedCountry, setSelectedCountry] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
 
+    const token = localStorage.getItem("authToken");
+
     useEffect(() => {
         fetchLeagues();
     }, []);
-
-    useEffect(() => {
-        if (searchTerm.trim()) {
-            searchLeagues();
-        } else {
-            fetchLeagues();
-        }
-    }, [searchTerm]);
-
-    const token = localStorage.getItem("authToken");
 
     const fetchLeagues = async () => {
         try {
@@ -36,26 +28,24 @@ const Leagues = () => {
         }
     };
 
-    const searchLeagues = async () => {
-        try {
-            const { data } = await axios.get(`https://localhost:7031/api/League/searchleague?searchTerm=${searchTerm}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            setLeagues(data);
-        } catch (error) {
-            console.error('Error searching leagues:', error);
-        }
-    };
-
     const filterLeagues = () => {
-        let filteredLeagues = leagues;
+        let filtered = leagues;
+
+        if (searchTerm) {
+            filtered = filtered.filter(league =>
+                league.leagueName.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         if (selectedCountry) {
-            filteredLeagues = filteredLeagues.filter(league => league.country === selectedCountry);
+            filtered = filtered.filter(league => league.country === selectedCountry);
         }
+
         if (selectedStatus) {
-            filteredLeagues = filteredLeagues.filter(league => league.status === selectedStatus);
+            filtered = filtered.filter(league => league.status === selectedStatus);
         }
-        return filteredLeagues;
+
+        return filtered;
     };
 
     return (
@@ -133,9 +123,7 @@ const Leagues = () => {
                                         <FiCalendar /> {new Date(league.startDate).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <Link to={`/leaguedetails/${league.leagueId}`}
-                                    className="details-button"
-                                >
+                                <Link to={`/leaguedetails/${league.leagueId}`} className="details-button">
                                     View Details
                                 </Link>
                             </div>
