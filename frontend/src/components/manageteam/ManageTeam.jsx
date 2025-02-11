@@ -66,7 +66,7 @@ const ManageTeam = () => {
                         {teams.map((team) => (
                             <div key={team.teamId} className="team-item">
                                 <div className="team-main-info">
-                                    <div className="team-info">
+                                    <div className="team-information">
                                         {team.imageUrl && (
                                             <img
                                                 src={team.imageUrl}

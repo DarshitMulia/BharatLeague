@@ -119,7 +119,7 @@ const LeagueDetails = () => {
                                 >
                                     <Row className="align-items-center">
                                         <Col xs={8} md={4}>
-                                            <div className="team-info">
+                                            <div className="team-information">
                                                 <h5 className="team-name">{team.teamName}</h5>
                                                 <div className="team-city">{team.city}</div>
                                             </div>
