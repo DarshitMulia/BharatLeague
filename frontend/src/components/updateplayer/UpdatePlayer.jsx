@@ -226,9 +226,22 @@ const UpdatePlayer = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Update Player'}
-                        </button>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="back-button"
+                                onClick={() => navigate(-1)}
+                            >
+                                Back
+                            </button>
+                            <button
+                                type="submit"
+                                className="submit-button"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Submitting...' : 'Update Player'}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

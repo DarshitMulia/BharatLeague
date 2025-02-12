@@ -119,10 +119,10 @@
     max-width: 60%;
 }
 
-.details-button {
-    width: 100%;
+.header-button {
+    width: 40%;
     padding: 0.8rem;
-    background: #E85D04;
+    background: #1a1a1a;
     color: white;
     border: none;
     border-radius: 12px;
@@ -130,7 +130,6 @@
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 1.5rem;
 }
 
 .details-button:hover {

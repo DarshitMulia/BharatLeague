@@ -6,7 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import '../ongoingmatches/ongoingmatches.css';
 
 const ScheduledMatchesByLeague = () => {
-    const { leagueId } = useParams(); 
+    const { leagueId } = useParams();
     const [matches, setMatches] = useState([]);
     const [teams, setTeams] = useState([]);
     const [league, setLeague] = useState(null);
@@ -82,12 +82,17 @@ const ScheduledMatchesByLeague = () => {
                     <div className="matches-grid">
                         {matches.map((match) => (
                             <div key={match.matchId} className="match-card">
+                                <button onClick={() => navigate(`/updatematch/${leagueId}/${match.matchId}`)} className="action-link">
+                                    <FiEdit className="btn-icon" />
+                                    Edit Match
+                                </button>
+                                <div style={{ "marginTop": "10px", "border-bottom": "1px solid #e2e8f0" }}></div>
                                 <div className="teams-container">
                                     <div className="team">
                                         <div className="team-logo">
-                                            <img 
-                                                src={getTeamImage(match.team1Id)} 
-                                                alt={getTeamName(match.team1Id)} 
+                                            <img
+                                                src={getTeamImage(match.team1Id)}
+                                                alt={getTeamName(match.team1Id)}
                                                 className="team-logo-img"
                                             />
                                         </div>
@@ -100,9 +105,9 @@ const ScheduledMatchesByLeague = () => {
 
                                     <div className="team">
                                         <div className="team-logo">
-                                            <img 
-                                                src={getTeamImage(match.team2Id)} 
-                                                alt={getTeamName(match.team2Id)} 
+                                            <img
+                                                src={getTeamImage(match.team2Id)}
+                                                alt={getTeamName(match.team2Id)}
                                                 className="team-logo-img"
                                             />
                                         </div>
@@ -130,10 +135,19 @@ const ScheduledMatchesByLeague = () => {
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
 
-                                    <button onClick={() => navigate(`/updatematch/${leagueId}/${match.matchId}`)} className="details-button">
-                                        <FiEdit style={{margin:"5px"}}/> 
-                                        Edit Details
-                                    </button>
+                                    <div className="button-group">
+                                        <button
+                                            type="button"
+                                            className="back-button"
+                                            onClick={() => navigate(-1)}
+                                        >
+                                            Back
+                                        </button>
+                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="submit-button">
+                                            View Match Details →
+                                        </button>
+                                    </div>
+
                                 </div>
                             </div>
                         ))}

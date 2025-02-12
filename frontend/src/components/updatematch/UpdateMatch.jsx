@@ -140,7 +140,22 @@ const UpdateMatch = () => {
                             <input className="form-input" type="text" name="venue" value={formData.venue} onChange={handleInputChange} required />
                             {errors.venue && <p className="error-text">{errors.venue}</p>}
                         </div>
-                        <button type="submit" className="submit-button" disabled={isSubmitting}>{isSubmitting ? 'Updating...' : 'Update Match'}</button>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="back-button"
+                                onClick={() => navigate(-1)}
+                            >
+                                Back
+                            </button>
+                            <button
+                                type="submit"
+                                className="submit-button"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Submitting...' : 'Update Match'}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

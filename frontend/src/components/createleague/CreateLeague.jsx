@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from "../sidebar/Sidebar";
 import './createLeague.css';
@@ -17,6 +18,8 @@ const CreateLeague = () => {
     const [errors, setErrors] = useState({
         leagueName: '',
     });
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('userId');
@@ -71,9 +74,9 @@ const CreateLeague = () => {
         try {
             const token = localStorage.getItem('authToken');
             const response = await axios.post('https://localhost:7031/api/League/addleague', data, {
-                headers: { 
+                headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` 
+                    'Authorization': `Bearer ${token}`
                 },
             });
             alert('League created successfully!');
@@ -99,7 +102,7 @@ const CreateLeague = () => {
                                 className="form-input"
                                 type="text"
                                 name="leagueName"
-                                placeholder='Enter League Name'
+                                placeholder="Enter League Name"
                                 value={formData.leagueName}
                                 onChange={(e) => {
                                     handleInputChange(e);
@@ -181,9 +184,22 @@ const CreateLeague = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Create League'}
-                        </button>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="back-button"
+                                onClick={() => navigate(-1)}
+                            >
+                                Back
+                            </button>
+                            <button
+                                type="submit"
+                                className="submit-button"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Submitting...' : 'Create League'}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -1,53 +1,3 @@
-// import React from 'react';
-// import './Home.css';
-// import Sidebar from '../sidebar/Sidebar';
-// import OngoingMatches from '../ongoingmatches/OngoingMatches';
-// import { Link } from 'react-router-dom';
-
-// const Home = () => {
-//     return (
-//         <div className="home-page">
-//             <Sidebar />
-//             <div className="home-main">
-//                 <section className="hero-section">
-//                     <div className="hero-content">
-//                         <h1 className="hero-title">Elevate Your League Experience</h1>
-//                         <p className="hero-text">
-//                             Welcome to the ultimate Football League Management System—where passion meets precision.
-//                             Manage teams, track performances, and celebrate every goal with cutting-edge analytics and engaging community features.
-//                         </p>
-//                         <Link to="/createleague" className="hero-cta">Create League</Link>
-//                     </div>
-//                 </section>
-
-//                 <section className="features-section">
-//                     <div className="feature">
-//                         <h2 className="feature-title">Streamlined Management</h2>
-//                         <p className="feature-text">
-//                             Simplify scheduling, team coordination, and league operations with our intuitive interface.
-//                         </p>
-//                     </div>
-//                     <div className="feature">
-//                         <h2 className="feature-title">Real-Time Analytics</h2>
-//                         <p className="feature-text">
-//                             Access comprehensive, real-time insights that empower coaches, managers, and fans alike.
-//                         </p>
-//                     </div>
-//                     <div className="feature">
-//                         <h2 className="feature-title">Engaging Community</h2>
-//                         <p className="feature-text">
-//                             Connect with fans, celebrate victories, and share the excitement of every match.
-//                         </p>
-//                     </div>
-//                 </section>
-//                 <OngoingMatches />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Home;
-
 import React from 'react';
 import './Home.css';
 import Sidebar from '../sidebar/Sidebar';
@@ -124,7 +74,6 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* Existing Component */}
                 <OngoingMatches />
             </div>
         </div>

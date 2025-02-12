@@ -130,9 +130,18 @@ const CompletedMatchesByLeague = () => {
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
 
-                                    <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
-                                        View Match Details →
-                                    </button>
+                                    <div className="button-group">
+                                        <button
+                                            type="button"
+                                            className="back-button"
+                                            onClick={() => navigate(-1)}
+                                        >
+                                            Back
+                                        </button>
+                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="submit-button">
+                                            View Match Details →
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

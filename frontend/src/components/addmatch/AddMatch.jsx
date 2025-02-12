@@ -202,9 +202,22 @@ const AddMatch = () => {
                             {errors.venue && <p className="error-text">{errors.venue}</p>}
                         </div>
 
-                        <button type="submit" className="submit-button" disabled={isSubmitting}>
-                            {isSubmitting ? "Submitting..." : "Add Match"}
-                        </button>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="back-button"
+                                onClick={() => navigate(-1)}
+                            >
+                                Back
+                            </button>
+                            <button
+                                type="submit"
+                                className="submit-button"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Submitting...' : 'Add Match'}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

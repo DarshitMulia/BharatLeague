@@ -17,7 +17,7 @@
 
 .form-wrapper {
     width: 100%;
-    max-width: 600px;
+    max-width: 1000px;
 }
 
 .form-heading {
@@ -83,9 +83,8 @@
 }
 
 .file-input-label {
-    background-color: #E85D04;
-    color: white;
-    padding: 0.75rem 1.5rem;
+    border: 2px solid;
+    padding: 0.5rem 1.0rem;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -98,22 +97,44 @@
     font-size: 0.9rem;
 }
 
-.submit-button {
-    background-color: #E85D04;
-    color: white;
-    padding: 1rem 2rem;
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.back-button {
+    background-color: #cccccc;
+    color: #23231A;
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    width: 100%;
     transition: background-color 0.3s ease;
-    margin-top: 1rem;
 }
 
-.file-input-label:hover {
-    background-color: #D45304;
+.back-button:hover {
+    background-color: #b0b0b0;
+}
+
+.button-group .submit-button {
+    width: auto;
+}
+
+.submit-button {
+    background-color: #E85D04;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
@@ -130,7 +151,7 @@
         padding: 20px;
         margin-left: 0;
     }
-    
+
     .date-container {
         grid-template-columns: 1fr;
     }

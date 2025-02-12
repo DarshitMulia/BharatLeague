@@ -81,6 +81,11 @@ const OngoingMatchesByLeague = () => {
                     <div className="matches-grid">
                         {matches.map((match) => (
                             <div key={match.matchId} className="match-card">
+                                <button onClick={() => navigate(`addmatchevents/${match.matchId}`)} className="header-button">
+                                    Manage Match
+                                    <i className="fa fa-cogs" style={{ color: "white", marginLeft: "10px" }}></i>
+                                </button>
+                                <div style={{ "marginTop": "10px", "border-bottom": "1px solid #e2e8f0" }}></div>
                                 <div className="teams-container">
                                     <div className="team">
                                         <div className="team-logo">
@@ -128,13 +133,18 @@ const OngoingMatchesByLeague = () => {
                                         <span className="info-label">📍 Venue</span>
                                         <span className="info-value">{match.venue || "To be determined"}</span>
                                     </div>
-                                    <button onClick={() => navigate(`addmatchevents/${match.matchId}`)} className="details-button" style={{ backgroundColor: "#1a1a1a" }}>
-                                        Manage Match
-                                        <i className="fa fa-cogs" style={{color:"white", marginLeft:"10px"}}></i>
-                                    </button>
-                                    <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
-                                        View Match Details →
-                                    </button>
+                                    <div className="button-group">
+                                        <button
+                                            type="button"
+                                            className="back-button"
+                                            onClick={() => navigate(-1)}
+                                        >
+                                            Back
+                                        </button>
+                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
+                                            View Match Details →
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
