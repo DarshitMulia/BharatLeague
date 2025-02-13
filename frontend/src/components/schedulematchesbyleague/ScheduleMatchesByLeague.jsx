@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit } from "react-icons/fi";
 import Sidebar from "../sidebar/Sidebar";
-import '../ongoingmatches/ongoingmatches.css';
+import "../ongoingmatches/ongoingmatches.css";
 
 const ScheduledMatchesByLeague = () => {
     const { leagueId } = useParams();
@@ -25,30 +25,40 @@ const ScheduledMatchesByLeague = () => {
         return team && team.imageUrl ? team.imageUrl : "https://via.placeholder.com/50";
     };
 
+    const startMatch = async (matchId) => {
+        try {
+            await axios.put(
+                `https://localhost:7031/api/match/markongoing/${matchId}`,
+                null,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            navigate(-1);
+        } catch (error) {
+            console.error("Error starting match:", error);
+            alert("An error occurred while starting the match.");
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch the scheduled matches for the league
                 const matchesResponse = await axios.get(
                     `https://localhost:7031/api/match/scheduledmatches/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setMatches(matchesResponse.data);
 
-                // Fetch the teams in the league
                 const teamsResponse = await axios.get(
                     `https://localhost:7031/api/team/league/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setTeams(teamsResponse.data);
 
-                // Fetch the league details
                 const leagueResponse = await axios.get(
                     `https://localhost:7031/api/league/${leagueId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setLeague(leagueResponse.data);
-
             } catch (err) {
                 console.error("Error fetching data:", err);
                 setError(err.response?.data || "An error occurred while fetching data.");
@@ -72,7 +82,9 @@ const ScheduledMatchesByLeague = () => {
         <div className="matches-container-for-all">
             <Sidebar />
             <header className="matches-header">
-                <h1>{league ? league.leagueName : `Scheduled Matches`} (Scheduled Matches)</h1>
+                <h1>
+                    {league ? league.leagueName : `Scheduled Matches`} (Scheduled Matches)
+                </h1>
             </header>
 
             <div className="content-wrapper">
@@ -82,11 +94,23 @@ const ScheduledMatchesByLeague = () => {
                     <div className="matches-grid">
                         {matches.map((match) => (
                             <div key={match.matchId} className="match-card">
-                                <button onClick={() => navigate(`/updatematch/${leagueId}/${match.matchId}`)} className="action-link">
-                                    <FiEdit className="btn-icon" />
-                                    Edit Match
-                                </button>
-                                <div style={{ "marginTop": "10px", "border-bottom": "1px solid #e2e8f0" }}></div>
+                                <div className="button-container" style={{ display: "flex", gap: "10px" }}>
+                                    <button
+                                        onClick={() => startMatch(match.matchId)}
+                                        className="header-button"
+                                    >
+                                        Start Match
+                                    </button>
+                                    <button
+                                        onClick={() => navigate(`/updatematch/${leagueId}/${match.matchId}`)}
+                                        className="action-link"
+                                    >
+                                        <FiEdit className="btn-icon" />
+                                        Edit Match
+                                    </button>
+                                </div>
+
+                                <div style={{ marginTop: "10px", borderBottom: "1px solid #e2e8f0" }}></div>
                                 <div className="teams-container">
                                     <div className="team">
                                         <div className="team-logo">
@@ -143,11 +167,13 @@ const ScheduledMatchesByLeague = () => {
                                         >
                                             Back
                                         </button>
-                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="submit-button">
+                                        <button
+                                            onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)}
+                                            className="submit-button"
+                                        >
                                             View Match Details →
                                         </button>
                                     </div>
-
                                 </div>
                             </div>
                         ))}
