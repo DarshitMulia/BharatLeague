@@ -22,3 +22,51 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .add-team-main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .form-heading {
+        font-size: 1.75rem;
+    }
+
+    .team-form {
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .add-team-main-content {
+        margin-left: 220px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-heading {
+        font-size: 1.5rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        font-size: 0.9rem;
+        padding: 0.65rem;
+    }
+
+    .file-input-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .back-button,
+    .submit-button {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
+    }
+}

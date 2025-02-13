@@ -24,6 +24,10 @@
     margin: 0;
 }
 
+.content-wrapper {
+    width: 100%;
+}
+
 .matches-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -54,18 +58,23 @@
     z-index: 2;
 }
 
+.league-badge {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
 .teams-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .team {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
     flex: 1;
 }
 
@@ -77,7 +86,6 @@
 }
 
 .vs-container {
-    position: relative;
     margin: 0 1rem;
 }
 
@@ -132,6 +140,18 @@
     transition: all 0.3s ease;
 }
 
+.details-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem;
+    background: #E85D04;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
 .details-button:hover {
     background: #d15303;
     transform: translateY(-2px);
@@ -150,12 +170,64 @@
 @media (max-width: 1200px) {
     .ongoing-matches-container {
         margin-left: 0;
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .ongoing-matches-container {
+        padding: 2rem;
+    }
+
+    .matches-container-for-all {
+        margin-left: 220px;
     }
 }
 
 @media (max-width: 768px) {
-    .ongoing-matches-container {
-        padding: 1.5rem;
+    .matches-container-for-all {
+        margin-left: 0;
+    }
+
+    .matches-header h1 {
+        margin-top: 50px;
+        margin-left: 100px;
+        font-size: 1.75rem;
+    }
+
+    .matches-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+
+    .team-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .vs-swords {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .matches-header h1 {
+        margin-top: 50px;
+        margin-left: 50px;
+        font-size: 1.4rem;
+    }
+
+    .header-button {
+        width: 100%;
+    }
+
+    .submit-button {
+        padding: 0;
+    }
+
+    .teams-container {
+        gap: 0rem;
+        font-size: 14px;
     }
 
     .matches-grid {
@@ -163,13 +235,91 @@
         gap: 1.5rem;
     }
 
-    .team-logo {
+    .team-logo-img {
         width: 70px;
         height: 70px;
     }
 
+    .vs-swords {
+        font-size: 1.75rem;
+    }
+
+    .info-label {
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-size: 0.9rem;
+    }
+
+    .details-button {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
     .live-ribbon {
         font-size: 0.8rem;
-        padding: 5px 30px;
+        padding: 4px 25px;
+        right: -20px;
+        top: 10px;
     }
+
+    .teams-container {
+        gap: 0rem;
+        font-size: 10px;
+    }
+
+    .team-logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .vs-swords {
+        font-size: 1.5rem;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+    }
+
+    .info-value {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .matches-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .team-logo-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .vs-swords {
+        font-size: 1.3rem;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+    }
+
+    .info-value {
+        font-size: 0.8rem;
+    }
+
+    .details-button {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
+    }
+}
+
+.ongoing-matches-container.sidebar-open {
+    margin-left: 60px;
+}
+
+.ongoing-matches-container.sidebar-open .matches-header {
+    margin-left: 0;
 }

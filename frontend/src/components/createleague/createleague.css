@@ -5,14 +5,14 @@
 
 .create-league-main-content {
     flex: 1;
-    background-color: #E1E6E1;
+    background-color: #e1e6e1;
     min-height: 100vh;
     padding: 40px;
     margin-left: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: margin 0.3s ease;
+    transition: margin 0.3s ease, padding 0.3s ease;
 }
 
 .form-wrapper {
@@ -21,7 +21,7 @@
 }
 
 .form-heading {
-    color: #23231A;
+    color: #23231a;
     font-size: 2rem;
     margin-bottom: 2rem;
     font-weight: 600;
@@ -42,7 +42,7 @@
 
 .form-label {
     display: block;
-    color: #23231A;
+    color: #23231a;
     font-size: 1rem;
     margin-bottom: 0.5rem;
     font-weight: 500;
@@ -51,10 +51,15 @@
 .form-input {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid #E1E6E1;
+    border: 2px solid #e1e6e1;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #e85d04;
 }
 
 .error-text {
@@ -84,7 +89,7 @@
 
 .file-input-label {
     border: 2px solid;
-    padding: 0.5rem 1.0rem;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -93,7 +98,7 @@
 }
 
 .file-name {
-    color: #23231A;
+    color: #23231a;
     font-size: 0.9rem;
 }
 
@@ -107,7 +112,7 @@
 
 .back-button {
     background-color: #cccccc;
-    color: #23231A;
+    color: #23231a;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px;
@@ -121,12 +126,8 @@
     background-color: #b0b0b0;
 }
 
-.button-group .submit-button {
-    width: auto;
-}
-
 .submit-button {
-    background-color: #E85D04;
+    background-color: #e85d04;
     color: white;
     padding: 0.75rem 1.5rem;
     border: none;
@@ -138,21 +139,57 @@
 }
 
 .submit-button:hover {
-    background-color: #D45304;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: #E85D04;
+    background-color: #d45304;
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        padding: 20px;
+    .create-league-main-content {
         margin-left: 0;
+        padding: 20px;
+    }
+
+    .form-heading {
+        font-size: 1.75rem;
+    }
+
+    .league-form {
+        padding: 1.5rem;
     }
 
     .date-container {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .create-league-main-content {
+        margin-left: 220px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-heading {
+        font-size: 1.5rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        font-size: 0.9rem;
+        padding: 0.65rem;
+    }
+
+    .file-input-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .back-button,
+    .submit-button {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
     }
 }

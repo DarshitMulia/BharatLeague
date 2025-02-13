@@ -1,21 +1,10 @@
-:root {
-    --primary-color: #2A2E45;
-    --secondary-color:#E85D04;
-    --accent-color: #FF6B6B;
-    --background-light: #E1E6E1;
-    --text-dark: #2A2E45;
-    --text-light: #FFFFFF;
-    --border-radius: 12px;
-    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
 .leagues-container {
     display: flex;
     min-height: 100vh;
-    background-color: var(--background-light);
+    background-color: #E1E6E1;
 }
 
-.content {
+.content-leagues {
     flex: 1;
     padding: 2rem 3rem;
     margin-left: 250px;
@@ -27,7 +16,7 @@
 
 .page-title {
     font-size: 2rem;
-    color: var(--primary-color);
+    color: #2A2E45;
     margin-bottom: 1.5rem;
     font-weight: 700;
 }
@@ -47,14 +36,14 @@
     width: 100%;
     padding: 0.8rem 1.5rem 0.8rem 3rem;
     border: 2px solid #e0e0e0;
-    border-radius: var(--border-radius);
+    border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
 .search-bar input:focus {
     outline: none;
-    border-color: var(--secondary-color);
+    border-color: #E85D04;
     box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
 }
 
@@ -76,9 +65,9 @@
 }
 
 .select-wrapper-dropdown select {
-    padding: 0.8rem 2rem 0.8rem 1.5rem;
+    padding: 0.8rem 1rem 0.8rem 1.5rem;
     border: 2px solid #e0e0e0;
-    border-radius: var(--border-radius);
+    border-radius: 12px;
     font-size: 1rem;
     appearance: none;
     background-color: white;
@@ -88,7 +77,7 @@
 .select-icon {
     position: absolute;
     right: 0.8rem;
-    top: 50%;
+    top: 30%;
     transform: translateY(-50%);
     pointer-events: none;
     color: #666;
@@ -102,8 +91,8 @@
 
 .league-card {
     background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
 }
@@ -160,7 +149,7 @@
 
 .card-content h3 {
     font-size: 1.3rem;
-    color: var(--primary-color);
+    color: #2A2E45;
     margin-bottom: 1rem;
 }
 
@@ -183,10 +172,10 @@
     width: 100%;
     padding: 0.8rem;
     text-decoration: none;
-    background-color: var(--secondary-color);
+    background-color: #E85D04;
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -194,4 +183,142 @@
 
 .details-button:hover {
     transform: translateY(-2px);
-} 
+}
+
+@media (max-width: 1200px) {
+    .content-leagues {
+        margin-left: 0;
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .content-leagues {
+        margin-left: 220px;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-leagues {
+        margin-left: 50px;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .search-filter-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-bar input {
+        padding: 0.7rem 1.3rem 0.7rem 2.5rem;
+        font-size: 0.95rem;
+    }
+
+    .filters select {
+        font-size: 0.95rem;
+        padding: 0.7rem 1.8rem 0.7rem 1.3rem;
+    }
+
+    .league-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .card-image {
+        height: 180px;
+    }
+
+    .card-content {
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .content-leagues {
+        padding: 1.5rem 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .search-filter-container {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .select-icon{
+        top: 50%;
+    }
+
+    .search-bar input {
+        padding: 0.6rem 1.2rem 0.6rem 2.2rem;
+        font-size: 0.9rem;
+    }
+
+    .filters select {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.5rem 0.6rem 1.2rem;
+    }
+
+    .league-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .card-image {
+        height: 160px;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .meta-info {
+        font-size: 0.8rem;
+    }
+
+    .details-button {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .page-title {
+        font-size: 1.25rem;
+    }
+
+    .search-bar input {
+        padding: 0.5rem 1rem 0.5rem 2rem;
+        font-size: 0.85rem;
+    }
+
+    .filters select {
+        font-size: 0.85rem;
+        padding: 0.5rem 1.5rem 0.5rem 1rem;
+    }
+
+    .meta-info span {
+        font-size: 0.75rem;
+    }
+
+    .details-button {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+}
+
+.leagues-container.sidebar-open .content {
+    margin-left: 60px;
+    padding-left: 2rem;
+}
+
+.leagues-container.sidebar-open .header-section {
+    margin-left: 60px;
+}

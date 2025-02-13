@@ -141,7 +141,7 @@ const OngoingMatchesByLeague = () => {
                                         >
                                             Back
                                         </button>
-                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="details-button">
+                                        <button onClick={() => navigate(`/viewmatchdetails/${leagueId}/${match.matchId}`)} className="submit-button">
                                             View Match Details →
                                         </button>
                                     </div>

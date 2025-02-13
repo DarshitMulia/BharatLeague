@@ -51,7 +51,7 @@ const Leagues = () => {
     return (
         <div className="leagues-container">
             <Sidebar />
-            <div className="content">
+            <div className="content-leagues">
                 <div className="header-section">
                     <h1 className="page-title">Football Leagues</h1>
                     <div className="search-filter-container">

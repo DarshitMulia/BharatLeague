@@ -33,7 +33,8 @@
     background-color: white;
     font-size: 1rem;
     transition: all 0.3s ease;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
 }
 
 .table-container {
@@ -47,12 +48,13 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    min-width: 700px;
 }
 
 .standings-table th {
     background-color: #23231A;
     color: white;
-    padding: 1.2rem;
+    padding: 1rem;
     text-align: center;
     text-transform: uppercase;
     font-weight: 600;
@@ -112,10 +114,58 @@
     }
 }
 
-.no-standings,
-.select-prompt {
-    color: #23231A;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-top: 2rem;
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .standings-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .standings-title {
+        font-size: 1.8rem;
+    }
+
+    .league-select {
+        width: 100%;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .standings-table th,
+    .standings-table td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .standings-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .league-select {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .table-container {
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    .standings-table {
+        font-size: 0.8rem;
+        min-width: 600px;
+    }
+
+    .standings-table th,
+    .standings-table td {
+        padding: 0.4rem;
+    }
 }
