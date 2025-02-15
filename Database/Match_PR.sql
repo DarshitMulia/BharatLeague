@@ -37,6 +37,14 @@ BEGIN
 END;
 
 
+-- Procedure to get all matches
+CREATE PROCEDURE PR_GetAllMatches
+AS
+BEGIN
+	Select * from Match
+END
+
+
 -- Procedure to mark a match as Ongoing
 CREATE PROCEDURE PR_MarkMatchOngoing
     @match_id INT

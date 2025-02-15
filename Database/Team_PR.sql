@@ -17,6 +17,14 @@ BEGIN
 END;
 
 
+-- Procedure to get all the teams
+CREATE PROCEDURE PR_GetAllTeams
+AS 
+BEGIN
+	Select * from Team
+END
+
+
 -- Procedure to Retrieve Teams by League ID
 CREATE PROCEDURE PR_GetTeamsByLeagueID
     @LeagueID INT
