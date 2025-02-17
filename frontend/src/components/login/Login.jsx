@@ -11,10 +11,10 @@ const Login = () => {
         password: "",
         role: "User"
     });
-
     const [showPassword, setShowPassword] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
-    
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -31,7 +31,8 @@ const Login = () => {
 
         try {
             const response = await axios.post(
-                "https://localhost:7031/api/Users/login", formData,
+                "https://localhost:7031/api/Users/login",
+                formData,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -53,14 +54,18 @@ const Login = () => {
             localStorage.setItem("role", userRole);
             localStorage.setItem("userId", userId);
 
-            if (userRole === "Admin") {
-                navigate("/admindashboard");
-            } else if (userRole === "User") {
-                navigate("/");
-            } else {
-                console.error("Unknown role:", userRole);
-                alert("Invalid role. Please contact support.");
-            }
+            setShowPopup(true);
+
+            setTimeout(() => {
+                if (userRole === "Admin") {
+                    navigate("/admindashboard");
+                } else if (userRole === "User") {
+                    navigate("/");
+                } else {
+                    console.error("Unknown role:", userRole);
+                    alert("Invalid role. Please contact support.");
+                }
+            }, 2000);
         } catch (error) {
             console.error("Error details:", error);
 
@@ -150,6 +155,16 @@ const Login = () => {
                     </p>
                 </form>
             </div>
+            {showPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <div className="popup-content">
+                            <span className="tick-emoji">✅</span>
+                            <p>Login successful!</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

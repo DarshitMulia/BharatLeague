@@ -10,8 +10,8 @@ const Signup = () => {
         password: "",
         role: "User",
     });
-
     const [showPassword, setShowPassword] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -33,13 +33,21 @@ const Signup = () => {
                 formData
             );
             console.log(response.data);
-            navigate("/login");
+            setShowPopup(true);
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
         } catch (error) {
             console.error("Error details:", error);
             if (error.response) {
-                alert("Backend error: " + (error.response.data.message || "Something went wrong!"));
+                alert(
+                    "Backend error: " +
+                    (error.response.data.message || "Something went wrong!")
+                );
             } else if (error.request) {
-                alert("No response from backend. Check network or CORS configuration.");
+                alert(
+                    "No response from backend. Check network or CORS configuration."
+                );
             } else {
                 alert("Frontend error: " + error.message);
             }
@@ -52,7 +60,9 @@ const Signup = () => {
                 <h2 id="form-heading">Sign Up to BharatLeague</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="username" className="form-label">Username</label>
+                        <label htmlFor="username" className="form-label">
+                            Username
+                        </label>
                         <input
                             type="text"
                             name="username"
@@ -65,7 +75,9 @@ const Signup = () => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email</label>
+                        <label htmlFor="email" className="form-label">
+                            Email
+                        </label>
                         <input
                             type="email"
                             name="email"
@@ -78,7 +90,9 @@ const Signup = () => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Password</label>
+                        <label htmlFor="password" className="form-label">
+                            Password
+                        </label>
                         <div className="password-container">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -90,16 +104,15 @@ const Signup = () => {
                                 id="password"
                                 required
                             />
-                            <span
-                                className="toggle-link"
-                                onClick={handleTogglePassword}
-                            >
+                            <span className="toggle-link" onClick={handleTogglePassword}>
                                 {showPassword ? "Hide" : "Show"}
                             </span>
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="role" className="form-label">Role</label>
+                        <label htmlFor="role" className="form-label">
+                            Role
+                        </label>
                         <div className="role-options">
                             <label className="role-option">
                                 <input
@@ -125,12 +138,30 @@ const Signup = () => {
                             </label>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary w-100">Sign Up</button>
+                    <button type="submit" className="btn btn-primary w-100">
+                        Sign Up
+                    </button>
                     <p className="mt-3">
-                        Already have an account? <span className="toggle-link-signup" onClick={() => navigate("/login")}>Login</span>
+                        Already have an account?{" "}
+                        <span
+                            className="toggle-link-signup"
+                            onClick={() => navigate("/login")}
+                        >
+                            Login
+                        </span>
                     </p>
                 </form>
             </div>
+            {showPopup && (
+                <div className="popup-overlay">
+                    <div className="popup">
+                        <div className="popup-content">
+                            <span className="tick-emoji">✅</span>
+                            <p>SignUp successful!</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

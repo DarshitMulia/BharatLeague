@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 import "font-awesome/css/font-awesome.min.css";
 import "./sidebar.css";
 
 const Sidebar = () => {
     const [role, setRole] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,9 +16,14 @@ const Sidebar = () => {
         setRole(storedRole);
     }, []);
 
-    const logout = () => {
+    const confirmLogout = () => {
         localStorage.clear();
         navigate("/login");
+        setModalIsOpen(false);
+    };
+
+    const handleLogoutClick = () => {
+        setModalIsOpen(true);
     };
 
     return (
@@ -105,7 +112,7 @@ const Sidebar = () => {
                     </li>
                     <hr />
                     <li className="nav-item logout-btn">
-                        <button className="nav-link" onClick={logout}>
+                        <button className="nav-link" onClick={handleLogoutClick}>
                             <i className="fa fa-sign-out"></i>
                             <span className="link-text">Logout</span>
                         </button>
@@ -122,6 +129,30 @@ const Sidebar = () => {
                 </button>
             )}
             {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                className={{
+                    base: 'logout-modal',
+                    afterOpen: 'logout-modal-open',
+                    beforeClose: 'logout-modal-close'
+                }}
+                closeTimeoutMS={300}
+            >
+                <div className="modal-content">
+                    <h2 className="modal-header">Confirm Logout</h2>
+                    <p>Are you sure you want to log out?</p>
+                    <div className="modal-buttons">
+                        <button className="modal-logout-cancel-button" onClick={() => setModalIsOpen(false)}>
+                            Cancel
+                        </button>
+                        <button className="modal-logout-submit-button" onClick={confirmLogout}>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </>
     );
 };
