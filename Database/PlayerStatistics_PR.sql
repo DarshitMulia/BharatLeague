@@ -57,6 +57,8 @@ BEGIN
     
     BEGIN TRY
         BEGIN TRANSACTION;
+        
+        -- Update matches played for existing PlayerStatistics records
         UPDATE ps
         SET 
             ps.matches_played = ps.matches_played + 1,
@@ -68,6 +70,8 @@ BEGIN
             UNION
             SELECT team2_id FROM Match WHERE match_id = @match_id
         );
+        
+        -- Insert PlayerStatistics for players that don't have an existing record
         INSERT INTO PlayerStatistics 
         (
             player_id, 
@@ -101,12 +105,19 @@ BEGIN
             FROM PlayerStatistics ps 
             WHERE ps.player_id = p.player_id
         );
+        
+        -- Mark the match as completed
         UPDATE Match
         SET status = 'Completed',
             updated_at = GETDATE()
         WHERE match_id = @match_id;
-
-        EXEC PR_UpdateLeagueStandingsFromMatch @match_id = @match_id;
+        
+        -- Retrieve the league id from the match record
+        DECLARE @league_id INT;
+        SELECT @league_id = league_id FROM Match WHERE match_id = @match_id;
+        
+        -- Update league standings using the updated procedure that requires league id
+        EXEC PR_UpdateLeagueStandingsFromMatch @match_id = @match_id, @league_id = @league_id;
         
         COMMIT TRANSACTION;
     END TRY

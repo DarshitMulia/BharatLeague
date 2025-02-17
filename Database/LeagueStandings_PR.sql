@@ -1,11 +1,11 @@
--- To Update League Standings Automatically After Match Ends
 CREATE PROCEDURE PR_UpdateLeagueStandingsFromMatch
-    @match_id INT
+    @match_id INT,
+    @league_id INT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @league_id INT,
-            @team1_id INT, 
+
+    DECLARE @team1_id INT, 
             @team2_id INT,
             @team1_goals INT = 0,
             @team2_goals INT = 0,
@@ -16,13 +16,22 @@ BEGIN
             @team1_loss INT = 0,
             @team2_loss INT = 0,
             @draw INT = 0;
+
+    -- Verify the match belongs to the provided league_id
+    IF NOT EXISTS (SELECT 1 FROM Match WHERE match_id = @match_id AND league_id = @league_id)
+    BEGIN
+        RAISERROR('Match does not belong to the specified league.', 16, 1);
+        RETURN;
+    END
+
+    -- Retrieve team IDs from the Match table
     SELECT 
-        @league_id = league_id,
         @team1_id = team1_id,
         @team2_id = team2_id
     FROM Match
     WHERE match_id = @match_id;
 
+    -- Calculate the goals scored by each team in the match
     SELECT @team1_goals = COUNT(*)
     FROM MatchEvents
     WHERE match_id = @match_id 
@@ -35,6 +44,7 @@ BEGIN
       AND team_id = @team2_id 
       AND event_type = 'Goal';
 
+    -- Determine match outcome and assign points and win/loss/draw flags
     IF @team1_goals > @team2_goals
     BEGIN
         SET @team1_points = 3;
@@ -54,6 +64,7 @@ BEGIN
         SET @draw = 1;
     END
 
+    -- Update or insert LeagueStandings for team1
     IF EXISTS (SELECT 1 FROM LeagueStandings WHERE league_id = @league_id AND team_id = @team1_id)
     BEGIN
         UPDATE LeagueStandings
@@ -71,14 +82,31 @@ BEGIN
     BEGIN
         INSERT INTO LeagueStandings 
         (
-            league_id, team_id, matches_played, wins, losses, draws, points, goals_scored, goals_conceded
+            league_id, 
+            team_id, 
+            matches_played, 
+            wins, 
+            losses, 
+            draws, 
+            points, 
+            goals_scored, 
+            goals_conceded
         )
         VALUES 
         (
-            @league_id, @team1_id, 1, @team1_win, @team1_loss, @draw, @team1_points, @team1_goals, @team2_goals
+            @league_id, 
+            @team1_id, 
+            1, 
+            @team1_win, 
+            @team1_loss, 
+            @draw, 
+            @team1_points, 
+            @team1_goals, 
+            @team2_goals
         );
     END
 
+    -- Update or insert LeagueStandings for team2
     IF EXISTS (SELECT 1 FROM LeagueStandings WHERE league_id = @league_id AND team_id = @team2_id)
     BEGIN
         UPDATE LeagueStandings
@@ -96,20 +124,58 @@ BEGIN
     BEGIN
         INSERT INTO LeagueStandings 
         (
-            league_id, team_id, matches_played, wins, losses, draws, points, goals_scored, goals_conceded
+            league_id, 
+            team_id, 
+            matches_played, 
+            wins, 
+            losses, 
+            draws, 
+            points, 
+            goals_scored, 
+            goals_conceded
         )
         VALUES 
         (
-            @league_id, @team2_id, 1, @team2_win, @team2_loss, @draw, @team2_points, @team2_goals, @team1_goals
+            @league_id, 
+            @team2_id, 
+            1, 
+            @team2_win, 
+            @team2_loss, 
+            @draw, 
+            @team2_points, 
+            @team2_goals, 
+            @team1_goals
         );
     END
 END;
 
 
+
 -- Procedure to get league Standings of a league
 CREATE PROCEDURE PR_GetLeagueStandingsOfALeague
-	@league_id INT
+    @league_id INT
 AS
 BEGIN
-	Select * FROM LeagueStandings
-END 
+    SELECT
+        ls.standing_id,
+        ls.league_id,
+        ls.team_id,
+        t.teamname AS TeamName,  
+        ls.matches_played,
+        ls.wins,
+        ls.losses,
+        ls.draws,
+        ls.goals_scored,
+        ls.goals_conceded,
+        ls.goals_difference,
+        ls.points,
+        ls.created_at,
+        ls.updated_at
+    FROM LeagueStandings AS ls
+    INNER JOIN Team AS t 
+        ON ls.team_id = t.team_id
+    WHERE ls.league_id = @league_id
+    ORDER BY ls.points DESC,
+             ls.goals_difference DESC,
+             ls.goals_scored DESC;
+END;
