@@ -152,7 +152,7 @@ END;
 
 
 -- Retrieves overall statistics for a specific player.
-ALTER PROCEDURE PR_GetPlayerStatisticsByPlayerId
+CREATE PROCEDURE PR_GetPlayerStatisticsByPlayerId
     @player_id INT
 AS
 BEGIN
