@@ -1,7 +1,8 @@
 using backend.Data;
+using FluentValidation;
 using FluentValidation.AspNetCore;
-using System.Reflection;
 using backend.Models;
+using backend.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -11,23 +12,19 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<UsersModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<LeagueModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<TeamModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<MatchEventsModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<PlayerStatisticsModel>());
-builder.Services.AddControllers()
-    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<LeagueStandingsModel>());
+// Add controllers and register all validators in one call.
+builder.Services.AddControllers().AddFluentValidation(c =>
+{
+    // Scan the assemblies that contain your models/validators.
+    c.RegisterValidatorsFromAssemblyContaining<UsersModel>();
+    c.RegisterValidatorsFromAssemblyContaining<LeagueModel>();
+    c.RegisterValidatorsFromAssemblyContaining<TeamModel>();
+    c.RegisterValidatorsFromAssemblyContaining<PlayerModel>();
+    c.RegisterValidatorsFromAssemblyContaining<MatchModel>();
+    c.RegisterValidatorsFromAssemblyContaining<MatchEventsModel>();
+    c.RegisterValidatorsFromAssemblyContaining<PlayerStatisticsModel>();
+    c.RegisterValidatorsFromAssemblyContaining<LeagueStandingsModel>();
+});
 
 // Register repositories and other dependencies
 builder.Services.AddScoped<UsersRepository>();
@@ -55,9 +52,32 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bharat League API", Version = "v1" });
-    c.OperationFilter<SwaggerFileUploadOperationFilter>(); // Register the filter for file uploads
-});
+    c.OperationFilter<SwaggerFileUploadOperationFilter>(); // Filter for file uploads
 
+    // Configure JWT Authentication support in Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -75,7 +95,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Configure CORS to allow React frontend
+// Configure CORS to allow your React frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -99,19 +119,17 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bharat League API V1");
     });
 }
-
-// Use HTTPS redirection only in non-development environments
-if (!app.Environment.IsDevelopment())
+else
 {
     app.UseHttpsRedirection();
     app.UseDeveloperExceptionPage();
 }
 
 // Enable Authentication and Authorization
-app.UseAuthentication();  // Add this line to use JWT Authentication
-app.UseAuthorization();   
+app.UseAuthentication();
+app.UseAuthorization();
 
-// Map controllers to API endpoints
+// Map controllers to endpoints
 app.MapControllers();
 
 app.Run();
