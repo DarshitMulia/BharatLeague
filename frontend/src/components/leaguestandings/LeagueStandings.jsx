@@ -6,7 +6,6 @@ const LeagueStandings = () => {
     const [leagues, setLeagues] = useState([]);
     const [selectedLeagueId, setSelectedLeagueId] = useState("");
     const [standings, setStandings] = useState([]);
-    const [teams, setTeams] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const token = localStorage.getItem('authToken');
@@ -54,30 +53,9 @@ const LeagueStandings = () => {
         fetchStandings();
     }, [selectedLeagueId, token]);
 
-    useEffect(() => {
-        const fetchTeams = async () => {
-            if (!selectedLeagueId) return;
-            try {
-                const response = await fetch(`https://localhost:7031/api/team/league/${selectedLeagueId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch teams.");
-                }
-                const data = await response.json();
-                setTeams(data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        fetchTeams();
-    }, [selectedLeagueId, token]);
-
     const handleLeagueChange = (e) => {
         setSelectedLeagueId(e.target.value);
         setStandings([]);
-        setTeams([]);
     };
 
     const sortedStandings = [...standings].sort((a, b) => b.points - a.points);
@@ -129,25 +107,22 @@ const LeagueStandings = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {sortedStandings.map((standing, index) => {
-                                    const team = teams.find((t) => t.teamId === standing.teamId);
-                                    return (
-                                        <tr key={standing.standingId}>
-                                            <td>{index + 1}</td>
-                                            <td className="team-name-cell">
-                                                {team ? team.teamName : standing.teamId}
-                                            </td>
-                                            <td>{standing.matchesPlayed}</td>
-                                            <td>{standing.wins}</td>
-                                            <td>{standing.losses}</td>
-                                            <td>{standing.draws}</td>
-                                            <td>{standing.goalsScored}</td>
-                                            <td>{standing.goalsConceded}</td>
-                                            <td>{standing.goalsDifference}</td>
-                                            <td className="points-cell">{standing.points}</td>
-                                        </tr>
-                                    );
-                                })}
+                                {sortedStandings.map((standing, index) => (
+                                    <tr key={standing.standingId}>
+                                        <td>{index + 1}</td>
+                                        <td className="team-name-cell">
+                                            {standing.teamName || standing.teamId}
+                                        </td>
+                                        <td>{standing.matchesPlayed}</td>
+                                        <td>{standing.wins}</td>
+                                        <td>{standing.losses}</td>
+                                        <td>{standing.draws}</td>
+                                        <td>{standing.goalsScored}</td>
+                                        <td>{standing.goalsConceded}</td>
+                                        <td>{standing.goalsDifference}</td>
+                                        <td className="points-cell">{standing.points}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
