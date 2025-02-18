@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using backend.Data;
+﻿using FluentValidation;
 using backend.Models;
 using backend.Validator;
-using FluentValidation;
-using CloudinaryDotNet.Actions;
-using CloudinaryDotNet;
+using Microsoft.AspNetCore.Mvc;
+using backend.Data;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -16,20 +14,13 @@ namespace backend.Controllers
     public class LeagueController : ControllerBase
     {
         private readonly LeagueRepository _leagueRepository;
-        private readonly LeagueValidator _leagueValidator;
         private readonly CloudinaryService _cloudinaryService;
 
-        public LeagueController(
-            LeagueRepository leagueRepository,
-            LeagueValidator leagueValidator,
-            CloudinaryService cloudinaryService)
+        public LeagueController(LeagueRepository leagueRepository, CloudinaryService cloudinaryService)
         {
             _leagueRepository = leagueRepository;
-            _leagueValidator = leagueValidator;
             _cloudinaryService = cloudinaryService;
         }
-
-
 
         public class LeagueDto
         {
@@ -42,47 +33,33 @@ namespace backend.Controllers
             public DateTime? EndDate { get; set; }
         }
 
-
-
         [HttpPost("addleague")]
-        public async Task<IActionResult> AddLeague([FromForm] LeagueDto LeagueDto)
+        public async Task<IActionResult> AddLeague([FromForm] LeagueDto leagueDto)
         {
-            if (LeagueDto == null || LeagueDto.ImageFile == null)
-                return BadRequest("Invalid data.");
-
-            var imageUrl = await _cloudinaryService.UploadImageAsync(LeagueDto.ImageFile);
-            if (string.IsNullOrEmpty(imageUrl))
-            {
-                return StatusCode(500, "Image upload failed.");
-            }
-
+            var imageUrl = await _cloudinaryService.UploadImageAsync(leagueDto.ImageFile);
             var leagueModel = new LeagueModel
             {
-                UserId = LeagueDto.UserId,
-                LeagueName = LeagueDto.LeagueName,
-                Country = LeagueDto.Country,
-                ImageUrl = imageUrl, 
-                StartDate = (DateTime)LeagueDto.StartDate,
-                EndDate = (DateTime)LeagueDto.EndDate,
+                UserId = leagueDto.UserId,
+                LeagueName = leagueDto.LeagueName,
+                Country = leagueDto.Country,
+                ImageUrl = imageUrl,
+                StartDate = (DateTime)leagueDto.StartDate,
+                EndDate = (DateTime)leagueDto.EndDate,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                Status = "Scheduled" 
             };
 
-            var validationResult = await _leagueValidator.ValidateAsync(leagueModel);
-
+            var validator = new LeagueValidator();
+            var validationResult = validator.Validate(leagueModel);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
 
-            var result = await _leagueRepository.AddLeagueAsync(leagueModel);
-            if (result)
-                return Ok("League added successfully.");
-
-            return StatusCode(500, "An error occurred while adding the league.");
+            await _leagueRepository.AddLeagueAsync(leagueModel);
+            return Ok("League added successfully.");
         }
-
-
 
         [HttpGet("leagues")]
         public async Task<IActionResult> GetAllLeagues()
@@ -91,97 +68,57 @@ namespace backend.Controllers
             return Ok(leagues);
         }
 
-
-
         [HttpGet("{leagueid}")]
         public async Task<IActionResult> GetLeagueById(int leagueid)
         {
             var league = await _leagueRepository.GetLeagueByIdAsync(leagueid);
-
-            if (league == null)
-                return NotFound("League not found.");
-
             return Ok(league);
         }
-
-
 
         [HttpPut("UpdateLeague/{leagueid}")]
         public async Task<IActionResult> UpdateLeague(int leagueid, [FromForm] LeagueDto leagueDto)
         {
-            try
+            var existingLeague = await _leagueRepository.GetLeagueByIdAsync(leagueid);
+            if (leagueDto.ImageFile != null)
             {
-                var existingLeague = await _leagueRepository.GetLeagueByIdAsync(leagueid);
-                if (existingLeague == null)
-                {
-                    return NotFound("League not found.");
-                }
-
-                if (leagueDto.ImageFile != null)
-                {
-                    string newImageUrl = await _cloudinaryService.UploadImageAsync(leagueDto.ImageFile);
-
-                    existingLeague.ImageUrl = newImageUrl;
-                }
-
-                existingLeague.LeagueName = leagueDto.LeagueName ?? existingLeague.LeagueName;
-                existingLeague.Country = leagueDto.Country ?? existingLeague.Country;
-                existingLeague.StartDate = (DateTime)leagueDto.StartDate;
-                existingLeague.EndDate = (DateTime)leagueDto.EndDate;
-                existingLeague.UpdatedAt = DateTime.Now;
-
-                // Save changes to the database
-                await _leagueRepository.UpdateLeagueAsync(existingLeague);
-
-                return Ok("League updated successfully.");
+                existingLeague.ImageUrl = await _cloudinaryService.UploadImageAsync(leagueDto.ImageFile);
             }
-            catch (Exception ex)
+            existingLeague.LeagueName = leagueDto.LeagueName;
+            existingLeague.Country = leagueDto.Country;
+            existingLeague.StartDate = (DateTime)leagueDto.StartDate;
+            existingLeague.EndDate = (DateTime)leagueDto.EndDate;
+            existingLeague.UpdatedAt = DateTime.Now;
+
+            var validator = new LeagueValidator();
+            var validationResult = validator.Validate(existingLeague);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(validationResult.Errors);
             }
+
+            await _leagueRepository.UpdateLeagueAsync(existingLeague);
+            return Ok("League updated successfully.");
         }
-
-
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetLeaguesByUser(int userId)
         {
             var leagues = await _leagueRepository.GetLeaguesByUserAsync(userId);
-
-            if (!leagues.Any())
-                return Ok(new List<LeagueModel>());
-
             return Ok(leagues);
         }
-
-
 
         [HttpGet("ongoingleagues")]
         public async Task<IActionResult> GetOngoingLeagues()
         {
             var leagues = await _leagueRepository.GetOngoingLeaguesAsync();
-
-            if (!leagues.Any())
-                return NotFound("No ongoing leagues found.");
-
             return Ok(leagues);
         }
-
-
 
         [HttpGet("searchleague")]
         public async Task<IActionResult> SearchLeagues([FromQuery] string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return BadRequest("Search term cannot be empty.");
-
             var leagues = await _leagueRepository.SearchLeaguesAsync(searchTerm);
-
-            if (!leagues.Any())
-                return NotFound("No leagues matched the search criteria.");
-
             return Ok(leagues);
         }
-
     }
 }

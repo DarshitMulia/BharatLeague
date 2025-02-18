@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using backend.Models;
 using System;
+using System.Linq;
 
 namespace backend.Validator
 {
@@ -9,21 +10,33 @@ namespace backend.Validator
         public LeagueValidator()
         {
             RuleFor(x => x.UserId)
-                .GreaterThan(0).WithMessage("User ID is required and must be valid.");
+                .GreaterThan(0);
 
             RuleFor(x => x.LeagueName)
-                .NotEmpty().WithMessage("League name is required.")
-                .MaximumLength(100).WithMessage("League name cannot exceed 100 characters.");
+                .NotEmpty()
+                .MinimumLength(3)
+                .MaximumLength(100);
 
             RuleFor(x => x.Country)
-                .MaximumLength(50).WithMessage("Country name cannot exceed 50 characters.");
+                .NotEmpty()
+                .MinimumLength(2)
+                .MaximumLength(100);
 
             RuleFor(x => x.StartDate)
-                .LessThan(x => x.EndDate).WithMessage("Start date must be earlier than end date.")
-                .GreaterThanOrEqualTo(DateTime.Today).WithMessage("Start date must not be in the past.");
+                .GreaterThanOrEqualTo(_ => DateTime.Now)
+                .WithMessage("StartDate cannot be in the past.")
+                .LessThan(x => x.EndDate)
+                .WithMessage("StartDate must be before EndDate.");
 
             RuleFor(x => x.EndDate)
-                .GreaterThan(x => x.StartDate).WithMessage("End date must be later than start date.");
+                .GreaterThan(x => x.StartDate)
+                .WithMessage("EndDate must be after StartDate.");
+
+            RuleFor(x => x.Status)
+                .NotEmpty()
+                .Must(status => new[] { "Scheduled", "Ongoing", "Completed" }
+                    .Contains(status, StringComparer.OrdinalIgnoreCase))
+                .WithMessage("Status must be one of the following: Scheduled, Ongoing, Complete.");
         }
     }
 }

@@ -2,54 +2,41 @@
 using System.Data;
 using System.Threading.Tasks;
 using backend.Models;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace backend.Data
 {
     public class LeagueRepository
     {
         private readonly string _connectionString;
-        private readonly ILogger<LeagueRepository> _logger;
 
-        public LeagueRepository(IConfiguration configuration, ILogger<LeagueRepository> logger)
+        public LeagueRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _logger = logger;
         }
-
-
 
         public async Task<bool> AddLeagueAsync(LeagueModel leagueModel)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand("PR_AddLeague", connection))
                 {
-                    await connection.OpenAsync();
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserID", leagueModel.UserId);
+                    command.Parameters.AddWithValue("@LeagueName", leagueModel.LeagueName);
+                    command.Parameters.AddWithValue("@Country", leagueModel.Country);
+                    command.Parameters.AddWithValue("@ImageUrl", leagueModel.ImageUrl);
+                    command.Parameters.AddWithValue("@StartDate", leagueModel.StartDate);
+                    command.Parameters.AddWithValue("@EndDate", leagueModel.EndDate);
 
-                    using (SqlCommand command = new SqlCommand("PR_AddLeague", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@UserID", leagueModel.UserId);
-                        command.Parameters.AddWithValue("@LeagueName", leagueModel.LeagueName);
-                        command.Parameters.AddWithValue("@Country", leagueModel.Country);
-                        command.Parameters.AddWithValue("@ImageUrl", leagueModel.ImageUrl);
-                        command.Parameters.AddWithValue("@StartDate", leagueModel.StartDate);
-                        command.Parameters.AddWithValue("@EndDate", leagueModel.EndDate);
-
-                        await command.ExecuteNonQueryAsync();
-                    }
-
-                    return true;
+                    await command.ExecuteNonQueryAsync();
                 }
-                catch (Exception)
-                {
-                    return false;
-                }
+
+                return true;
             }
         }
-
-
 
         public async Task<List<LeagueModel>> GetAllLeaguesAsync()
         {
@@ -58,6 +45,7 @@ namespace backend.Data
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 using (SqlCommand command = new SqlCommand("PR_GetAllLeagues", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -87,8 +75,6 @@ namespace backend.Data
             return leagues;
         }
 
-
-
         public async Task<LeagueModel?> GetLeagueByIdAsync(int leagueId)
         {
             LeagueModel? league = null;
@@ -96,6 +82,7 @@ namespace backend.Data
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 using (SqlCommand command = new SqlCommand("PR_GetLeagueByID", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -126,47 +113,29 @@ namespace backend.Data
             return league;
         }
 
-
-
         public async Task<LeagueModel> UpdateLeagueAsync(LeagueModel leagueModel)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand("PR_UpdateLeague", connection))
                 {
-                    await connection.OpenAsync();
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@LeagueID", leagueModel.LeagueId);
+                    command.Parameters.AddWithValue("@UserID", leagueModel.UserId);
+                    command.Parameters.AddWithValue("@LeagueName", leagueModel.LeagueName);
+                    command.Parameters.AddWithValue("@Country", leagueModel.Country);
+                    command.Parameters.AddWithValue("@ImageUrl", leagueModel.ImageUrl);
+                    command.Parameters.AddWithValue("@StartDate", leagueModel.StartDate);
+                    command.Parameters.AddWithValue("@EndDate", leagueModel.EndDate);
 
-                    using (SqlCommand command = new SqlCommand("PR_UpdateLeague", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        command.Parameters.AddWithValue("@LeagueID", leagueModel.LeagueId);
-                        command.Parameters.AddWithValue("@UserID", leagueModel.UserId);
-                        command.Parameters.AddWithValue("@LeagueName", leagueModel.LeagueName);
-                        command.Parameters.AddWithValue("@Country", leagueModel.Country);
-                        command.Parameters.AddWithValue("@ImageUrl", leagueModel.ImageUrl);
-                        command.Parameters.AddWithValue("@StartDate", leagueModel.StartDate);
-                        command.Parameters.AddWithValue("@EndDate", leagueModel.EndDate);
-
-                        await command.ExecuteNonQueryAsync();
-                    }
-
-                    return leagueModel;
+                    await command.ExecuteNonQueryAsync();
                 }
-                catch (SqlException sqlEx)
-                {
-                    _logger.LogError($"SQL error while updating league: {sqlEx.Message}");
-                    throw new Exception("A database error occurred while updating the league.", sqlEx);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error while updating league: {ex.Message}");
-                    throw new Exception("An unexpected error occurred while updating the league.", ex);
-                }
+
+                return leagueModel;
             }
         }
-
-
 
         public async Task<List<LeagueModel>> GetLeaguesByUserAsync(int userId)
         {
@@ -175,6 +144,7 @@ namespace backend.Data
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 using (SqlCommand command = new SqlCommand("PR_GetLeaguesByUser", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -205,8 +175,6 @@ namespace backend.Data
             return leagues;
         }
 
-        
-
         public async Task<List<LeagueModel>> GetOngoingLeaguesAsync()
         {
             var leagues = new List<LeagueModel>();
@@ -214,6 +182,7 @@ namespace backend.Data
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 using (SqlCommand command = new SqlCommand("PR_GetOngoingLeagues", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -243,8 +212,6 @@ namespace backend.Data
             return leagues;
         }
 
-
-
         public async Task<List<LeagueModel>> SearchLeaguesAsync(string searchTerm)
         {
             var leagues = new List<LeagueModel>();
@@ -252,6 +219,7 @@ namespace backend.Data
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 using (SqlCommand command = new SqlCommand("PR_SearchLeagues", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;

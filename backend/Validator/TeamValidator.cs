@@ -8,27 +8,31 @@ namespace backend.Validator
     {
         public TeamValidator()
         {
-            RuleFor(x => x.LeagueId)
-                .GreaterThan(0).WithMessage("League ID is required and must be valid.");
+            RuleFor(team => team.LeagueId)
+                .GreaterThan(0)
+                .WithMessage("LeagueId must be greater than 0.");
 
-            RuleFor(x => x.TeamName)
-                .NotEmpty().WithMessage("Team name is required.")
-                .MaximumLength(100).WithMessage("Team name cannot exceed 100 characters.");
+            RuleFor(team => team.TeamName)
+                .NotEmpty()
+                .WithMessage("Team name is required.")
+                .MaximumLength(100)
+                .WithMessage("Team name must not exceed 100 characters.");
 
-            RuleFor(x => x.ImageUrl)
-                .MaximumLength(2048).WithMessage("Image URL cannot exceed 2048 characters.")
-                .When(x => !string.IsNullOrEmpty(x.ImageUrl));
+            RuleFor(team => team.City)
+                .NotEmpty()
+                .WithMessage("City is required.")
+                .MaximumLength(50)
+                .WithMessage("City must not exceed 50 characters.");
 
-            RuleFor(x => x.City)
-                .MaximumLength(50).WithMessage("City name cannot exceed 50 characters.")
-                .When(x => !string.IsNullOrEmpty(x.City));
+            RuleFor(team => team.CoachName)
+                .NotEmpty()
+                .WithMessage("Coach name is required.")
+                .MaximumLength(100)
+                .WithMessage("Coach name must not exceed 100 characters.");
 
-            RuleFor(x => x.CoachName)
-                .MaximumLength(50).WithMessage("Coach name cannot exceed 50 characters.")
-                .When(x => !string.IsNullOrEmpty(x.CoachName));
-
-            RuleFor(x => x.FoundedYear)
-                .InclusiveBetween(1801, DateTime.Now.Year).WithMessage($"Founded year must be between 1801 and {DateTime.Now.Year}.");
+            RuleFor(team => team.FoundedYear)
+                .InclusiveBetween(1800, DateTime.Now.Year)
+                .WithMessage($"Founded year must be between 1800 and {DateTime.Now.Year}.");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using backend.Models;
+using System;
 
 namespace backend.Validator
 {
@@ -7,23 +8,29 @@ namespace backend.Validator
     {
         public PlayerValidator()
         {
-            RuleFor(x => x.TeamId)
-                .GreaterThan(0).WithMessage("Team ID must be a valid and greater than 0.");
+            RuleFor(player => player.TeamId)
+                .GreaterThan(0)
+                .WithMessage("TeamId must be greater than 0.");
 
-            RuleFor(x => x.PlayerName)
-                .NotEmpty().WithMessage("Player name is required.")
-                .MaximumLength(100).WithMessage("Player name cannot exceed 100 characters.");
+            RuleFor(player => player.PlayerName)
+                .NotEmpty()
+                .WithMessage("Player name is required.")
+                .MaximumLength(100)
+                .WithMessage("Player name must not exceed 100 characters.");
 
-            RuleFor(x => x.Age)
-                .InclusiveBetween(1, 100).WithMessage("Age must be between 1 and 100.");
+            RuleFor(player => player.Age)
+                .InclusiveBetween(16, 60)
+                .WithMessage("Age must be between 16 and 60.");
 
-            RuleFor(x => x.JerseyNumber)
-                .InclusiveBetween(1, 99).WithMessage("Jersey number must be between 1 and 99.");
+            RuleFor(player => player.JerseyNumber)
+                .InclusiveBetween(0, 99)
+                .WithMessage("Jersey number must be between 0 and 99.");
 
-            RuleFor(x => x.Position)
-                .NotEmpty().WithMessage("Position is required.")
-                .Must(position => new[] { "Forward", "Midfielder", "Defender", "Goalkeeper" }.Contains(position))
-                .WithMessage("Position must be one of the following: Forward, Midfielder, Defender, Goalkeeper.");
+            RuleFor(player => player.Position)
+                .NotEmpty()
+                .WithMessage("Position is required.")
+                .MaximumLength(50)
+                .WithMessage("Position must not exceed 50 characters.");
         }
     }
 }

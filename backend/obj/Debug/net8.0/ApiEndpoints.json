@@ -262,6 +262,16 @@
   },
   {
     "ContainingType": "backend.Controllers.MatchController",
+    "Method": "GetAllMatches",
+    "RelativePath": "api/Match/matches",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.MatchController",
     "Method": "GetOngoingMatches",
     "RelativePath": "api/Match/ongoingmatches",
     "HttpMethod": "GET",
@@ -719,6 +729,16 @@
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.TeamController",
+    "Method": "GetAllTeams",
+    "RelativePath": "api/Team/teams",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

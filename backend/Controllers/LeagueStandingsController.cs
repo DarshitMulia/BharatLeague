@@ -18,11 +18,7 @@ namespace backend.Controllers
         [HttpGet("{leagueId}")]
         public async Task<IActionResult> GetLeagueStandings(int leagueId)
         {
-            List<LeagueStandingsModel> standings = await _leagueStandingsRepository.GetLeagueStandingsAsync(leagueId);
-
-            if (standings == null || standings.Count == 0)
-                return NotFound("No league standings found for this league.");
-
+            var standings = await _leagueStandingsRepository.GetLeagueStandingsAsync(leagueId);
             return Ok(standings);
         }
     }

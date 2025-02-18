@@ -8,38 +8,26 @@ namespace backend.Data
     public class PlayerStatisticsRepository
     {
         private readonly string _connectionString;
-        private readonly ILogger<PlayerStatisticsRepository> _logger;
 
-        public PlayerStatisticsRepository(IConfiguration configuration, ILogger<PlayerStatisticsRepository> logger)
+        public PlayerStatisticsRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _logger = logger;
         }
 
         public async Task<bool> UpdatePlayerStatisticsAsync(int playerId, string eventType, bool incrementMatch)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_UpdatePlayerStatistics", connection))
                 {
-                    await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("PR_UpdatePlayerStatistics", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@player_id", playerId);
-                        command.Parameters.AddWithValue("@event_type", eventType);
-                        // Stored procedure expects BIT (0 or 1)
-                        command.Parameters.AddWithValue("@increment_match", incrementMatch ? 1 : 0);
-
-                        await command.ExecuteNonQueryAsync();
-                    }
-                    return true;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@player_id", playerId);
+                    command.Parameters.AddWithValue("@event_type", eventType);
+                    command.Parameters.AddWithValue("@increment_match", incrementMatch ? 1 : 0);
+                    await command.ExecuteNonQueryAsync();
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error updating player statistics: {ex.Message}");
-                    return false;
-                }
+                return true;
             }
         }
 
@@ -47,23 +35,14 @@ namespace backend.Data
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_IncrementMatchesPlayedAndMarkTheMatchStatusAsCompletedAsWellAsUpdateLeagueStandings", connection))
                 {
-                    await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("PR_IncrementMatchesPlayedAndMarkTheMatchStatusAsCompletedAsWellAsUpdateLeagueStandings", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@match_id", matchId);
-
-                        await command.ExecuteNonQueryAsync();
-                    }
-                    return true;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@match_id", matchId);
+                    await command.ExecuteNonQueryAsync();
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error updating match and player statistics: {ex.Message}");
-                    return false;
-                }
+                return true;
             }
         }
 
@@ -83,36 +62,28 @@ namespace backend.Data
             PlayerMatchStatisticsDto stats = null;
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetPlayerStatisticsByMatchId", connection))
                 {
-                    await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("PR_GetPlayerStatisticsByMatchId", connection))
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@match_id", matchId);
+                    command.Parameters.AddWithValue("@player_id", playerId);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@match_id", matchId);
-                        command.Parameters.AddWithValue("@player_id", playerId);
-
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        if (await reader.ReadAsync())
                         {
-                            if (await reader.ReadAsync())
+                            stats = new PlayerMatchStatisticsDto
                             {
-                                stats = new PlayerMatchStatisticsDto
-                                {
-                                    PlayerId = Convert.ToInt32(reader["player_id"]),
-                                    MatchId = Convert.ToInt32(reader["match_id"]),
-                                    Goals = Convert.ToInt32(reader["Goals"]),
-                                    Assists = Convert.ToInt32(reader["Assists"]),
-                                    YellowCards = Convert.ToInt32(reader["YellowCards"]),
-                                    RedCards = Convert.ToInt32(reader["RedCards"]),
-                                    Fouls = Convert.ToInt32(reader["Fouls"])
-                                };
-                            }
+                                PlayerId = Convert.ToInt32(reader["player_id"]),
+                                MatchId = Convert.ToInt32(reader["match_id"]),
+                                Goals = Convert.ToInt32(reader["Goals"]),
+                                Assists = Convert.ToInt32(reader["Assists"]),
+                                YellowCards = Convert.ToInt32(reader["YellowCards"]),
+                                RedCards = Convert.ToInt32(reader["RedCards"]),
+                                Fouls = Convert.ToInt32(reader["Fouls"])
+                            };
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error retrieving match statistics for player {playerId} in match {matchId}: {ex.Message}");
                 }
             }
             return stats;
@@ -123,43 +94,35 @@ namespace backend.Data
             PlayerStatisticsModel stats = null;
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                try
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand("PR_GetPlayerStatisticsByPlayerId", connection))
                 {
-                    await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("PR_GetPlayerStatisticsByPlayerId", connection))
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@player_id", playerId);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@player_id", playerId);
-
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        if (await reader.ReadAsync())
                         {
-                            if (await reader.ReadAsync())
+                            stats = new PlayerStatisticsModel
                             {
-                                stats = new PlayerStatisticsModel
-                                {
-                                    PlayerName = reader["playername"].ToString(),
-                                    PlayerImage = reader["playerimage"].ToString(),
-                                    TeamName = reader["teamname"].ToString(),
-                                    TeamImage = reader["teamimage"].ToString(),
-                                    LeagueName = reader["leaguename"].ToString(),
-                                    LeagueImage = reader["leagueimage"].ToString(),
-                                    Age = Convert.ToInt32(reader["age"]),
-                                    JerseyNumber = Convert.ToInt32(reader["jersey_number"]),
-                                    Position = reader["position"].ToString(),
-                                    MatchesPlayed = Convert.ToInt32(reader["matches_played"]),
-                                    Goals = Convert.ToInt32(reader["goals"]),
-                                    Assists = Convert.ToInt32(reader["assists"]),
-                                    YellowCards = Convert.ToInt32(reader["yellow_cards"]),
-                                    RedCards = Convert.ToInt32(reader["red_cards"]),
-                                    Fouls = Convert.ToInt32(reader["fouls"])
-                                };
-                            }
+                                PlayerName = reader["playername"].ToString(),
+                                PlayerImage = reader["playerimage"].ToString(),
+                                TeamName = reader["teamname"].ToString(),
+                                TeamImage = reader["teamimage"].ToString(),
+                                LeagueName = reader["leaguename"].ToString(),
+                                LeagueImage = reader["leagueimage"].ToString(),
+                                Age = Convert.ToInt32(reader["age"]),
+                                JerseyNumber = Convert.ToInt32(reader["jersey_number"]),
+                                Position = reader["position"].ToString(),
+                                MatchesPlayed = Convert.ToInt32(reader["matches_played"]),
+                                Goals = Convert.ToInt32(reader["goals"]),
+                                Assists = Convert.ToInt32(reader["assists"]),
+                                YellowCards = Convert.ToInt32(reader["yellow_cards"]),
+                                RedCards = Convert.ToInt32(reader["red_cards"]),
+                                Fouls = Convert.ToInt32(reader["fouls"])
+                            };
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error retrieving statistics for player {playerId}: {ex.Message}");
                 }
             }
             return stats;

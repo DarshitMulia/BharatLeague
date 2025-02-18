@@ -1,9 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
-using backend.Validator;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,6 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
+using FluentValidation.Results;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Controllers
 {
@@ -21,75 +22,60 @@ namespace backend.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UsersRepository _usersRepository;
-        private readonly SignUpUsersValidator _signUpValidator;
-        private readonly LoginUsersValidator _loginValidator;
-        private readonly ILogger<UsersController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IValidator<SignUpUsers> _signUpUsersValidator;
+        private readonly IValidator<LoginUsers> _loginUsersValidator;
 
         public UsersController(UsersRepository usersRepository,
-                               SignUpUsersValidator signUpValidator,
-                               LoginUsersValidator loginValidator,
-                               ILogger<UsersController> logger,
-                               IConfiguration configuration)
+                               IConfiguration configuration,
+                               IValidator<SignUpUsers> signUpUsersValidator,
+                               IValidator<LoginUsers> loginUsersValidator)
         {
             _usersRepository = usersRepository;
-            _signUpValidator = signUpValidator;
-            _loginValidator = loginValidator;
-            _logger = logger;
             _configuration = configuration;
+            _signUpUsersValidator = signUpUsersValidator;
+            _loginUsersValidator = loginUsersValidator;
         }
 
         [HttpPost("signup")]
         [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] SignUpUsers signupUser)
         {
-            var validationResult = await _signUpValidator.ValidateAsync(signupUser);
+            ValidationResult validationResult = await _signUpUsersValidator.ValidateAsync(signupUser);
             if (!validationResult.IsValid)
             {
-                _logger.LogWarning("Sign-up validation failed: {Errors}", validationResult.Errors);
                 return BadRequest(validationResult.Errors);
             }
-
-            var result = await _usersRepository.SignupAsync(signupUser);
-            if (result)
-            {
-                _logger.LogInformation("User registered successfully: {Username}", signupUser.Username);
-                return Ok(new { message = "User registered successfully." });
-            }
-
-            _logger.LogError("Error during user registration for {Username}", signupUser.Username);
-            return Conflict(new { message = "User already exists or an error occurred." });
+            await _usersRepository.SignupAsync(signupUser);
+            return Ok(new { message = "User registered successfully." });
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUsers loginUser)
         {
-            var validationResult = await _loginValidator.ValidateAsync(loginUser);
+            ValidationResult validationResult = await _loginUsersValidator.ValidateAsync(loginUser);
             if (!validationResult.IsValid)
             {
-                _logger.LogWarning("Login validation failed: {Errors}", validationResult.Errors);
                 return BadRequest(validationResult.Errors);
             }
-
             var user = await _usersRepository.LoginAsync(loginUser.Email, loginUser.Password, loginUser.Role);
-            if (user != null)
+            if (user == null)
             {
-                _logger.LogInformation("Login successful for user: {Email}", loginUser.Email);
-
-                var token = GenerateJwtToken(user);
-
-                return Ok(new { message = "Login successful", token });
+                return Unauthorized(new { message = "Invalid credentials." });
             }
-
-            _logger.LogWarning("Invalid login attempt for email: {Email}", loginUser.Email);
-            return Unauthorized(new { message = "Invalid email, password, or role." });
+            var token = GenerateJwtToken(user);
+            return Ok(new { message = "Login successful", user, token });
         }
 
         [HttpGet("getallusers")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _usersRepository.GetAllUsersAsync();
+            if (users == null || !users.Any())
+            {
+                return Ok(new List<UsersModel>());
+            }
             return Ok(users);
         }
 
@@ -99,7 +85,7 @@ namespace backend.Controllers
             var user = await _usersRepository.GetUserByIdAsync(userid);
             if (user == null)
             {
-                return NotFound(new { Message = "User not found." });
+                return Ok(new UsersModel());
             }
             return Ok(user);
         }
@@ -108,6 +94,10 @@ namespace backend.Controllers
         public async Task<IActionResult> SearchUsers([FromQuery] string searchTerm)
         {
             var users = await _usersRepository.SearchUsersAsync(searchTerm);
+            if (users == null || !users.Any())
+            {
+                return Ok(new List<UsersModel>());
+            }
             return Ok(users);
         }
 
@@ -115,7 +105,6 @@ namespace backend.Controllers
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
@@ -123,7 +112,6 @@ namespace backend.Controllers
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString())
             };
-
             var token = new JwtSecurityToken(
                 _configuration["JwtSettings:Issuer"],
                 _configuration["JwtSettings:Audience"],
@@ -131,7 +119,6 @@ namespace backend.Controllers
                 expires: DateTime.Now.AddMinutes(double.Parse(_configuration["JwtSettings:ExpirationInMinutes"])),
                 signingCredentials: credentials
             );
-
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

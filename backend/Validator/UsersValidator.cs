@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using backend.Models;
+using System.Collections.Generic;
 
 namespace backend.Validator
 {
@@ -7,29 +8,30 @@ namespace backend.Validator
     {
         public SignUpUsersValidator()
         {
-            // Username validation
             RuleFor(x => x.Username)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Username is required.")
-                .Length(3, 50).WithMessage("Username must be between 3 and 50 characters.");
+                .MinimumLength(3).WithMessage("Username must be at least 3 characters long.")
+                .MaximumLength(50).WithMessage("Username must not exceed 50 characters.");
 
-            // Email validation
             RuleFor(x => x.Email)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("Invalid email format.");
+                .EmailAddress().WithMessage("A valid email is required.");
 
-            // Password validation
             RuleFor(x => x.Password)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Password is required.")
-                .Length(6, 100).WithMessage("Password must be between 6 and 100 characters.")
-                .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
-                .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter.")
-                .Matches("[0-9]").WithMessage("Password must contain at least one number.")
-                .Matches(@"[!@#$%^&*(),.?""':{}|<>]").WithMessage("Password must contain at least one special character.");
+                .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
+                .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
+                .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
+                .Matches(@"[0-9]").WithMessage("Password must contain at least one number.")
+                .Matches(@"[\!\@\#\$\%\^\&\*\(\)\-\+\=]").WithMessage("Password must contain at least one special character (!,@,#,$,%,^,&,*,(,),-,+,=).");
 
-            // Role validation
             RuleFor(x => x.Role)
                 .NotEmpty().WithMessage("Role is required.")
-                .Must(role => role == "User" || role == "Admin").WithMessage("Invalid role. Role must be 'User' or 'Admin'.");
+                .Must(role => new List<string> { "User", "Admin" }.Contains(role))
+                .WithMessage("Role must be either 'User' or 'Admin'.");
         }
     }
 
@@ -37,19 +39,19 @@ namespace backend.Validator
     {
         public LoginUsersValidator()
         {
-            // Email validation
             RuleFor(x => x.Email)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("Invalid email format.");
+                .EmailAddress().WithMessage("A valid email is required.");
 
-            // Password validation
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password is required.");
+                .NotEmpty().WithMessage("Password is required.")
+                .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
 
-            // Role validation
             RuleFor(x => x.Role)
                 .NotEmpty().WithMessage("Role is required.")
-                .Must(role => role == "User" || role == "Admin").WithMessage("Invalid role. Role must be 'User' or 'Admin'.");
+                .Must(role => new List<string> { "User", "Admin" }.Contains(role))
+                .WithMessage("Role must be either 'User' or 'Admin'.");
         }
     }
 }
