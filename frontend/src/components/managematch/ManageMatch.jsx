@@ -20,7 +20,7 @@ const ManageMatch = () => {
     const [teams, setTeams] = useState([]);
     const [players, setPlayers] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isCompleting, setIsCompleting] = useState(false); // For the Mark as Completed button
+    const [isCompleting, setIsCompleting] = useState(false);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -100,10 +100,49 @@ const ManageMatch = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.teamId) newErrors.teamId = "Please select a team";
-        if (!formData.playerId) newErrors.playerId = "Please select a player";
-        if (!formData.eventType) newErrors.eventType = "Please select an event type";
-        if (!formData.eventTime) newErrors.eventTime = "Event time is required";
+
+        if (!formData.teamId) {
+            newErrors.teamId = "Please select a team";
+        } else if (parseInt(formData.teamId, 10) <= 0) {
+            newErrors.teamId = "TeamId must be greater than 0";
+        }
+
+        if (!formData.playerId) {
+            newErrors.playerId = "Please select a player";
+        } else if (parseInt(formData.playerId, 10) <= 0) {
+            newErrors.playerId = "PlayerId must be greater than 0";
+        }
+
+        if (!formData.eventType) {
+            newErrors.eventType = "Please select an event type";
+        } else {
+            if (formData.eventType.length > 50) {
+                newErrors.eventType = "EventType must not exceed 50 characters";
+            }
+            const allowedTypes = ["Goal", "Assist", "Foul", "Yellow Card", "Red Card"];
+            const isValidType = allowedTypes.some(
+                (type) => type.toLowerCase() === formData.eventType.toLowerCase()
+            );
+            if (!isValidType) {
+                newErrors.eventType =
+                    "EventType must be one of the following: Goal, Assist, Foul, Yellow Card, Red Card";
+            }
+        }
+
+        if (formData.eventTime === "") {
+            newErrors.eventTime = "Event time is required";
+        } else {
+            const eventTime = parseInt(formData.eventTime, 10);
+            if (isNaN(eventTime)) {
+                newErrors.eventTime = "Event time must be a valid number";
+            } else if (eventTime < 0 || eventTime > 150) {
+                newErrors.eventTime = "EventTime must be between 0 and 150 minutes";
+            }
+        }
+
+        if (formData.additionalInfo && formData.additionalInfo.length > 250) {
+            newErrors.additionalInfo = "Additional Info must not exceed 250 characters";
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -118,11 +157,11 @@ const ManageMatch = () => {
         try {
             const token = localStorage.getItem("authToken");
             const matchEvent = {
-                matchId: parseInt(matchId),
-                teamId: parseInt(formData.teamId),
-                playerId: formData.playerId ? parseInt(formData.playerId) : null,
+                matchId: parseInt(matchId, 10),
+                teamId: parseInt(formData.teamId, 10),
+                playerId: formData.playerId ? parseInt(formData.playerId, 10) : null,
                 eventType: formData.eventType,
-                eventTime: parseInt(formData.eventTime),
+                eventTime: parseInt(formData.eventTime, 10),
                 additionalInfo: formData.additionalInfo || null
             };
 
@@ -136,8 +175,6 @@ const ManageMatch = () => {
                     },
                 }
             );
-
-            alert("Match event added successfully!");
             navigate(-1);
         } catch (err) {
             console.error("Error adding match event:", err);
@@ -147,7 +184,6 @@ const ManageMatch = () => {
         }
     };
 
-    // Function to mark the match as completed
     const handleMarkAsCompleted = async () => {
         setIsCompleting(true);
         try {
@@ -198,7 +234,6 @@ const ManageMatch = () => {
                             {errors.teamId && <p className="error-text">{errors.teamId}</p>}
                         </div>
 
-                        {/* Player Selection */}
                         <div className="form-group">
                             <label className="form-label">Select Player</label>
                             <select
@@ -215,9 +250,9 @@ const ManageMatch = () => {
                                     </option>
                                 ))}
                             </select>
+                            {errors.playerId && <p className="error-text">{errors.playerId}</p>}
                         </div>
 
-                        {/* Event Type Selection */}
                         <div className="form-group">
                             <label className="form-label">Event Type</label>
                             <select
@@ -236,7 +271,6 @@ const ManageMatch = () => {
                             {errors.eventType && <p className="error-text">{errors.eventType}</p>}
                         </div>
 
-                        {/* Event Time */}
                         <div className="form-group">
                             <label className="form-label">Event Time (minutes)</label>
                             <input
@@ -246,13 +280,12 @@ const ManageMatch = () => {
                                 value={formData.eventTime}
                                 onChange={handleInputChange}
                                 min="0"
-                                max="120"
+                                max="150"
                                 placeholder="Enter minutes"
                             />
                             {errors.eventTime && <p className="error-text">{errors.eventTime}</p>}
                         </div>
 
-                        {/* Additional Info */}
                         <div className="form-group">
                             <label className="form-label">Additional Info (Optional)</label>
                             <input
@@ -263,8 +296,8 @@ const ManageMatch = () => {
                                 value={formData.additionalInfo}
                                 onChange={handleInputChange}
                             />
+                            {errors.additionalInfo && <p className="error-text">{errors.additionalInfo}</p>}
                         </div>
-
 
                         <div className="button-group">
                             <button
@@ -279,24 +312,19 @@ const ManageMatch = () => {
                                 className="submit-button"
                                 disabled={isSubmitting}
                             >
-                                {isSubmitting ? 'Submitting...' : 'Add Match Event'}
+                                {isSubmitting ? "Submitting..." : "Add Match Event"}
                             </button>
                             <button
-                            type="button"
-                            className="header-button"
-                            style={{width:"50%"}}
-                            onClick={handleMarkAsCompleted}
-                            disabled={isCompleting}
-                        >
-                            {isCompleting ? 'Completing...' : 'Mark Match As Completed'}
-                        </button>
+                                type="button"
+                                className="header-button"
+                                style={{ width: "50%" }}
+                                onClick={handleMarkAsCompleted}
+                                disabled={isCompleting}
+                            >
+                                {isCompleting ? "Completing..." : "Mark Match As Completed"}
+                            </button>
                         </div>
-                        <div className="button-group">
-                        
-                    </div>
                     </form>
-
-                    
                 </div>
             </div>
         </div>

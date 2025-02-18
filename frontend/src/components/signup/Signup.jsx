@@ -10,9 +10,55 @@ const Signup = () => {
         password: "",
         role: "User",
     });
+    const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
+
+    const validate = () => {
+        const newErrors = {};
+
+        if (!formData.username.trim()) {
+            newErrors.username = "Username is required.";
+        } else if (formData.username.length < 3) {
+            newErrors.username = "Username must be at least 3 characters long.";
+        } else if (formData.username.length > 50) {
+            newErrors.username = "Username must not exceed 50 characters.";
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required.";
+        } else {
+            const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+            if (!emailRegex.test(formData.email)) {
+                newErrors.email = "A valid email is required.";
+            }
+        }
+
+        if (!formData.password) {
+            newErrors.password = "Password is required.";
+        } else {
+            if (formData.password.length < 8) {
+                newErrors.password = "Password must be at least 8 characters long.";
+            } else if (!/[A-Z]/.test(formData.password)) {
+                newErrors.password = "Password must contain at least one uppercase letter.";
+            } else if (!/[a-z]/.test(formData.password)) {
+                newErrors.password = "Password must contain at least one lowercase letter.";
+            } else if (!/[0-9]/.test(formData.password)) {
+                newErrors.password = "Password must contain at least one number.";
+            } else if (!/[\!\@\#\$\%\^\&\*\(\)\-\+\=]/.test(formData.password)) {
+                newErrors.password = "Password must contain at least one special character (!,@,#,$,%,^,&,*,(,),-,+,=).";
+            }
+        }
+
+        if (!formData.role) {
+            newErrors.role = "Role is required.";
+        } else if (!["User", "Admin"].includes(formData.role)) {
+            newErrors.role = "Role must be either 'User' or 'Admin'.";
+        }
+
+        return newErrors;
+    };
 
     const handleChange = (e) => {
         setFormData({
@@ -22,11 +68,18 @@ const Signup = () => {
     };
 
     const handleTogglePassword = () => {
-        setShowPassword(!showPassword);
+        setShowPassword((prev) => !prev);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+        setErrors({});
+
         try {
             const response = await axios.post(
                 "https://localhost:7031/api/Users/signup",
@@ -45,9 +98,7 @@ const Signup = () => {
                     (error.response.data.message || "Something went wrong!")
                 );
             } else if (error.request) {
-                alert(
-                    "No response from backend. Check network or CORS configuration."
-                );
+                alert("No response from backend. Check network or CORS configuration.");
             } else {
                 alert("Frontend error: " + error.message);
             }
@@ -69,25 +120,28 @@ const Signup = () => {
                             placeholder="Enter Username"
                             value={formData.username}
                             onChange={handleChange}
-                            className="form-control"
+                            className={`form-control ${errors.username ? "is-invalid" : ""}`}
                             id="username"
-                            required
                         />
+                        {errors.username && (
+                            <div className="invalid-feedback">{errors.username}</div>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">
                             Email
                         </label>
                         <input
-                            type="email"
                             name="email"
                             placeholder="Enter Email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="form-control"
+                            className={`form-control ${errors.email ? "is-invalid" : ""}`}
                             id="email"
-                            required
                         />
+                        {errors.email && (
+                            <div className="invalid-feedback">{errors.email}</div>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">
@@ -100,14 +154,16 @@ const Signup = () => {
                                 placeholder="Enter Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="form-control"
+                                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                                 id="password"
-                                required
                             />
                             <span className="toggle-link" onClick={handleTogglePassword}>
                                 {showPassword ? "Hide" : "Show"}
                             </span>
                         </div>
+                        {errors.password && (
+                            <div className="invalid-feedback">{errors.password}</div>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="role" className="form-label">
@@ -137,6 +193,9 @@ const Signup = () => {
                                 Admin
                             </label>
                         </div>
+                        {errors.role && (
+                            <div className="invalid-feedback d-block">{errors.role}</div>
+                        )}
                     </div>
                     <button type="submit" className="btn btn-primary w-100">
                         Sign Up

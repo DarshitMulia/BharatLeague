@@ -7,7 +7,6 @@ import "./addmatch.css";
 const AddMatch = () => {
     const { leagueId } = useParams();
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({
         team1Id: "",
         team2Id: "",
@@ -15,7 +14,6 @@ const AddMatch = () => {
         startTime: "",
         venue: "",
     });
-
     const [teams, setTeams] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
@@ -25,24 +23,18 @@ const AddMatch = () => {
             console.error("League ID not found in the URL.");
             return;
         }
-
         const fetchTeams = async () => {
             try {
                 const token = localStorage.getItem("authToken");
                 const response = await axios.get(
                     `https://localhost:7031/api/Team/league/${leagueId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
+                    { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setTeams(response.data);
             } catch (err) {
                 console.error("Error fetching teams:", err);
             }
         };
-
         fetchTeams();
     }, [leagueId]);
 
@@ -52,16 +44,25 @@ const AddMatch = () => {
 
     const validateForm = () => {
         const newErrors = {};
-
         if (!formData.team1Id) newErrors.team1Id = "Please select Team 1.";
         if (!formData.team2Id) newErrors.team2Id = "Please select Team 2.";
         if (formData.team1Id && formData.team2Id && formData.team1Id === formData.team2Id) {
-            newErrors.team2Id = "Team 1 and Team 2 cannot be the same.";
+            newErrors.team2Id = "Team 1 and Team 2 must be different.";
         }
-        if (!formData.matchDate) newErrors.matchDate = "Match Date is required.";
+        if (!formData.matchDate) {
+            newErrors.matchDate = "Match Date is required.";
+        } else {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const mDate = new Date(formData.matchDate);
+            if (mDate < today) newErrors.matchDate = "Match Date cannot be in the past.";
+        }
         if (!formData.startTime) newErrors.startTime = "Start Time is required.";
-        if (!formData.venue) newErrors.venue = "Venue is required.";
-
+        if (!formData.venue) {
+            newErrors.venue = "Venue is required.";
+        } else if (formData.venue.length > 150) {
+            newErrors.venue = "Venue must not exceed 150 characters.";
+        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -73,16 +74,10 @@ const AddMatch = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
+        if (!validateForm()) return;
         setIsSubmitting(true);
-
         try {
             const token = localStorage.getItem("authToken");
-
             const matchData = {
                 leagueId: parseInt(leagueId, 10),
                 team1Id: parseInt(formData.team1Id, 10),
@@ -92,9 +87,6 @@ const AddMatch = () => {
                 venue: formData.venue,
                 status: "Scheduled",
             };
-
-            console.log("Sending Match Data:", matchData);
-
             const response = await axios.post(
                 "https://localhost:7031/api/Match/addmatch",
                 matchData,
@@ -105,10 +97,8 @@ const AddMatch = () => {
                     },
                 }
             );
-
-            alert("Match added successfully!");
             console.log(response.data);
-            navigate("/");
+            navigate(-1);
         } catch (err) {
             console.error("Error:", err);
             alert("An error occurred while adding the match.");
@@ -131,7 +121,6 @@ const AddMatch = () => {
                                 name="team1Id"
                                 value={formData.team1Id}
                                 onChange={handleInputChange}
-                                required
                             >
                                 <option value="">Select Team 1</option>
                                 {teams.map((team) => (
@@ -142,7 +131,6 @@ const AddMatch = () => {
                             </select>
                             {errors.team1Id && <p className="error-text">{errors.team1Id}</p>}
                         </div>
-
                         <div className="form-group">
                             <label className="form-label">Team 2</label>
                             <select
@@ -150,7 +138,6 @@ const AddMatch = () => {
                                 name="team2Id"
                                 value={formData.team2Id}
                                 onChange={handleInputChange}
-                                required
                             >
                                 <option value="">Select Team 2</option>
                                 {teams.map((team) => (
@@ -161,7 +148,6 @@ const AddMatch = () => {
                             </select>
                             {errors.team2Id && <p className="error-text">{errors.team2Id}</p>}
                         </div>
-
                         <div className="form-group">
                             <label className="form-label">Match Date</label>
                             <input
@@ -170,11 +156,9 @@ const AddMatch = () => {
                                 name="matchDate"
                                 value={formData.matchDate}
                                 onChange={handleInputChange}
-                                required
                             />
                             {errors.matchDate && <p className="error-text">{errors.matchDate}</p>}
                         </div>
-
                         <div className="form-group">
                             <label className="form-label">Start Time</label>
                             <input
@@ -183,11 +167,9 @@ const AddMatch = () => {
                                 name="startTime"
                                 value={formData.startTime}
                                 onChange={handleInputChange}
-                                required
                             />
                             {errors.startTime && <p className="error-text">{errors.startTime}</p>}
                         </div>
-
                         <div className="form-group">
                             <label className="form-label">Venue</label>
                             <input
@@ -197,25 +179,15 @@ const AddMatch = () => {
                                 placeholder="Enter Venue"
                                 value={formData.venue}
                                 onChange={handleInputChange}
-                                required
                             />
                             {errors.venue && <p className="error-text">{errors.venue}</p>}
                         </div>
-
                         <div className="button-group">
-                            <button
-                                type="button"
-                                className="back-button"
-                                onClick={() => navigate(-1)}
-                            >
+                            <button type="button" className="back-button" onClick={() => navigate(-1)}>
                                 Back
                             </button>
-                            <button
-                                type="submit"
-                                className="submit-button"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? 'Submitting...' : 'Add Match'}
+                            <button type="submit" className="submit-button" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Add Match"}
                             </button>
                         </div>
                     </form>
