@@ -51,6 +51,12 @@ const ViewMatchDetails = () => {
     };
 
     fetchData();
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 15000);
+
+    return () => clearInterval(intervalId);
   }, [matchId, token]);
 
   const calculateScore = (teamId) => {
@@ -77,7 +83,6 @@ const ViewMatchDetails = () => {
     <div className="match-dashboard">
       <Sidebar />
 
-      {/* Score Header with Team Names */}
       {participatingTeams.length === 2 ? (
         <div className="score-header">
           <div className="team-info left">
@@ -111,7 +116,6 @@ const ViewMatchDetails = () => {
           </div>
         </div>
       ) : (
-        // Fallback layout if there are not exactly two teams
         participatingTeams.map((team) => (
           <div key={team.teamId} className="team-container">
             <img
@@ -125,7 +129,6 @@ const ViewMatchDetails = () => {
         ))
       )}
 
-      {/* Match Timeline */}
       <div className="match-timeline">
         <h2 className="section-heading">Match Events Timeline</h2>
         <div className="timeline-container">
@@ -155,7 +158,6 @@ const ViewMatchDetails = () => {
         </div>
       </div>
 
-      {/* Team Rosters */}
       <div className="team-rosters">
         {participatingTeams.map((team) => (
           <div key={team.teamId} className="roster-container">

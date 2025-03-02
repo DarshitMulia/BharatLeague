@@ -126,7 +126,7 @@ const LeagueDetails = () => {
                                         </Col>
                                         <Col md={4} className="d-none d-md-block">
                                             <div className="coach-info">
-                                                <span className="coach-label">Coach:</span>
+                                                <span className="coach-label">Manager:</span>
                                                 <span className="coach-name">{team.coachName}</span>
                                             </div>
                                             <div className="founded-year">Est. {team.foundedYear}</div>

@@ -161,12 +161,12 @@ const UpdateTeam = () => {
                             {errors.city && <p className="error-text">{errors.city}</p>}
                         </div>
                         <div className="form-group">
-                            <label className="form-label">Coach Name</label>
+                            <label className="form-label">Manager Name</label>
                             <input
                                 className="form-input"
                                 type="text"
                                 name="coachName"
-                                placeholder="Enter Coach Name"
+                                placeholder="Enter Manager Name"
                                 value={formData.coachName}
                                 onChange={handleInputChange}
                             />

@@ -58,7 +58,7 @@ const ManageLeague = () => {
             <div className="manage-league-main-content">
                 <div className="content-header">
                     <h1>Manage Leagues</h1>
-                    <Link to="/createleague" className="create-league-button">
+                    <Link to="/createleague" className="create-team-btn">
                         <FiPlus className="btn-icon" />
                         New League
                     </Link>

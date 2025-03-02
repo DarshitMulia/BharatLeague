@@ -89,6 +89,11 @@ namespace backend.Data
             return stats;
         }
 
+        // Helper method to safely convert DB value to int
+        private int GetIntValue(object dbValue)
+        {
+            return dbValue != DBNull.Value ? Convert.ToInt32(dbValue) : 0;
+        }
         public async Task<PlayerStatisticsModel> GetPlayerStatisticsByPlayerIdAsync(int playerId)
         {
             PlayerStatisticsModel stats = null;
@@ -111,15 +116,15 @@ namespace backend.Data
                                 TeamImage = reader["teamimage"].ToString(),
                                 LeagueName = reader["leaguename"].ToString(),
                                 LeagueImage = reader["leagueimage"].ToString(),
-                                Age = Convert.ToInt32(reader["age"]),
-                                JerseyNumber = Convert.ToInt32(reader["jersey_number"]),
+                                Age = GetIntValue(reader["age"]),
+                                JerseyNumber = GetIntValue(reader["jersey_number"]),
                                 Position = reader["position"].ToString(),
-                                MatchesPlayed = Convert.ToInt32(reader["matches_played"]),
-                                Goals = Convert.ToInt32(reader["goals"]),
-                                Assists = Convert.ToInt32(reader["assists"]),
-                                YellowCards = Convert.ToInt32(reader["yellow_cards"]),
-                                RedCards = Convert.ToInt32(reader["red_cards"]),
-                                Fouls = Convert.ToInt32(reader["fouls"])
+                                MatchesPlayed = GetIntValue(reader["matches_played"]),
+                                Goals = GetIntValue(reader["goals"]),
+                                Assists = GetIntValue(reader["assists"]),
+                                YellowCards = GetIntValue(reader["yellow_cards"]),
+                                RedCards = GetIntValue(reader["red_cards"]),
+                                Fouls = GetIntValue(reader["fouls"])
                             };
                         }
                     }
