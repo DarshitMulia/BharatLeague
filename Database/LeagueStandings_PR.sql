@@ -1,3 +1,4 @@
+-- Procedure to update league Standings of a league
 CREATE PROCEDURE PR_UpdateLeagueStandingsFromMatch
     @match_id INT,
     @league_id INT

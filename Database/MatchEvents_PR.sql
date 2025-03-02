@@ -1,4 +1,4 @@
--- Adds a new event to the MatchEventLogs table.
+-- Procedure to Add a new event to the MatchEventLogs table.
 CREATE PROCEDURE PR_AddMatchEvent
     @match_id INT,
     @team_id INT,
@@ -31,7 +31,7 @@ BEGIN
 END;
 
 
--- Fetches all events for a specific match.
+-- Procedure to Fetch all events for a specific match.
 CREATE PROCEDURE PR_GetMatchEventsByMatchId
     @match_id INT
 AS
@@ -42,13 +42,45 @@ BEGIN
 END;
 
 
--- Deletes an event from MatchEventLogs (optional, in case of corrections).
-CREATE PROCEDURE PR_DeleteMatchEvent
+-- Procedure to Delete an event from MatchEventLogs
+ALTER PROCEDURE PR_DeleteMatchEvent
     @event_id INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM MatchEvents WHERE event_id = @event_id;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        
+        DECLARE @player_id INT,
+                @event_type NVARCHAR(50);
+        
+        SELECT 
+            @player_id = player_id,
+            @event_type = event_type
+        FROM MatchEvents
+        WHERE event_id = @event_id;
+        
+        IF (@player_id IS NOT NULL)
+        BEGIN
+            UPDATE PlayerStatistics
+            SET 
+                goals = goals - CASE WHEN @event_type = 'Goal' THEN 1 ELSE 0 END,
+                assists = assists - CASE WHEN @event_type = 'Assist' THEN 1 ELSE 0 END,
+                yellow_cards = yellow_cards - CASE WHEN @event_type = 'Yellow Card' THEN 1 ELSE 0 END,
+                red_cards = red_cards - CASE WHEN @event_type = 'Red Card' THEN 1 ELSE 0 END,
+                fouls = fouls - CASE WHEN @event_type = 'Foul' THEN 1 ELSE 0 END,
+                updated_at = GETDATE()
+            WHERE player_id = @player_id;
+        END
+        
+        DELETE FROM MatchEvents WHERE event_id = @event_id;
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 
