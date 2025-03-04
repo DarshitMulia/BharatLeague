@@ -315,13 +315,18 @@
   {
     "ContainingType": "backend.Controllers.MatchController",
     "Method": "SearchMatches",
-    "RelativePath": "api/Match/searchmatch",
+    "RelativePath": "api/Match/searchmatches",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "searchTerm",
+        "Name": "teamName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "venue",
         "Type": "System.String",
         "IsRequired": false
       }

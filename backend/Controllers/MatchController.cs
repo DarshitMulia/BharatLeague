@@ -88,10 +88,10 @@ namespace backend.Controllers
             return Ok(match);
         }
 
-        [HttpGet("searchmatch")]
-        public async Task<IActionResult> SearchMatches([FromQuery] string searchTerm)
+        [HttpGet("searchmatches")]
+        public async Task<IActionResult> SearchMatches([FromQuery] string? teamName, [FromQuery] string? venue)
         {
-            var matches = await _matchRepository.SearchMatchesAsync(searchTerm);
+            var matches = await _matchRepository.SearchMatchesAsync(teamName, venue);
             return Ok(matches);
         }
     }

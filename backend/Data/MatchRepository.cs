@@ -306,7 +306,7 @@ namespace backend.Data
             return match;
         }
 
-        public async Task<List<MatchModel>> SearchMatchesAsync(string searchTerm)
+        public async Task<List<MatchModel>> SearchMatchesAsync(string? teamName, string? venue)
         {
             var matches = new List<MatchModel>();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -315,7 +315,12 @@ namespace backend.Data
                 using (SqlCommand command = new SqlCommand("PR_SearchMatches", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@search", searchTerm);
+
+                    command.Parameters.AddWithValue("@TeamName",
+                        !string.IsNullOrEmpty(teamName) ? (object)teamName : DBNull.Value);
+                    command.Parameters.AddWithValue("@Venue",
+                        !string.IsNullOrEmpty(venue) ? (object)venue : DBNull.Value);
+
                     using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
@@ -329,9 +334,7 @@ namespace backend.Data
                                 MatchDate = Convert.ToDateTime(reader["match_date"]),
                                 StartTime = reader["start_time"] != DBNull.Value ? (TimeSpan)reader["start_time"] : TimeSpan.Zero,
                                 Venue = reader["venue"].ToString(),
-                                Status = reader["status"].ToString(),
-                                CreatedAt = Convert.ToDateTime(reader["created_at"]),
-                                UpdatedAt = Convert.ToDateTime(reader["updated_at"])
+                                Status = reader["status"].ToString()
                             });
                         }
                     }

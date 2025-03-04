@@ -116,13 +116,32 @@ BEGIN
 END;
 
 
--- Procedure to Search Matches by Teams or Venue
+-- Procedure to Search Matches by TeamName or Venue
 CREATE PROCEDURE PR_SearchMatches
-    @search NVARCHAR(100)
+    @TeamName NVARCHAR(100) = NULL,
+    @Venue NVARCHAR(100) = NULL
 AS
 BEGIN
-    SELECT match_id, league_id, team1_id, team2_id, match_date, start_time, venue, status, created_at, updated_at
-    FROM Match
-    WHERE venue LIKE '%' + @search + '%' OR
-          status LIKE '%' + @search + '%';
+    SET NOCOUNT ON;
+
+    SELECT 
+        m.match_id,
+        m.league_id,
+        m.team1_id, 
+        t1.teamname AS team1_name,
+        m.team2_id, 
+        t2.teamname AS team2_name,
+        m.match_date,
+        m.start_time,
+        m.venue,
+        m.status
+    FROM [Match] m
+    INNER JOIN Team t1 ON m.team1_id = t1.team_id
+    INNER JOIN Team t2 ON m.team2_id = t2.team_id
+    WHERE m.status = 'Ongoing'
+      AND (
+            (@TeamName IS NOT NULL AND (t1.teamname LIKE '%' + @TeamName + '%' OR t2.teamname LIKE '%' + @TeamName + '%'))
+         OR (@Venue IS NOT NULL AND m.venue LIKE '%' + @Venue + '%')
+         OR (@TeamName IS NULL AND @Venue IS NULL)
+      );
 END;

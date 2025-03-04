@@ -509,14 +509,21 @@
         }
       }
     },
-    "/api/Match/searchmatch": {
+    "/api/Match/searchmatches": {
       "get": {
         "tags": [
           "Match"
         ],
         "parameters": [
           {
-            "name": "searchTerm",
+            "name": "teamName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "venue",
             "in": "query",
             "schema": {
               "type": "string"

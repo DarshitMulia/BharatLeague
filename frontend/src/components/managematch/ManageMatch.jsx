@@ -197,8 +197,6 @@ const ManageMatch = () => {
                     },
                 }
             );
-
-            alert("Match marked as completed successfully!");
             navigate(-1);
         } catch (err) {
             console.error("Error marking match as completed:", err);
