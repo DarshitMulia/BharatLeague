@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../sidebar/Sidebar";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Pie, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { FaTrophy, FaUsers, FaUser, FaFutbol, FaSearch } from "react-icons/fa";
 import "../admindashboard/admindashboard.css";
@@ -19,7 +19,15 @@ const AdminDashboard = () => {
         labels: [],
         datasets: []
     });
+    const [leagueTrends, setLeagueTrends] = useState({
+        labels: [],
+        datasets: []
+    });
     const [users, setUsers] = useState([]);
+    const [userSignUpTrends, setUserSignUpTrends] = useState({
+        labels: [],
+        datasets: []
+    });
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -48,6 +56,7 @@ const AdminDashboard = () => {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setTotalMatches(matchesResponse.data.length);
+
                 const monthCount = Array(12).fill(0);
                 matchesResponse.data.forEach((match) => {
                     const month = new Date(match.matchDate).getMonth();
@@ -60,7 +69,7 @@ const AdminDashboard = () => {
                     ],
                     datasets: [
                         {
-                            label: "Match Trends",
+                            label: "Count",
                             data: monthCount,
                             backgroundColor: "#36A2EB"
                         }
@@ -109,6 +118,42 @@ const AdminDashboard = () => {
     }, [token]);
 
     useEffect(() => {
+        const fetchLeagueTrends = async () => {
+            try {
+                const leaguesResponse = await axios.get(
+                    "https://localhost:7031/api/League/leagues",
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                const monthCount = Array(12).fill(0);
+                leaguesResponse.data.forEach((league) => {
+                    const createdDate = new Date(league.createdAt);
+                    const month = createdDate.getMonth();
+                    monthCount[month]++;
+                });
+                setLeagueTrends({
+                    labels: [
+                        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                    ],
+                    datasets: [
+                        {
+                            label: "Count",
+                            data: monthCount,
+                            borderColor: "#FF6384",
+                            backgroundColor: "rgb(213, 145, 145)",
+                            fill: false,
+                            tension: 0.1
+                        }
+                    ]
+                });
+            } catch (error) {
+                console.error("Error fetching league trends:", error);
+            }
+        };
+        fetchLeagueTrends();
+    }, [token]);
+
+    useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const usersResponse = await axios.get(
@@ -122,6 +167,33 @@ const AdminDashboard = () => {
         };
         fetchUsers();
     }, [token]);
+
+    useEffect(() => {
+        if (users.length > 0) {
+            const signupMonthCount = Array(12).fill(0);
+            users.forEach(user => {
+                const createdDate = new Date(user.createdAt);
+                const month = createdDate.getMonth();
+                signupMonthCount[month]++;
+            });
+            setUserSignUpTrends({
+                labels: [
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ],
+                datasets: [
+                    {
+                        label: "Count",
+                        data: signupMonthCount,
+                        borderColor: "#4BC0C0",
+                        backgroundColor: "rgba(75,192,192,0.2)",
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            });
+        }
+    }, [users]);
 
     const filteredUsers = users.filter((user) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
@@ -140,7 +212,9 @@ const AdminDashboard = () => {
         <div className="admin-dashboard">
             <Sidebar />
             <div className="admin-content">
-                <h1 className="dashboard-title" style={{marginBottom:"2rem"}}>Admin Dashboard</h1>
+                <h1 className="dashboard-title" style={{ marginBottom: "2rem" }}>
+                    Admin Dashboard
+                </h1>
                 <div className="metrics">
                     <div className="metric-item">
                         <FaTrophy className="metric-icon" />
@@ -171,9 +245,21 @@ const AdminDashboard = () => {
                         )}
                     </div>
                     <div className="chart-item">
-                        <h3 className="chart-title">Match Trends</h3>
+                        <h3 className="chart-title">Leagues Created</h3>
+                        {leagueTrends.datasets.length > 0 && (
+                            <Bar data={leagueTrends} />
+                        )}
+                    </div>
+                    <div className="chart-item">
+                        <h3 className="chart-title">Matches Organised</h3>
                         {matchTrends.datasets.length > 0 && (
-                            <Bar data={matchTrends} />
+                            <Line data={matchTrends} />
+                        )}
+                    </div>
+                    <div className="chart-item">
+                        <h3 className="chart-title">User Sign-Up Trends</h3>
+                        {userSignUpTrends.datasets.length > 0 && (
+                            <Line data={userSignUpTrends} />
                         )}
                     </div>
                 </div>
