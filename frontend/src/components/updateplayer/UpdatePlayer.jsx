@@ -120,7 +120,12 @@ const UpdatePlayer = () => {
             const response = await axios.put(
                 `https://localhost:7031/api/Player/updateplayer/${playerId}`,
                 data,
-                { headers: { "Content-Type": "multipart/form-data" } }
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             );
             console.log(response.data);
             navigate(`/viewplayers/${teamId}`);
@@ -130,7 +135,7 @@ const UpdatePlayer = () => {
         }
         setIsSubmitting(false);
     };
-    
+
     return (
         <div className="add-player-container">
             <Sidebar />
