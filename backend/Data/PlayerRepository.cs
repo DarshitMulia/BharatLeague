@@ -42,7 +42,7 @@ namespace backend.Data
                 using (SqlCommand command = new SqlCommand("PR_UpdatePlayer", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@PlayerId", playerModel.TeamId);
+                    command.Parameters.AddWithValue("@PlayerId", playerModel.PlayerId);
                     command.Parameters.AddWithValue("@TeamId", playerModel.TeamId);
                     command.Parameters.AddWithValue("@PlayerName", playerModel.PlayerName);
                     command.Parameters.AddWithValue("@ImageUrl", playerModel.ImageUrl);
