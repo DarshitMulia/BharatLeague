@@ -62,7 +62,7 @@ const UpdateLeague = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const { leagueName, country, startDate, endDate } = leagueDetails;
+        const { leagueName, country } = leagueDetails;
         if (!leagueName.trim()) {
             newErrors.leagueName = "League name is required.";
         } else if (leagueName.length < 3) {
@@ -78,31 +78,6 @@ const UpdateLeague = () => {
             newErrors.country = "Country must be at least 2 characters long.";
         } else if (country.length > 100) {
             newErrors.country = "Country must not exceed 100 characters.";
-        }
-        if (!startDate) {
-            newErrors.startDate = "Start date is required.";
-        } else {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const sDate = new Date(startDate);
-            if (sDate < today) {
-                newErrors.startDate = "Start date cannot be in the past.";
-            }
-            if (endDate) {
-                const eDate = new Date(endDate);
-                if (sDate >= eDate) {
-                    newErrors.startDate = "Start date must be before end date.";
-                }
-            }
-        }
-        if (!endDate) {
-            newErrors.endDate = "End date is required.";
-        } else if (startDate) {
-            const sDate = new Date(startDate);
-            const eDate = new Date(endDate);
-            if (eDate <= sDate) {
-                newErrors.endDate = "End date must be after start date.";
-            }
         }
         return newErrors;
     };
@@ -201,7 +176,6 @@ const UpdateLeague = () => {
                                     value={leagueDetails.startDate}
                                     onChange={handleChange}
                                 />
-                                {errors.startDate && <p className="error-text">{errors.startDate}</p>}
                             </div>
                             <div className="date-group">
                                 <label className="form-label">End Date</label>
@@ -212,7 +186,6 @@ const UpdateLeague = () => {
                                     value={leagueDetails.endDate}
                                     onChange={handleChange}
                                 />
-                                {errors.endDate && <p className="error-text">{errors.endDate}</p>}
                             </div>
                         </div>
                         <div className="form-group">

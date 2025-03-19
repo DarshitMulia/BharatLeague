@@ -89,13 +89,6 @@ namespace backend.Controllers
             existingLeague.EndDate = (DateTime)leagueDto.EndDate;
             existingLeague.UpdatedAt = DateTime.Now;
 
-            var validator = new LeagueValidator();
-            var validationResult = validator.Validate(existingLeague);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
             await _leagueRepository.UpdateLeagueAsync(existingLeague);
             return Ok("League updated successfully.");
         }
