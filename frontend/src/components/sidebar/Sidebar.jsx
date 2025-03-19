@@ -40,7 +40,7 @@ const Sidebar = () => {
                     </button>
                 </div>
                 <ul className="nav flex-column">
-                    {role === "Admin" && (
+                    {role === "Admin" ? (
                         <>
                             <li className="nav-item">
                                 <NavLink
@@ -54,63 +54,66 @@ const Sidebar = () => {
                             </li>
                             <hr />
                         </>
+                    ) : (
+                        <>
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/"
+                                    end
+                                    className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <i className="fa fa-home"></i>
+                                    <span className="link-text">Home</span>
+                                </NavLink>
+                            </li>
+                            <hr />
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/createleague"
+                                    className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <i className="fa fa-plus-circle"></i>
+                                    <span className="link-text">Create League</span>
+                                </NavLink>
+                            </li>
+                            <hr />
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/manageleague"
+                                    className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <i className="fa fa-cogs"></i>
+                                    <span className="link-text">Manage League</span>
+                                </NavLink>
+                            </li>
+                            <hr />
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/leagues"
+                                    className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <i className="fa fa-shield"></i>
+                                    <span className="link-text">Leagues</span>
+                                </NavLink>
+                            </li>
+                            <hr />
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/leaguestandings"
+                                    className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <i className="fa fa-trophy"></i>
+                                    <span className="link-text">League Standings</span>
+                                </NavLink>
+                            </li>
+                            <hr />
+                        </>
                     )}
-                    <li className="nav-item">
-                        <NavLink
-                            to="/"
-                            end
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <i className="fa fa-home"></i>
-                            <span className="link-text">Home</span>
-                        </NavLink>
-                    </li>
-                    <hr />
-                    <li className="nav-item">
-                        <NavLink
-                            to="/createleague"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <i className="fa fa-plus-circle"></i>
-                            <span className="link-text">Create League</span>
-                        </NavLink>
-                    </li>
-                    <hr />
-                    <li className="nav-item">
-                        <NavLink
-                            to="/manageleague"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <i className="fa fa-cogs"></i>
-                            <span className="link-text">Manage League</span>
-                        </NavLink>
-                    </li>
-                    <hr />
-                    <li className="nav-item">
-                        <NavLink
-                            to="/leagues"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <i className="fa fa-shield"></i>
-                            <span className="link-text">Leagues</span>
-                        </NavLink>
-                    </li>
-                    <hr />
-                    <li className="nav-item">
-                        <NavLink
-                            to="/leaguestandings"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <i className="fa fa-trophy"></i>
-                            <span className="link-text">League Standings</span>
-                        </NavLink>
-                    </li>
-                    <hr />
                     <li className="nav-item logout-btn">
                         <button className="nav-link" onClick={handleLogoutClick}>
                             <i className="fa fa-sign-out"></i>
