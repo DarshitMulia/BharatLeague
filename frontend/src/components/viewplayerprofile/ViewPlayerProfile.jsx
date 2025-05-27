@@ -6,7 +6,7 @@ import './viewplayerprofile.css';
 
 const ViewPlayerProfile = () => {
     const [profile, setProfile] = useState(null);
-    const { playerId } = useParams(); 
+    const { playerId } = useParams();
     const token = localStorage.getItem("authToken");
 
     useEffect(() => {
@@ -33,54 +33,80 @@ const ViewPlayerProfile = () => {
             <Sidebar />
             <div className="content">
                 <div className="profile-header">
-                    <div className="profile-image">
-                        <img src={profile.playerImage} alt={profile.playerName} />
+                    <div className="profile-image-container">
+                        <div className="profile-image">
+                            <img src={profile.playerImage} alt={profile.playerName} />
+                        </div>
+                        <div className="jersey-number-player-profile">{profile.jerseyNumber}</div>
                     </div>
+
                     <div className="profile-details">
                         <h1>{profile.playerName}</h1>
-                        <p><strong>Age:</strong> {profile.age}</p>
-                        <p><strong>Jersey Number:</strong> {profile.jerseyNumber}</p>
-                        <p><strong>Position:</strong> {profile.position}</p>
+                        <div className="detail-grid">
+                            <div className="detail-item">
+                                <span className="detail-label">Age</span>
+                                <span className="detail-value">{profile.age}</span>
+                            </div>
+                            <div className="detail-item">
+                                <span className="detail-label">Position</span>
+                                <span className="detail-value">{profile.position}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="team-league-info">
-                    <div className="player-team-info">
-                        <img src={profile.teamImage} alt={profile.teamName} />
-                        <h2>{profile.teamName}</h2>
+                <div className="affiliation-section">
+                    <div className="affiliation-card">
+                        <div className="affiliation-logo">
+                            <img src={profile.teamImage} alt={profile.teamName} />
+                        </div>
+                        <div className="affiliation-info">
+                            <span className="affiliation-label">Team</span>
+                            <h3>{profile.teamName}</h3>
+                        </div>
                     </div>
-                    <div className="player-league-info">
-                        <img src={profile.leagueImage} alt={profile.leagueName} />
-                        <h2>{profile.leagueName}</h2>
+
+                    <div className="affiliation-card">
+                        <div className="affiliation-logo">
+                            <img src={profile.leagueImage} alt={profile.leagueName} />
+                        </div>
+                        <div className="affiliation-info">
+                            <span className="affiliation-label">League</span>
+                            <h3>{profile.leagueName}</h3>
+                        </div>
                     </div>
                 </div>
 
                 <div className="statistics-section">
-                    <h2>Statistics</h2>
+                    <div className="section-header">
+                        <h2>Season Statistics</h2>
+                        <div className="divider"></div>
+                    </div>
+
                     <div className="stats-grid">
-                        <div className="stat">
-                            <h3>{profile.matchesPlayed}</h3>
-                            <p>Matches Played</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.matchesPlayed}</div>
+                            <div className="stat-label">Matches</div>
                         </div>
-                        <div className="stat">
-                            <h3>{profile.goals}</h3>
-                            <p>Goals</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.goals}</div>
+                            <div className="stat-label">Goals</div>
                         </div>
-                        <div className="stat">
-                            <h3>{profile.assists}</h3>
-                            <p>Assists</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.assists}</div>
+                            <div className="stat-label">Assists</div>
                         </div>
-                        <div className="stat">
-                            <h3>{profile.yellowCards}</h3>
-                            <p>Yellow Cards</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.yellowCards}</div>
+                            <div className="stat-label">Yellow Cards</div>
                         </div>
-                        <div className="stat">
-                            <h3>{profile.redCards}</h3>
-                            <p>Red Cards</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.redCards}</div>
+                            <div className="stat-label">Red Cards</div>
                         </div>
-                        <div className="stat">
-                            <h3>{profile.fouls}</h3>
-                            <p>Fouls</p>
+                        <div className="stat-card accent">
+                            <div className="stat-value">{profile.fouls}</div>
+                            <div className="stat-label">Fouls</div>
                         </div>
                     </div>
                 </div>

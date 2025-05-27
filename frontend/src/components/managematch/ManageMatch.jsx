@@ -312,14 +312,27 @@ const ManageMatch = () => {
                             >
                                 {isSubmitting ? "Submitting..." : "Add Match Event"}
                             </button>
+                        </div>
+
+                        <div className="completion-section">
+                            <div className="completion-header">
+                                <h3>Match Completion</h3>
+                                <p>Mark this match as completed when all events are recorded</p>
+                            </div>
                             <button
                                 type="button"
-                                className="header-button"
-                                style={{ width: "50%" }}
+                                className="completion-button"
                                 onClick={handleMarkAsCompleted}
                                 disabled={isCompleting}
                             >
-                                {isCompleting ? "Completing..." : "Mark Match As Completed"}
+                                {isCompleting ? (
+                                    <span className="completing-text">Processing...</span>
+                                ) : (
+                                    <>
+                                        <span className="icon">✓</span>
+                                        <span>Mark Match As Completed</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>

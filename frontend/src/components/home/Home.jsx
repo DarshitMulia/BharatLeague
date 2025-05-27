@@ -10,7 +10,7 @@ const Home = () => {
         <div className="home-page">
             <Sidebar />
             <div className="home-main">
-                {/* Hero Section */}
+
                 <section className="hero-section">
                     <div className="hero-content">
                         <h1 className="hero-title">Seamless Football League Management</h1>
@@ -21,7 +21,6 @@ const Home = () => {
                     </div>
                 </section>
 
-                {/* Features Section */}
                 <section className="features-section">
                     <h2 className="section-header">Key Features</h2>
                     <div className="features-grid">
@@ -56,7 +55,7 @@ const Home = () => {
                 </section>
 
                 {/* Testimonial Section */}
-                <section className="testimonial-section">
+                {/* <section className="testimonial-section">
                     <h2 className="section-header">What Our Users Say</h2>
                     <div className="testimonial-cards">
                         <div className="testimonial-card">
@@ -72,7 +71,7 @@ const Home = () => {
                             <p className="testimonial-author">– Coach, National Football Club</p>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 <OngoingMatches />
             </div>
