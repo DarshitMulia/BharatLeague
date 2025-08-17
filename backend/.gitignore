@@ -1,1 +1,40 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio files
 .vs/
+*.user
+*.suo
+
+# Rider / JetBrains
+.idea/
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Temporary files
+*.tmp
+*.temp
+*.db
+*.bak
+
+# Others
+*.swp
+*.lock.json
+project.lock.json
+
+# Publish output
+publish/
